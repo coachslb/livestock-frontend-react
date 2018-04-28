@@ -5,7 +5,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        Hello dvsf React!!!
+        Hello from linux with React!!!
       </div>
     );
   }
