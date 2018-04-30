@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import LoginPage from './pages/login/LoginPage';
+import Routes from '../routes/index';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import amber from 'material-ui/colors/amber'
+import amber from 'material-ui/colors/amber';
 
 class App extends Component {
 
@@ -16,7 +16,7 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <div className="App">
-          <LoginPage name={"José Garção"}/>
+          <Routes />
         </div>
       </MuiThemeProvider>
     );
