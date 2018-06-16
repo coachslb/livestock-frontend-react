@@ -71,7 +71,14 @@
 }
 
 /* Forgot password form */
-.forgotPasswordForm{
+.forgotPasswordForm {
+    margin-top: 64px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.registrationForm {
     margin-top: 64px;
     display: flex;
     flex-direction: column;
@@ -80,6 +87,7 @@
 
 .form-title{
     margin-bottom: 20px !important;
+    margin-left: 10px !important;
 }
 
 .presentation-image{

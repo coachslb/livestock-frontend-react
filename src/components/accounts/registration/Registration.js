@@ -7,6 +7,7 @@ import ErrorDialog from '../../UI/ErrorDialog/ErrorDialog';
 import InputField from '../../UI/Inputs/InputField';
 import SubmitButton from '../../UI/Buttons/SubmitButton';
 import {withRouter} from 'react-router-dom';
+import '../../pages/accounts/accounts.css';
 
 class Registration extends Component {
   constructor() {
@@ -89,7 +90,7 @@ class Registration extends Component {
     const { countries, country, errors, serverError } = this.state;
 
     let render = (
-      <div className="forgotPasswordForm">
+      <div className="registrationForm">
         <Typography variant="headline" className="form-title">
           Criar Utilizador
         </Typography>
@@ -164,7 +165,7 @@ class Registration extends Component {
             })}
           />
           <SubmitButton
-            style={{ marginTop: '50px', width: '20%' }}
+            style={{ marginTop: '50px', width: '20%', marginLeft: '10px' }}
             color="primary"
             variant="raised"
           >

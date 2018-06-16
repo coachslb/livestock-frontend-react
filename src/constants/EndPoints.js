@@ -13,3 +13,6 @@ export const DEVICE_TOKEN = "/deviceToken";
 /** Preferences */
 export const PREFERENCES = "/user/preferences";
 export const FORGOT_PASSWORD = "/password/request";
+
+/** Entity */
+export const AGRICOLA_ENTITY = "/agricolaentity";

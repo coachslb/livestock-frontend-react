@@ -20,28 +20,34 @@ let AuthenticationService = {
           .post(end.URL + end.VERSION + end.LOGIN + end.DEVICE_TOKEN + `?token=${deviceToken}`, {})
           .then(handleResponse)
           .then(res => {
-            //guarda dados novos
-            //set da variavel token
-            console.log(res);
+            console.log('device token');
+            localStorage.setItem('token', res.data.token);
+            expirationDate = new Date().getTime() + 900000
+            localStorage.setItem('expirationDate', expirationDate);
+            return res.data.token;
           });
       } else {
-        if (new Date().getTime() + 300000 < expirationDate) {
+        if (new Date().getTime() + 300000 > expirationDate) {
           token = await axios
             .put(end.URL + end.VERSION + end.LOGIN + `?token=${token}`, {})
             .then(handleResponse)
             .then(res => {
-              //guarda dados novos
-              //set da variavel token
-              console.log(res);
+              console.log('new login');
+              localStorage.setItem('token', res.data.token);
+              localStorage.setItem('deviceToken', res.data.deviceToken);
+              localStorage.setItem('language', res.data.language.code);
+              localStorage.setItem('userId', res.data.userId);
+              localStorage.setItem('username', res.data.userId);
+              expirationDate = new Date().getTime() + 900000
+              localStorage.setItem('expirationDate', expirationDate);
+              return res.data.token;
             });
         }
       }
-      //else if data de expiração está a 5 min, faz refresh token e guarda os novos dados da sessão e guarda token na variavel
-      //else põe o token na variavel
     }
 
     //return header config
-    return { headers: { Authorization: 'bearer ' + token } };
+    return { headers: { Authorization: 'Bearer ' + token } };
   },
 };
 

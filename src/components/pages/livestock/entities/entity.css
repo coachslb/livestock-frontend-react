@@ -1,0 +1,6 @@
+.createEntityForm{
+    margin-top: 64px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
