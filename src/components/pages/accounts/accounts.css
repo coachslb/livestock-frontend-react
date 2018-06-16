@@ -1,0 +1,101 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    overflow-y: hidden;
+}
+
+.container-left{
+    justify-content: left;
+    width: 60%;
+}
+
+.container-right{
+    justify-content: right;
+    width: 40%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 5px 8px 0 rgba(0,0,0,.14), 0 1px 14px 0 rgba(0,0,0,.12);
+}
+
+.container-right--footer{
+    margin-bottom: 10px;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    width: 40%;
+}
+
+@media screen and (max-width: 992px) {
+    .container-left{
+        display: none;
+    }
+
+    .container-right{
+        width: 100%;
+    }
+
+    .container-right--footer{
+        width: 100%;
+    }
+}
+
+.loginForm{
+    margin-top: 70px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+/* Sidebar Right header */
+.sidebar_header{
+    display: flex;
+    height: 64px;
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    background-color: hsla(0,0%,60%,.1) ;
+    align-items: center;
+}
+
+.sidebar_icon--left{
+    cursor: pointer;
+    color: #989898;
+}
+
+/* Forgot password form */
+.forgotPasswordForm{
+    margin-top: 64px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.form-title{
+    margin-bottom: 20px !important;
+}
+
+.presentation-image{
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    margin-right: var(--Sidebar-width);
+}
+
+.logo{
+    height: 64px;
+    padding: 0;
+    margin-top: 60px;
+    background-image: url('../../../assets/imgs/brand.png');
+    background-size: 180px;
+    background-repeat: no-repeat;
+    margin-left: 20px;
+}
