@@ -6,6 +6,7 @@ import ForgotPasswordPage from '../components/pages/accounts/forgotPassword/Forg
 import SelectEntityPage from '../components/pages/livestock/entities/SelectEntityPage';
 import CreateEntityPage from '../components/pages/livestock/entities/CreateEntityPage';
 import LivestockPage from './livestock';
+import Logout from '../components/accounts/logout/Logout';
 
 export default () => {
     return(
@@ -16,6 +17,7 @@ export default () => {
             <Route path="/forgot-password" component={ForgotPasswordPage} />
             <Route path="/create-entity" component={CreateEntityPage} />
             <Route path="/select-entity" component={SelectEntityPage} />
+            <Route path="/logout" component={Logout} />
             <Route path="/livestock" component={LivestockPage} />
             <Route path="/" exact component={LivestockPage} />
         </Switch>

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 
 const DashboardPage = (props) => {
+    console.log('dashboard');
 
     return(<div>Hello from dashboard!!!</div>);
     

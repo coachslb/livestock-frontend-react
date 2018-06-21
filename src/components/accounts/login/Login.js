@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { CircularProgress } from 'material-ui';
 import InputField from '../../UI/Inputs/InputField';
 import SubmitButton from '../../UI/Buttons/SubmitButton';
 import AuthenticationService from '../../../services/AuthenticationService';
@@ -13,7 +14,8 @@ class Login extends Component {
       email: '',
       password: '',
       errors: null,
-      serverError: null
+      serverError: null,
+      isLoading: false
     };
     this.onChange = this.onChange.bind(this);
     this.onDialogClose = this.onDialogClose.bind(this);
@@ -21,6 +23,7 @@ class Login extends Component {
 
   onSubmitLogin(e) {
     e.preventDefault();
+    this.setState({isLoading: true})
     let errors = AccountsValidations.validateLogin(this.state.email, this.state.password);
     if (errors.length > 0) {
       this.setState({ errors });
@@ -41,12 +44,19 @@ class Login extends Component {
         localStorage.setItem('deviceToken', res.data.deviceToken);
         localStorage.setItem('language', res.data.language.code);
         localStorage.setItem('userId', res.data.userId);
-        localStorage.setItem('username', res.data.userId);
+        localStorage.setItem('username', res.data.username);
         let expirationDate = new Date().getTime() + 900000
         localStorage.setItem('expirationDate', expirationDate);
-        this.props.history.push('/livestock')
+        this.setState({ isLoading: false })
+        if(!res.data.entityId){
+          this.props.history.push('/create-entity');
+        }
+        else{
+          localStorage.setItem('entityId', res.data.entityId);
+          this.props.history.push('/livestock');
+        }
       }).catch((err) => {
-        this.setState({ serverError: true })
+        this.setState({ serverError: true, isLoading: false })
       });
     }
   }
@@ -61,7 +71,7 @@ class Login extends Component {
   }
 
   render() {
-    const { errors, serverError } = this.state;
+    const { errors, serverError, isLoading } = this.state;
     return (
       <div className="loginForm">
         <form onSubmit={this.onSubmitLogin.bind(this)}>
@@ -114,6 +124,9 @@ class Login extends Component {
             text="There are some server problem"
             onDialogClose={this.onDialogClose}
           />
+        )}
+        {isLoading && (
+          <CircularProgress style={{height:'80px', width:'80px', top:"50%", left:"50%", position: 'absolute'}}/>
         )}
       </div>
     );

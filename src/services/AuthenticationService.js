@@ -6,6 +6,9 @@ let AuthenticationService = {
   login: function(data) {
     return axios.post(end.URL + end.VERSION + end.LOGIN, data).then(handleResponse);
   },
+  logout: function(data) {
+    return axios.delete(end.URL + end.VERSION + end.LOGIN + end.LOGOUT + `?token=${data.token}`).then(handleResponse);
+  },
   checkAndGetToken: async function() {
     //get token from localStorage
     let token = localStorage.getItem('token');

@@ -1,0 +1,31 @@
+.logo-icon{
+    background-image: url('../../../assets/imgs/logo-header.svg');
+    height: 32px;
+    padding: 0;
+    background-size: 180px;
+    background-repeat: no-repeat;
+    margin-left: 20px;
+}
+
+.menu-item{
+    font-weight: 500 !important;
+}
+
+.menu-item-selected{
+    color: #ffc107 !important;
+    font-weight: 500 !important;
+}
+
+.material-icons-menu{
+    margin-right: 10px;
+}
+
+.layout-logo{
+    background-image: url('../../../assets/imgs/logo-header.svg');
+    height: 40px;
+    width: 100px;
+    padding: 20px;
+    background-repeat: no-repeat;
+    margin-right: 120px;
+    margin-left: 20px;
+}

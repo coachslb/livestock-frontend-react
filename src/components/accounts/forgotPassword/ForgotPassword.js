@@ -7,6 +7,7 @@ import ErrorDialog from '../../UI/ErrorDialog/ErrorDialog';
 import AccountsValidations from '../../../validations/AccountsValidations';
 import ForgotPasswordService from '../../../services/ForgotPasswordService';
 import SuccessCard from '../../UI/Cards/SuccessCard';
+import { CircularProgress } from '@material-ui/core';
 
 export default class ForgotPassword extends Component {
   constructor() {
@@ -16,16 +17,18 @@ export default class ForgotPassword extends Component {
       errors: null,
       serverError: null,
       successRequest: null,
-      redirect: null
+      redirect: null,
+      isLoading: null,
     };
 
     this.onDialogClose = this.onDialogClose.bind(this);
   }
 
   onSubmitForgotPassword(e) {
+    this.setState({isLoading: true})
     let errors = AccountsValidations.validateForgotPassword(this.state.email);
 
-    if (errors.length > 0) this.setState({ errors });
+    if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
       const { email } = this.state;
 
@@ -37,10 +40,10 @@ export default class ForgotPassword extends Component {
 
       forgotPasswordResponse.then((res)=>{
         this.setState({successRequest: true});
-        setTimeout(() => { clearInterval(); this.setState({redirect: true}); }, 3000);
+        setTimeout(() => { clearInterval(); this.setState({redirect: true, isLoading: false}); }, 3000);
         //setTimeout mostra mensagem de sucesso e redirect to login
       }).catch((err) => {
-        this.setState({ serverError: true })
+        this.setState({ serverError: true, isLoading: true })
       });
       
     }
@@ -60,7 +63,7 @@ export default class ForgotPassword extends Component {
   }
 
   render() {
-    const { errors, serverError, successRequest, redirect } = this.state;
+    const { errors, serverError, successRequest, redirect, isLoading } = this.state;
 
     return (
       <div className="forgotPasswordForm">
@@ -117,6 +120,9 @@ export default class ForgotPassword extends Component {
             text="There are some server problem"
             onDialogClose={this.onDialogClose}
           />
+        )}
+        {isLoading && (
+          <CircularProgress/>
         )}
         { redirect && (
             <Redirect to="/login"/>

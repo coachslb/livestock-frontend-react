@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import FixedValuesService from '../../../services/FixedValuesService';
-import { FormControl, InputLabel, Typography, Select, MenuItem } from 'material-ui';
+import { FormControl, InputLabel, Typography, Select, MenuItem, CircularProgress } from 'material-ui';
 import RegistrationValidations from '../../../validations/RegistrationValidations';
 import RegistrationService from '../../../services/RegistrationService';
 import ErrorDialog from '../../UI/ErrorDialog/ErrorDialog';
@@ -24,6 +24,7 @@ class Registration extends Component {
       errors: null,
       serverError: null,
       countries: [],
+      isLoading: false,
     };
 
     this.onChange = this.onChange.bind(this);
@@ -32,18 +33,18 @@ class Registration extends Component {
 
   componentWillMount() {
     //Get Countries List
+    this.setState({ isLoading: true });
     let countriesPromise = FixedValuesService.getCountries();
     countriesPromise.then(res => {
-      this.setState({ countries: res.data });
+      this.setState({ countries: res.data, isLoading: false });
     });
   }
 
   onSubmitRegistration(e) {
-    //do axios request to forgot password attempt
-    //receive the response
+    this.setState({ isLoading: true })
     let errors = RegistrationValidations.validateRegistration(this.state);
 
-    if (errors.length > 0) this.setState({ errors });
+    if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
       const { email, password, name, phone, country } = this.state;
 
@@ -58,7 +59,6 @@ class Registration extends Component {
       }, false);
 
       registrationResponse.then((res)=>{
-        console.log(res);
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('deviceToken', res.data.deviceToken);
         localStorage.setItem('language', res.data.language.code);
@@ -66,10 +66,11 @@ class Registration extends Component {
         localStorage.setItem('username', res.data.username);
         let expirationDate = new Date().getTime() + 900000
         localStorage.setItem('expirationDate', expirationDate);
+        this.setState({isLoading: false});
         //create entity page
         this.props.history.push('/create-entity')
       }).catch((err) => {
-        this.setState({ serverError: true })
+        this.setState({ serverError: true, isLoading: false })
       });
       
     }
@@ -87,7 +88,7 @@ class Registration extends Component {
   }
 
   render() {
-    const { countries, country, errors, serverError } = this.state;
+    const { countries, country, errors, serverError, isLoading } = this.state;
 
     let render = (
       <div className="registrationForm">
@@ -187,6 +188,9 @@ class Registration extends Component {
             text="There are some server problem"
             onDialogClose={this.onDialogClose}
           />
+        )}
+        { isLoading && (
+          <CircularProgress />
         )}
       </div>
     );

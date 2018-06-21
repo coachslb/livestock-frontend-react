@@ -1,0 +1,45 @@
+.empty-list-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.placeholder-img{
+    display: inline-block;
+    height: 210px;
+    width: 210px;
+    background-repeat: no-repeat;
+    background-size: 400%;
+}
+
+.exploration-img{
+    background-image: url('../../../assets/imgs/brand.png');
+}
+
+.placeholder-title{
+    margin-bottom: 14px;
+    margin-top: 24px;
+}
+
+.placeholder-description{
+    margin-bottom: 24px;
+    margin-left: 24px;
+    margin-right: 24px;
+    color: #989898;
+}
+
+.placeholder-button{
+    width: 20%;
+}
+
+.placeholder-button-text{
+    font-size: .875rem;
+    line-height: 2.25rem;
+    font-weight: 500;
+    letter-spacing: .08929em;
+    text-decoration: none;
+    text-transform: uppercase;
+}

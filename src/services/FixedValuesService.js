@@ -9,6 +9,9 @@ let FixedValuesService = {
   },
   getLanguages: function(){
     return axios.get(end.URL + end.VERSION + end.LANGUAGES).then(handleResponse);
+  },
+  getRegions: function(countryName){
+    return axios.get(end.URL + end.VERSION + end.REGIONS + `?country=${countryName}`).then(handleResponse);
   }
 };
 

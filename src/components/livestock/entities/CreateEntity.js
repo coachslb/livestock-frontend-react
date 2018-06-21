@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { FormControl, InputLabel, Typography, Select, MenuItem } from 'material-ui';
+import React, { Component, Fragment } from 'react';
+import { FormControl, InputLabel, Typography, Select, MenuItem, CircularProgress } from 'material-ui';
 import {withRouter} from 'react-router-dom';
 import ErrorDialog from '../../UI/ErrorDialog/ErrorDialog';
 import InputField from '../../UI/Inputs/InputField';
@@ -19,6 +19,7 @@ class CreateEntity extends Component {
       countries: [],
       errors: null,
       serverError: null,
+      isLoading: null,
     };
 
     this.onChange = this.onChange.bind(this);
@@ -26,19 +27,21 @@ class CreateEntity extends Component {
   }
 
   componentWillMount() {
+    this.setState({isLoading: true});
     //Get Countries List
     let countriesPromise = FixedValuesService.getCountries();
     countriesPromise.then(res => {
-      this.setState({ countries: res.data });
+      this.setState({ countries: res.data, isLoading: false });
     });
   }
 
   onSubmitCreateEntity(e) {
     e.preventDefault();
+    this.setState({ isLoading: true })
     const {name, country, email} = this.state;
     let errors = EntityValidations.validateCreateEntity(name, country);
 
-    if (errors.length > 0) this.setState({ errors });
+    if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
       let createEntityResponse = EntityService.createEntity({
         name,
@@ -48,9 +51,10 @@ class CreateEntity extends Component {
 
       createEntityResponse.then((res)=>{
         localStorage.setItem('entityId', res.data.id);
+        this.setState({isLoading: false})
         this.props.history.replace('/livestock');
       }).catch((err) => {
-        this.setState({ serverError: true })
+        this.setState({ serverError: true, isLoading: false })
       });
       
     }
@@ -67,10 +71,12 @@ class CreateEntity extends Component {
 
   render() {
 
-    const { countries, country, errors, serverError } = this.state;
+    const { countries, country, errors, serverError, isLoading } = this.state;
 
     return (
-      <div className="createEntityForm">
+      <Fragment>
+      {!isLoading &&
+        <div className="createEntityForm">
         <Typography variant="headline" className="form-title">
           Create Entity
         </Typography>
@@ -124,7 +130,7 @@ class CreateEntity extends Component {
           >
             Conclude
           </SubmitButton>
-        </form>
+        </form> </div>}
         {errors && (
           <ErrorDialog
             title="Input Errors"
@@ -140,7 +146,10 @@ class CreateEntity extends Component {
             onDialogClose={this.onDialogClose}
           />
         )}
-      </div>
+         {isLoading && <CircularProgress style={{height:'80px', width:'80px', top:"50%", left:"50%", position: 'absolute'}}/>}
+        )}
+        </Fragment>
+      
     );
   }
 }
