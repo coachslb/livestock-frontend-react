@@ -1,50 +1,110 @@
 import React, { Component, Fragment } from 'react';
-import { CircularProgress } from 'material-ui';
+import { CircularProgress, Button } from 'material-ui';
 import ExplorationService from '../../../../services/ExplorationService';
 import EmptyExploration from '../../../livestock/exploration/EmptyExploration';
+import ListCardExploration from '../../../livestock/exploration/ListCardExploration';
 
 class ExplorationPage extends Component {
+  constructor() {
+    super();
+    this.state = {
+      explorations: null,
+      hasData: null,
+      serverError: null,
+      isLoading: null,
+    };
+  }
 
-    constructor(){
-        super();
-        this.state = {
-            hasData: null,
-            serverError: null,
-            isLoading: null
-        }
+  componentDidMount() {
+    this.setState({ isLoading: true });
+    const { id } = this.props.match.params;
+
+    if (id) {
+      const getExplorationsResponse = ExplorationService.get(null, id, true);
+
+      getExplorationsResponse
+        .then(res => {
+          if (res.data.length > 0) {
+            console.log(res);
+            this.setState({ hasData: true, isLoading: false, explorations: res.data });
+          } else this.setState({ hasData: false, isLoading: false });
+        })
+        .catch(err => this.setState({ serverError: true, isLoading: false }));
     }
+  }
 
-    componentDidMount(){
-        this.setState({isLoading: true});
-        const { id } = this.props.match.params;
+  onEdit = (e, id) => {
+    e.preventDefault();
+    this.props.history.push(`/livestock/explorations/${this.props.match.params.id}/edit/${id}`);
+  };
 
-        if (id) {
-        const getExplorationsResponse = ExplorationService.get(null, id, true);
+  onDelete = (e, id) => {
+    e.preventDefault();
+    this.setState({ isLoading: true });
 
-        getExplorationsResponse
-            .then(res => {
-                if(res.data.length > 0){
-                    console.log(res);
-                    this.setState({hasData: false, isLoading: false})
-                }else
-                    this.setState({hasData: false, isLoading: false})
-            })
-            .catch(err => this.setState({ serverError: true, isLoading: false }));
-        }
-    }
+    const deleteExplorationResponse = ExplorationService.delete(
+      id,
+      this.props.match.params.id,
+      true,
+    );
+    deleteExplorationResponse
+      .then(res => {
+        if (res.data.length > 0) {
+          this.setState({ hasData: true, isLoading: false, explorations: res.data });
+        } else this.setState({ hasData: false, isLoading: false });
+      })
+      .catch(err => this.setState({ serverError: true, isLoading: false }));
+  };
 
-    render(){
-        const { isLoading, hasData } = this.state;
-        const { id } = this.props.match.params;
-        return(
-            <Fragment>
-                {!hasData && !isLoading &&
-                <EmptyExploration id={id}/>
-                }
-                {isLoading && <CircularProgress style={{height:'80px', width:'80px', top:"50%", left:"50%", position: 'absolute'}}/>}
-            </Fragment>
-        );
-    }
+  onClick = (e, id) => {
+    e.preventDefault();
+    this.props.history.push(`/livestock/explorations/${this.props.match.params.id}/detail/${id}`);
+  };
+  
+  onCreateExploration = (e) => {
+    e.preventDefault();
+    this.props.history.push(`/livestock/explorations/${this.props.match.params.id}/create`);
+  }
+
+  render() {
+    const { isLoading, hasData, explorations } = this.state;
+    const { id } = this.props.match.params;
+    return (
+      <Fragment>
+        {!hasData && !isLoading && <EmptyExploration id={id} />}
+        {hasData &&
+          !isLoading &&
+          explorations.map(el => {
+            return (
+              <ListCardExploration
+                key={el.id}
+                data={el}
+                onEdit={this.onEdit}
+                onDelete={this.onDelete}
+                onClick={this.onClick}
+              />
+            );
+          })}
+        {hasData &&
+          !isLoading && (
+            <Button
+              className="placeholder-button-text"
+              variant="raised"
+              style={{ width: '100%' }}
+              color="primary"
+              onClick={this.onCreateExploration}
+            >
+              + Adicionar
+            </Button>
+          )}
+        {isLoading && (
+          <CircularProgress
+            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'absolute' }}
+          />
+        )}
+      </Fragment>
+    );
+  }
 }
 
 export default ExplorationPage;

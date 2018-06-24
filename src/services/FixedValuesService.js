@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import * as end from '../constants/EndPoints';
 import { handleResponse } from './HandleResponseService';
+import AuthenticationService from './AuthenticationService';
 
 let FixedValuesService = {
   getCountries: function() {
@@ -12,6 +13,11 @@ let FixedValuesService = {
   },
   getRegions: function(countryName){
     return axios.get(end.URL + end.VERSION + end.REGIONS + `?country=${countryName}`).then(handleResponse);
+  },
+  getExplorationTypes: async function(isAuthenticated){
+    let config = null;
+    if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.EXPLORATION_TYPES, config).then(handleResponse);
   }
 };
 

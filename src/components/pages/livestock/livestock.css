@@ -69,3 +69,11 @@
 .col-6{
     width: calc(50% - 16px);
 }
+
+.col-2{
+    width: calc(20% - 16px);
+}
+
+.col-3{
+    width: calc(30% - 16px);
+}

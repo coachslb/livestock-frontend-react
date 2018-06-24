@@ -45,7 +45,6 @@ class EditEntity extends Component {
 
   componentWillMount() {
     const entity = this.props.entityData;
-    console.log(entity);
     this.setState({
       id: entity.id,
       name: entity.name,

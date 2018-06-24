@@ -84,6 +84,7 @@ class Layout extends Component {
       errors: null,
       serverError: null,
       value: 0,
+      explorationId: null,
     };
 
     this.onDialogClose = this.onDialogClose.bind(this);
@@ -105,8 +106,27 @@ class Layout extends Component {
     }
   };
 
+  handleUserDetailClick = e => {
+    e.preventDefault();
+    const userId = localStorage.getItem('userId');
+    if (userId !== null) {
+      this.props.history.push(`/livestock/user/${userId}`);
+    }
+  };
+
   handleChange = (event, value) => {
     this.setState({ value });
+    const entityId = localStorage.getItem('entityId');
+    const params = this.props.location.pathname.split('/');
+    if (value === 0) {
+      this.props.history.push(`/livestock/explorations/${entityId}/detail/${params[5]}`);
+    } else if (value === 1) {
+      this.props.history.push(`/livestock/explorations/${entityId}/place/${params[5]}`);
+    } else if (value === 2) {
+      this.props.history.push(`/livestock/explorations/${entityId}/animal/${params[5]}`);
+    } else if (value === 3) {
+      this.props.history.push(`/livestock/explorations/${entityId}/group/${params[5]}`);
+    }
   };
 
   componentWillMount() {
@@ -120,7 +140,7 @@ class Layout extends Component {
 
         getOneEntityResponse
           .then(res => {
-            this.setState({ entityName: res.data.name, entityId});
+            this.setState({ entityName: res.data.name, entityId });
           })
           .catch(err => {
             this.setState({ serverError: true });
@@ -130,7 +150,29 @@ class Layout extends Component {
       this.props.history.push(`/login`);
       window.location.reload();
     }
-    this.setState({ editButton: null });
+
+    if (this.props.location.pathname.startsWith('/livestock/explorations/')) {
+      if (this.props.location.pathname.startsWith(`/livestock/explorations/${entityId}/`)) {
+        const params = this.props.location.pathname.split('/');
+        switch (params[4]) {
+          case 'detail':
+            this.setState({ explorationId: params[5], value: 0 });
+            break;
+          case 'place':
+            this.setState({ explorationId: params[5], value: 1 });
+            break;
+          case 'animal':
+            this.setState({ explorationId: params[5], value: 2 });
+            break;
+          case 'group':
+            this.setState({ explorationId: params[5], value: 3 });
+            break;
+          default:
+            this.setState({ explorationId: params[5], value: 0 });
+            break;
+        }
+      }
+    }
   }
 
   render() {
@@ -140,15 +182,16 @@ class Layout extends Component {
       location: { pathname },
     } = this.props;
 
-    console.log(this.props);
-
     const { mobileOpen, value, entityName, entityId, errors, serverError } = this.state;
+
     const drawer = (
       <div>
         <Hidden smDown>
           <div
             className={classes.toolbar}
-            style={pathname.startsWith('/livestock/explorations/detail') ? { minHeight: 108 } : {}}
+            style={
+              pathname.startsWith(`/livestock/explorations/${entityId}/`) ? { minHeight: 108 } : {}
+            }
           />
         </Hidden>
         <MenuList>
@@ -265,7 +308,7 @@ class Layout extends Component {
                 <Menu />
               </IconButton>
               <Hidden smDown>
-                <div className="layout-logo"></div>
+                <div className="layout-logo" />
               </Hidden>
               <Typography variant="title" color="inherit" className={classes.entityName}>
                 {entityName}
@@ -277,8 +320,15 @@ class Layout extends Component {
               >
                 <i className="material-icons">domain</i>
               </IconButton>
+              <IconButton
+                aria-haspopup="true"
+                onClick={this.handleUserDetailClick}
+                color="inherit"
+              >
+                <i className="material-icons">account_circle</i>
+              </IconButton>
             </Toolbar>
-            {pathname.startsWith('/livestock/explorations/detail') && (
+            {pathname.startsWith(`/livestock/explorations/${entityId}/`) && (
               <Tabs
                 value={value}
                 onChange={this.handleChange}
@@ -323,7 +373,9 @@ class Layout extends Component {
             <div
               className={classes.toolbar}
               style={
-                pathname.startsWith('/livestock/explorations/detail') ? { minHeight: 108 } : {}
+                pathname.startsWith(`/livestock/explorations/${entityId}/`)
+                  ? { minHeight: 108 }
+                  : {}
               }
             />
             {children}

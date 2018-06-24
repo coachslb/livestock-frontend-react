@@ -22,6 +22,11 @@ const ExplorationService = {
     if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
     return axios.get(end.URL + end.VERSION + end.EXPLORATION + getValue, config).then(handleResponse);
   },
+  delete: async function(id, entityId, isAuthenticated){
+    let config = null;
+    if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.delete(end.URL + end.VERSION + end.EXPLORATION + `?id=${id}&agricolaEntityId=${entityId}`, config).then(handleResponse);
+  }
 };
 
 export default ExplorationService;

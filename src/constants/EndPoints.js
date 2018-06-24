@@ -5,6 +5,7 @@ export const VERSION = "v1";
 export const COUNTRIES = "/fixedvalues/countries";
 export const LANGUAGES = "/fixedvalues/languages";
 export const REGIONS = "/fixedvalues/regions";
+export const EXPLORATION_TYPES = "/fixedvalues/explorationTypes";
 
 /** Accounts */
 export const REGISTRATION = "/registration";
@@ -14,6 +15,8 @@ export const DEVICE_TOKEN = "/deviceToken";
 
 /** Preferences */
 export const PREFERENCES = "/user/preferences";
+export const LANGUAGE = "/language";
+export const PASSWORD = "/password/change";
 export const FORGOT_PASSWORD = "/password/request";
 
 /** Entity */

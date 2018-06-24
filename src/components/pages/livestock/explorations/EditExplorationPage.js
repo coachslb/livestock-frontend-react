@@ -1,12 +1,12 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import {
   Typography,
   Card,
   CardContent,
-  Button,
   FormControl,
   InputLabel,
   Input,
+  Button,
   Select,
   MenuItem,
   CircularProgress,
@@ -29,48 +29,75 @@ const MenuProps = {
   },
 };
 
-class CreateExplorationPage extends Component {
+class EditExplorationPage extends Component {
   constructor() {
     super();
     this.state = {
+      id: 0,
+      agricolaEntityId: 0,
       name: '',
+      addressId: '',
       address: '',
       postalCode: '',
       district: '',
       explorationTypes: [],
-      explorationTypeIds: [],
       isLoading: false,
       serverError: false,
       errors: null,
       types: [],
     };
-
-    this.onDialogClose = this.onDialogClose.bind(this);
   }
 
   componentDidMount() {
     this.setState({ isLoading: true });
+
+    let getOneExplorationPromise = ExplorationService.get(this.props.match.params.id, null, true);
+
     let explorationTypePromise = FixedValuesService.getExplorationTypes(true);
     explorationTypePromise
       .then(res => {
-        this.setState({ explorationTypes: res.data, isLoading: false });
+        this.setState({ explorationTypes: res.data });
+      })
+      .catch(err => this.setState({ serverError: true }));
+
+    getOneExplorationPromise
+      .then(res => {
+        this.setState({
+          id: res.data.id ? res.data.id : '',
+          agricolaEntityId: res.data.agricolaEntityId ? res.data.agricolaEntityId : '',
+          addressId: res.data.address && res.data.address.id ? res.data.address.id : '',
+          address: res.data.address && res.data.address.detail ? res.data.address.detail : '',
+          district: res.data.address && res.data.address.district ? res.data.address.district : '',
+          postalCode:
+            res.data.address && res.data.address.postalCode ? res.data.address.postalCode : '',
+          name: res.data.name ? res.data.name : '',
+          types: res.data.explorationTypes ? res.data.explorationTypes.map(elem => elem.name) : '',
+          isLoading: false,
+        });
       })
       .catch(err => this.setState({ serverError: true, isLoading: false }));
   }
 
-  onDialogClose(e) {
+  onDialogClose = e => {
     this.setState({ errors: null, serverError: null });
-  }
+    e.preventDefault();
+  };
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
     e.preventDefault();
   };
 
-  onCreate = e => {
+  onCancel = e => {
+    const entityId = this.props.match.params.entityId;
+    const id = this.props.match.params.id;
+    this.props.history.push(`/livestock/explorations/${entityId}/detail/${id}`);
+  };
+
+  onSave = e => {
     e.preventDefault();
     this.setState({ isLoading: true });
-    const {name, address, postalCode, district, types} = this.state;
+    const { id, name, agricolaEntityId, addressId, address, postalCode, district, types } = this.state;
     let explorationTypeIds = [];
     let errors = ExplorationValidations.validateCreateOrUpdateExploration(name, types);
 
@@ -78,36 +105,40 @@ class CreateExplorationPage extends Component {
     else {
       types.forEach(elem => {
         this.state.explorationTypes.find(exp => {
-          if(exp.name !== null && exp.name === elem)
-            explorationTypeIds.push(exp.id);
+          if (exp.name !== null && exp.name === elem) explorationTypeIds.push(exp.id);
         });
       });
-      let createExplorationResponse = ExplorationService.createExploration({
-        agricolaEntityId: this.props.match.params.id,
-        name,
-        address:{
-          detail: address,
-          district,
-          postalCode
+      let updateExplorationResponse = ExplorationService.updateExploration(
+        {
+          id,
+          agricolaEntityId,
+          name,
+          address: {
+            id: addressId,
+            detail: address,
+            district,
+            postalCode,
+          },
+          explorationTypes: explorationTypeIds,
         },
-        explorationTypes: explorationTypeIds
-      }, true);
+        true,
+      );
 
-      createExplorationResponse.then((res)=>{
-        this.setState({isLoading: false})
-        this.props.history.push(`/livestock/explorations/${this.props.match.params.id}/detail/${res.data.id}`);
-      }).catch((err) => {
-        this.setState({ serverError: true, isLoading: false })
-      });
+      updateExplorationResponse
+        .then(res => {
+          this.setState({ isLoading: false });
+          this.props.history.push(
+            `/livestock/explorations/${agricolaEntityId}/detail/${res.data.id}`,
+          );
+        })
+        .catch(err => {
+          this.setState({ serverError: true, isLoading: false });
+        });
     }
-  }; 
-
-  onCancel = e => {
-    const id = this.props.match.params.id;
-    this.props.history.push(`/livestock/explorations/${id}`);
   };
 
   render() {
+    console.log(this.state);
     const { isLoading, explorationTypes, errors, serverError } = this.state;
     return (
       <Fragment>
@@ -137,7 +168,10 @@ class CreateExplorationPage extends Component {
                   >
                     {explorationTypes.map(explorationType => (
                       <MenuItem key={explorationType.id} value={explorationType.name}>
-                        <Checkbox color="primary" checked={this.state.types.indexOf(explorationType.name) > -1} />
+                        <Checkbox
+                          color="primary"
+                          checked={this.state.types.indexOf(explorationType.name) > -1}
+                        />
                         <ListItemText primary={explorationType.name} />
                       </MenuItem>
                     ))}
@@ -176,9 +210,9 @@ class CreateExplorationPage extends Component {
                 variant="raised"
                 color="primary"
                 className="card-button"
-                onClick={this.onCreate}
+                onClick={this.onSave}
               >
-                Criar
+                Save
               </Button>
             </div>
           </Card>
@@ -207,4 +241,4 @@ class CreateExplorationPage extends Component {
   }
 }
 
-export default CreateExplorationPage;
+export default EditExplorationPage;
