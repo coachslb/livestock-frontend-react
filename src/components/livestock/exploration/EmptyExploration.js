@@ -2,7 +2,6 @@ import React from 'react';
 import EmptyListPlaceholder from '../../UI/Placeholders/EmptyListPlaceholder';
 
 const EmptyExploration = props => {
-  console.log(props);
   return (
     <EmptyListPlaceholder 
         img="exploration-img" 

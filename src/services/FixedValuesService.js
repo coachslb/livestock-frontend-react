@@ -18,6 +18,16 @@ let FixedValuesService = {
     let config = null;
     if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
     return axios.get(end.URL + end.VERSION + end.EXPLORATION_TYPES, config).then(handleResponse);
+  },
+  getPlaceTypes: async function(isAuthenticated){
+    let config = null;
+    if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.PLACE_TYPES, config).then(handleResponse);
+  },
+  getSoilTypes: async function(isAuthenticated){
+    let config = null;
+    if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.SOIL_TYPES, config).then(handleResponse);
   }
 };
 

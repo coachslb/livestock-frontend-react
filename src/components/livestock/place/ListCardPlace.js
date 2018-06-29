@@ -1,13 +1,8 @@
 import React from 'react';
-import { Typography } from 'material-ui';
-import { Button } from 'material-ui';
-import './exploration.css';
+import { Typography, Button } from 'material-ui';
+import '../exploration/exploration.css';
 
-const ListCardExploration = props => {
-  function onClick(e, id) {
-    props.onClick(e, props.data.id);
-  }
-
+const ListCardPlace = props => {
   function onEdit(e, id) {
     props.onEdit(e, props.data.id);
   }
@@ -16,24 +11,13 @@ const ListCardExploration = props => {
     props.onDelete(e, props.data.id);
   }
 
-  function getExplorationTypesFromId(explorationTypes) {
-    explorationTypes.sort((a, b) => a.id - b.id);
-    let first = true;
-    return explorationTypes.map(type => {
-      if (first) {
-        first = false;
-        return type.name;
-      } else return ', ' + type.name;
-    });
-  }
-
   return (
     <div className="card-container">
-      <div className="card-info" onClick={onClick}>
+      <div className="card-info">
         <Typography variant="title" style={{ marginTop: '20px' }}>
           {props.data.name}
         </Typography>
-        <p>{getExplorationTypesFromId(props.data.explorationTypes)}</p>
+        <p>{props.data.placeType.name}</p>
       </div>
       <div className="card-actions">
         <Button
@@ -59,4 +43,4 @@ const ListCardExploration = props => {
   );
 };
 
-export default ListCardExploration;
+export default ListCardPlace;

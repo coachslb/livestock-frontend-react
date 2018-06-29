@@ -55,7 +55,6 @@ class EntityDetailPage extends Component {
   };
 
   render() {
-    /* const { id } = this.props.match.params; */
     const { edit, serverError, isLoading } = this.state;
     let view = <ViewEntity onClick={this.onClick} entityData={this.state} />;
 

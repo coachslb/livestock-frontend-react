@@ -71,17 +71,11 @@ class CreateExplorationPage extends Component {
     e.preventDefault();
     this.setState({ isLoading: true });
     const {name, address, postalCode, district, types} = this.state;
-    let explorationTypeIds = [];
     let errors = ExplorationValidations.validateCreateOrUpdateExploration(name, types);
 
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
-      types.forEach(elem => {
-        this.state.explorationTypes.find(exp => {
-          if(exp.name !== null && exp.name === elem)
-            explorationTypeIds.push(exp.id);
-        });
-      });
+      let explorationTypeIds = types.map(elem => this.state.explorationTypes.find(exp => exp.name === elem).id);
       let createExplorationResponse = ExplorationService.createExploration({
         agricolaEntityId: this.props.match.params.id,
         name,

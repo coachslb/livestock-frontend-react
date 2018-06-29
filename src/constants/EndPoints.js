@@ -6,6 +6,8 @@ export const COUNTRIES = "/fixedvalues/countries";
 export const LANGUAGES = "/fixedvalues/languages";
 export const REGIONS = "/fixedvalues/regions";
 export const EXPLORATION_TYPES = "/fixedvalues/explorationTypes";
+export const PLACE_TYPES = "/fixedvalues/placeTypes";
+export const SOIL_TYPES = "/fixedvalues/soilTypes";
 
 /** Accounts */
 export const REGISTRATION = "/registration";
@@ -24,3 +26,6 @@ export const AGRICOLA_ENTITY = "/agricolaentity";
 
 /** Exploration */
 export const EXPLORATION = "/exploration";
+
+/** Place */
+export const PLACE = "/place";
