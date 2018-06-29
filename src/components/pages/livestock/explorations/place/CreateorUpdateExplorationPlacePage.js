@@ -140,7 +140,6 @@ class CreateorUpdateExplorationPlacePage extends Component {
   };
 
   onCancel = e => {
-    console.log(this.props)
     const { entityId, explorationId } = this.props.match.params;
     this.props.history.push(`/livestock/explorations/${entityId}/place/${explorationId}`);
   };

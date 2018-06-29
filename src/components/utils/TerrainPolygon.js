@@ -1,6 +1,6 @@
 import React from 'react';
 import { compose, withProps, lifecycle } from 'recompose';
-import { GoogleMap, Marker, withScriptjs, withGoogleMap, Polygon } from 'react-google-maps';
+import { GoogleMap, withScriptjs, withGoogleMap } from 'react-google-maps';
 import { DrawingManager } from 'react-google-maps/lib/components/drawing/DrawingManager';
 import SearchBox from 'react-google-maps/lib/components/places/SearchBox';
 /* global google */

@@ -28,6 +28,16 @@ let FixedValuesService = {
     let config = null;
     if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
     return axios.get(end.URL + end.VERSION + end.SOIL_TYPES, config).then(handleResponse);
+  },
+  getAnimalTypes: async function(explorationId, isAuthenticated){
+    let config = null;
+    if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.EXPLORATION_TYPES + `?explorationId=${explorationId}`, config).then(handleResponse);
+  },
+  getSexTypes: async function(isAuthenticated){
+    let config = null;
+    if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.SEX, config).then(handleResponse);
   }
 };
 

@@ -14,10 +14,11 @@ import CreateExplorationPage from '../components/pages/livestock/explorations/Cr
 import EntityDetailPage from '../components/pages/livestock/entities/EntityDetailPage';
 import EditExplorationPage from '../components/pages/livestock/explorations/EditExplorationPage';
 import ExplorationPlacePage from '../components/pages/livestock/explorations/place/ExplorationPlacePage';
-import ExplorationAnimalPage from '../components/pages/livestock/explorations/ExplorationAnimalPage';
+import CreateorUpdateExplorationPlacePage from '../components/pages/livestock/explorations/place/CreateorUpdateExplorationPlacePage';
+import ExplorationAnimalPage from '../components/pages/livestock/explorations/animal/ExplorationAnimalPage';
 import ExplorationGroupPage from '../components/pages/livestock/explorations/ExplorationGroupPage';
 import LoginUserDetailPage from '../components/pages/livestock/loginUser/LoginUserDetailPage';
-import CreateorUpdateExplorationPlacePage from '../components/pages/livestock/explorations/place/CreateorUpdateExplorationPlacePage';
+import CreateOrUpdateExplorationAnimalPage from '../components/pages/livestock/explorations/animal/CreateOrUpdateExplorationAnimalPage';
 
 class LivestockPage extends Component {
   render() {
@@ -32,7 +33,9 @@ class LivestockPage extends Component {
             <Route path="/livestock/explorations/:entityId/place/:explorationId/create" component={CreateorUpdateExplorationPlacePage}/> 
             <Route path="/livestock/explorations/:entityId/place/:explorationId/edit/:id" component={CreateorUpdateExplorationPlacePage}/> 
             <Route path="/livestock/explorations/:entityId/place/:id" component={ExplorationPlacePage}/> 
-            <Route path="/livestock/explorations/:entityId/animal/:id" component={ExplorationAnimalPage}/> 
+            <Route path="/livestock/explorations/:entityId/animal/:explorationId/create" component={CreateOrUpdateExplorationAnimalPage}/> 
+            <Route path="/livestock/explorations/:entityId/animal/:explorationId/edit/:id" component={CreateOrUpdateExplorationAnimalPage}/>
+            <Route path="/livestock/explorations/:entityId/animal/:explorationId" component={ExplorationAnimalPage}/>
             <Route path="/livestock/explorations/:entityId/group/:id" component={ExplorationGroupPage}/> 
             <Route path="/livestock/explorations/:entityId/edit/:id" component={EditExplorationPage}/> 
             <Route path="/livestock/explorations/:id/create" component={CreateExplorationPage}/>

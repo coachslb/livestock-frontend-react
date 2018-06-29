@@ -39,6 +39,31 @@ let ExplorationValidations = {
       console.log(errors)
     return errors;
   },
+  validateCreateOrUpdateAnimal: function(
+    name,
+    chipNumber,
+    animalType,
+    animalTypes,
+    sex,
+    sexList,
+    birthDate,
+  ) {
+    let errors = [];
+
+    if (name === null || name === '') errors.push(['name', 'Campo obrigatório']);
+
+    if (chipNumber === null || chipNumber === '' || isNaN(chipNumber)) errors.push(['chipNumber', 'Campo obrigatório']);
+
+    if (animalType === null || animalType === '' || animalTypes.find(type => animalType === type.id) === null)
+      errors.push(['animalType', 'Tipo de animal inválido']);
+
+    if (sex === null || sex === '' || sexList.find(type => sex === type.id) === null)
+      errors.push(['sex', 'Tipo de sexo inválido']);
+
+      console.log(errors)
+
+    return errors;
+  },
 };
 
 export default ExplorationValidations;

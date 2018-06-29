@@ -8,6 +8,7 @@ export const REGIONS = "/fixedvalues/regions";
 export const EXPLORATION_TYPES = "/fixedvalues/explorationTypes";
 export const PLACE_TYPES = "/fixedvalues/placeTypes";
 export const SOIL_TYPES = "/fixedvalues/soilTypes";
+export const SEX = "/fixedvalues/sexTypes";
 
 /** Accounts */
 export const REGISTRATION = "/registration";
@@ -29,3 +30,6 @@ export const EXPLORATION = "/exploration";
 
 /** Place */
 export const PLACE = "/place";
+
+/** Animal */
+export const ANIMAL = "/animal";

@@ -11,7 +11,7 @@ class ExplorationPlacePage extends Component {
       serverError: false,
       isLoading: false,
       hasData: false,
-      places: false,
+      places: null,
     };
   }
   componentDidMount() {

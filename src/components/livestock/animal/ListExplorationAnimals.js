@@ -1,0 +1,63 @@
+import React, { Component } from 'react';
+import { withStyles } from 'material-ui/styles';
+import { List, ListItem, ListItemSecondaryAction, ListItemText, Checkbox } from 'material-ui';
+
+const styles = theme => ({
+  root: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+  },
+});
+
+class ListExplorationAnimals extends Component {
+  state = {
+    checked: [],
+  };
+
+  handleToggle = value => () => {
+    const { checked } = this.state;
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    this.setState({
+      checked: newChecked,
+    });
+  };
+  render() {
+    const { classes } = this.props;
+    return (
+      <div className={classes.root}>
+        <List>
+          {[0, 1, 2, 3].map(value => (
+            <ListItem
+              key={value}
+              role={undefined}
+              dense
+              button
+              onClick={this.handleToggle(value)}
+              className={classes.listItem}
+            >
+              <Checkbox
+                checked={this.state.checked.indexOf(value) !== -1}
+                tabIndex={-1}
+                disableRipple
+              />
+              <ListItemText primary={`Line item ${value + 1}`} />
+              <ListItemSecondaryAction>
+                hello
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
+        </List>
+      </div>
+    );
+  }
+}
+
+export default withStyles(styles)(ListExplorationAnimals);
