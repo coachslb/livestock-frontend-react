@@ -43,7 +43,6 @@ class CreateorUpdateExplorationPlacePage extends Component {
     const getSoilTypes = FixedValuesService.getSoilTypes(true);
 
     if (id) {
-      console.log('Hello')
       this.setState({ id });
       const getPlaceResponse = PlaceService.get(id, null, true);
 
@@ -110,6 +109,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
     console.log(errors);
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
+      if(id){
       let createPlaceResponse = PlaceService.createPlace(
         {
           id,
@@ -136,6 +136,34 @@ class CreateorUpdateExplorationPlacePage extends Component {
         .catch(err => {
           this.setState({ serverError: true, isLoading: false });
         });
+      }else{
+        let updatePlaceResponse = PlaceService.updatePlace(
+          {
+            id,
+            name,
+            number,
+            placeType,
+            soilType,
+            area,
+            areaUnit: 'ha',
+            exploration: explorationId,
+          },
+          true,
+        );
+  
+        updatePlaceResponse
+          .then(res => {
+            this.setState({ isLoading: false });
+            this.props.history.push(
+              `/livestock/explorations/${this.props.match.params.entityId}/place/${
+                this.props.match.params.explorationId
+              }`,
+            );
+          })
+          .catch(err => {
+            this.setState({ serverError: true, isLoading: false });
+          });
+      }
     }
   };
 

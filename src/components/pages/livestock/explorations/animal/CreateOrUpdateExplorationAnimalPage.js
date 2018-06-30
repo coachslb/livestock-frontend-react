@@ -125,38 +125,73 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
     );
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
-      let createAnimalResponse = AnimalService.createAnimal(
-        {
-          id,
-          name,
-          number,
-          chipNumber,
-          explorationType: animalType,
-          sex,
-          birthDate,
-          breed,
-          motherNumber,
-          motherName,
-          fatherNumber,
-          fatherName,
-          bloodType,
-          exploration: explorationId,
-        },
-        true,
-      );
+      if (id) {
+        let createAnimalResponse = AnimalService.createAnimal(
+          {
+            id,
+            name,
+            number,
+            chipNumber,
+            explorationType: animalType,
+            sex,
+            birthDate,
+            breed,
+            motherNumber,
+            motherName,
+            fatherNumber,
+            fatherName,
+            bloodType,
+            exploration: explorationId,
+          },
+          true,
+        );
 
-      createAnimalResponse
-        .then(res => {
-          this.setState({ isLoading: false });
-          this.props.history.push(
-            `/livestock/explorations/${this.props.match.params.entityId}/animal/${
-              this.props.match.params.explorationId
-            }`,
-          );
-        })
-        .catch(err => {
-          this.setState({ serverError: true, isLoading: false });
-        });
+        createAnimalResponse
+          .then(res => {
+            this.setState({ isLoading: false });
+            this.props.history.push(
+              `/livestock/explorations/${this.props.match.params.entityId}/animal/${
+                this.props.match.params.explorationId
+              }`,
+            );
+          })
+          .catch(err => {
+            this.setState({ serverError: true, isLoading: false });
+          });
+      } else {
+        let updateAnimalResponse = AnimalService.updateAnimal(
+          {
+            id,
+            name,
+            number,
+            chipNumber,
+            explorationType: animalType,
+            sex,
+            birthDate,
+            breed,
+            motherNumber,
+            motherName,
+            fatherNumber,
+            fatherName,
+            bloodType,
+            exploration: explorationId,
+          },
+          true,
+        );
+
+        updateAnimalResponse
+          .then(res => {
+            this.setState({ isLoading: false });
+            this.props.history.push(
+              `/livestock/explorations/${this.props.match.params.entityId}/animal/${
+                this.props.match.params.explorationId
+              }`,
+            );
+          })
+          .catch(err => {
+            this.setState({ serverError: true, isLoading: false });
+          });
+      }
     }
   };
 

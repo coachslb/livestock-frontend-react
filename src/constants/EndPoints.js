@@ -33,3 +33,6 @@ export const PLACE = "/place";
 
 /** Animal */
 export const ANIMAL = "/animal";
+
+/** Group */
+export const GROUP = "/group"
