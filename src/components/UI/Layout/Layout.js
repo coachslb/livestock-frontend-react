@@ -183,7 +183,7 @@ class Layout extends Component {
     } = this.props;
 
     const { mobileOpen, value, entityName, entityId, errors, serverError } = this.state;
-
+    
     const drawer = (
       <div>
         <Hidden smDown>
@@ -197,7 +197,7 @@ class Layout extends Component {
         <MenuList>
           <MenuItem
             className={
-              pathname.startsWith('/livestock/dashboard') ? 'menu-item-selected' : 'menu-item'
+              pathname.startsWith('/livestock/dashboard') || pathname === '/' || pathname === '/livestock' ? 'menu-item-selected' : 'menu-item'
             }
             component={Link}
             to={`/livestock/dashboard/${entityId}`}

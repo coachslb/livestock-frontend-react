@@ -20,6 +20,7 @@ import LoginUserDetailPage from '../components/pages/livestock/loginUser/LoginUs
 import CreateOrUpdateExplorationAnimalPage from '../components/pages/livestock/explorations/animal/CreateOrUpdateExplorationAnimalPage';
 import CreateOrUpdateExplorationGroupPage from '../components/pages/livestock/explorations/group/CreateOrUpdateExplorationGroupPage'
 import ExplorationGroupPage from '../components/pages/livestock/explorations/group/ExplorationGroupPage';
+import RedirectToDashboard from '../components/pages/livestock/redirect/RedirectToDashboard';
 
 class LivestockPage extends Component {
   render() {
@@ -48,8 +49,9 @@ class LivestockPage extends Component {
             <Route path="/livestock/results" component={ResultsPage} />
             <Route path="/livestock/users" component={UsersPage} />
             <Route path="/livestock/support" component={SupportPage} />
-            <Route path="/livestock" component={DashboardPage} />
             <Route path="/logout" component={Logout} />
+            <Route path="/" exact component={DashboardPage} />
+            <Route path="/" component={RedirectToDashboard} />
           </Switch>
         </Layout>
       </BrowserRouter>

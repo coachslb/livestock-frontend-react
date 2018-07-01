@@ -1,63 +1,43 @@
 import React, { Component } from 'react';
-import { withStyles } from 'material-ui/styles';
-import { List, ListItem, ListItemSecondaryAction, ListItemText, Checkbox } from 'material-ui';
+import { Table, TableBody, TableHead, TableRow, TableCell } from 'material-ui';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    backgroundColor: theme.palette.background.paper,
-  },
-});
+const row = (x, i, header, handleRemove, onEdit) => {
+  return (
+    <TableRow key={`tr-${i}`}>
+      {header.map((y, k) => (
+        <TableCell key={`trc-${k}`}>
+          {y.prop !== 'birthDate'
+            ? y.prop !== 'explorationType'
+              ? x[y.prop]
+              : x[y.prop].name
+            : x[y.prop] ? x[y.prop].slice(0, 10) : ''}
+        </TableCell>
+      ))}
+      <TableCell>
+        <EditIcon onClick={() => onEdit(i)} />
+        <DeleteIcon onClick={() => handleRemove(i)} />
+      </TableCell>
+    </TableRow>
+  );
+};
 
 class ListExplorationAnimals extends Component {
-  state = {
-    checked: [],
-  };
-
-  handleToggle = value => () => {
-    const { checked } = this.state;
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    this.setState({
-      checked: newChecked,
-    });
-  };
   render() {
-    const { classes } = this.props;
+    const { header, data, handleRemove, onEdit } = this.props;
     return (
-      <div className={classes.root}>
-        <List>
-          {[0, 1, 2, 3].map(value => (
-            <ListItem
-              key={value}
-              role={undefined}
-              dense
-              button
-              onClick={this.handleToggle(value)}
-              className={classes.listItem}
-            >
-              <Checkbox
-                checked={this.state.checked.indexOf(value) !== -1}
-                tabIndex={-1}
-                disableRipple
-              />
-              <ListItemText primary={`Line item ${value + 1}`} />
-              <ListItemSecondaryAction>
-                hello
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-      </div>
+      <Table>
+        <TableHead>
+          <TableRow>
+            {header.map((x, i) => <TableCell key={`thc-${i}`}>{x.name}</TableCell>)}
+            <TableCell>Ações</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>{data.map(x => row(x, x.id, header, handleRemove, onEdit))}</TableBody>
+      </Table>
     );
   }
 }
 
-export default withStyles(styles)(ListExplorationAnimals);
+export default ListExplorationAnimals;

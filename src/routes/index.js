@@ -18,8 +18,7 @@ export default () => {
             <Route path="/create-entity" component={CreateEntityPage} />
             <Route path="/select-entity" component={SelectEntityPage} />
             <Route path="/logout" component={Logout} />
-            <Route path="/livestock" component={LivestockPage} />
-            <Route path="/" exact component={LivestockPage} />
+            <Route path="/" component={LivestockPage} />
         </Switch>
     </BrowserRouter>
     );

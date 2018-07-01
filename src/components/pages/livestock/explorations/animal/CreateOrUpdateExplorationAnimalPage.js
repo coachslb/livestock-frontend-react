@@ -18,6 +18,7 @@ import ErrorDialog from '../../../../UI/ErrorDialog/ErrorDialog';
 import FixedValuesService from '../../../../../services/FixedValuesService';
 import ExplorationValidations from '../../../../../validations/ExplorationValidations';
 import AnimalService from '../../../../../services/AnimalService';
+import GroupService from '../../../../../services/GroupService';
 import { CardActions } from '@material-ui/core';
 
 const ITEM_HEIGHT = 48;
@@ -57,16 +58,45 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
       fatherName: '',
       bloodType: '',
       groupList: null,
-      group: '',
+      group: [],
     };
+  }
+  formatDate(date){
+    return date.slice(0, 10);
   }
   componentDidMount() {
     this.setState({ isLoading: true });
-    const { explorationId } = this.props.match.params;
+    const { explorationId, id } = this.props.match.params;
 
+    if(id){
+      const animalResponse = AnimalService.get(id, null, true);
+      animalResponse.then(res => {
+        console.log(res.data);
+        this.setState({ 
+          name: res.data.name ? res.data.name : '',
+          number: res.data.number ? res.data.number : '',
+          chipNumber: res.data.chipNumber ? res.data.chipNumber : '',
+          animalType: res.data.explorationType ? res.data.explorationType.id : '',
+          sex: res.data.sex ? res.data.sex.id : '',
+          birthDate: res.data.birthDate ? this.formatDate(res.data.birthDate) : '',
+          breed: res.data.breed ? res.data.breed : '',
+          gestationPeriod: res.data.gestationPeriod ? res.data.gestationPeriod : '',
+          reproductionAge: res.data.reproductionAge ? res.data.reproductionAge : '',
+          reproductionWeight: res.data.reproductionWeight ? res.data.reproductionWeight : '',
+          motherNumber: res.data.motherNumber ? res.data.motherNumber : '',
+          motherName: res.data.motherName ? res.data.motherName : '',
+          fatherNumber: res.data.fatherNumber ? res.data.fatherNumber : '',
+          fatherName: res.data.fatherName ? res.data.fatherName : '',
+          bloodType: res.data.bloodType ? res.data.bloodType : '',
+          group: res.data.groups ? res.data.groups.map(elem => elem.name) : [],
+        })
+      }).catch(err => {
+        this.setState({ serverError: true });
+      });
+    }
     const animalTypesResponse = FixedValuesService.getAnimalTypes(explorationId, true);
     const animalSexResponse = FixedValuesService.getSexTypes(true);
-    /* const GroupResponse = GroupService.getExplorationGroups(explorationId, true); */
+    const groupResponse = GroupService.get(null, explorationId, true);
 
     animalTypesResponse
       .then(res => {
@@ -83,6 +113,14 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
       .catch(err => {
         this.setState({ serverError: true, isLoading: false });
       });
+
+    groupResponse
+      .then(res => {
+        this.setState({groupList: res.data, isLoading: false });
+      })
+      .catch(err => {
+        this.setState({ serverError: true, isLoading: false });
+      });
   }
 
   handleChange = e => {
@@ -95,10 +133,9 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
 
   onCreate = e => {
     e.preventDefault();
-    const { explorationId } = this.props.match.params;
+    const { explorationId, id } = this.props.match.params;
     this.setState({ isLoading: true });
     const {
-      id,
       name,
       number,
       chipNumber,
@@ -113,6 +150,8 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
       fatherNumber,
       fatherName,
       bloodType,
+      group,
+      groupList,
     } = this.state;
     let errors = ExplorationValidations.validateCreateOrUpdateAnimal(
       name,
@@ -126,6 +165,9 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
       if (id) {
+        let groupIds = group.map(
+          elem => groupList.find(exp => exp.name === elem).id,
+        );
         let createAnimalResponse = AnimalService.createAnimal(
           {
             id,
@@ -142,6 +184,7 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
             fatherName,
             bloodType,
             exploration: explorationId,
+            groups: groupIds,
           },
           true,
         );
@@ -159,6 +202,9 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
             this.setState({ serverError: true, isLoading: false });
           });
       } else {
+        let groupIds = group.map(
+          elem => groupList.find(exp => exp.name === elem).id,
+        );
         let updateAnimalResponse = AnimalService.updateAnimal(
           {
             id,
@@ -175,6 +221,7 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
             fatherName,
             bloodType,
             exploration: explorationId,
+            groups: groupIds,
           },
           true,
         );
@@ -198,14 +245,6 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
   onCancel = e => {
     const { entityId, explorationId } = this.props.match.params;
     this.props.history.push(`/livestock/explorations/${entityId}/animal/${explorationId}`);
-  };
-
-  getNewDate = e => {
-    const date = new Date()
-      .toJSON()
-      .slice(0, 10)
-      .replace(/-/g, '/');
-    return date;
   };
 
   render() {

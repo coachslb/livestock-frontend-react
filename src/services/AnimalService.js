@@ -25,7 +25,7 @@ const AnimalService = {
   deleteAnimal: async function(animalId, explorationId, enabled, isAuthenticated) {
     let config = null;
     if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
-    return axios.delete(end.URL + end.VERSION + end.PLACE + `?id=${animalId}&explorationId=${explorationId}&enabled=${enabled}`, config).then(handleResponse);
+    return axios.delete(end.URL + end.VERSION + end.ANIMAL + `?id=${animalId}&explorationId=${explorationId}&enabled=${enabled}`, config).then(handleResponse);
   },
 };
 

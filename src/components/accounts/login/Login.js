@@ -53,7 +53,7 @@ class Login extends Component {
         }
         else{
           localStorage.setItem('entityId', res.data.entityId);
-          this.props.history.push('/livestock');
+          this.props.history.push('/');
         }
       }).catch((err) => {
         this.setState({ serverError: true, isLoading: false })
