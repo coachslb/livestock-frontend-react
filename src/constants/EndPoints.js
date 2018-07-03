@@ -25,6 +25,9 @@ export const FORGOT_PASSWORD = "/password/request";
 /** Entity */
 export const AGRICOLA_ENTITY = "/agricolaentity";
 
+/** Dashboard */
+export const DASHBOARD = "/dashboard"
+
 /** Exploration */
 export const EXPLORATION = "/exploration";
 
