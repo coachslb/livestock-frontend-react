@@ -11,11 +11,11 @@ import {
   MenuItem,
   CircularProgress,
 } from 'material-ui';
-import TerrainPolygon from '../../../../utils/TerrainPolygon';
 import ErrorDialog from '../../../../UI/ErrorDialog/ErrorDialog';
 import FixedValuesService from '../../../../../services/FixedValuesService';
 import ExplorationValidations from '../../../../../validations/ExplorationValidations';
 import PlaceService from '../../../../../services/PlaceService';
+import MapDraw from '../../../../UI/MapDraw';
 
 class CreateorUpdateExplorationPlacePage extends Component {
   constructor() {
@@ -31,6 +31,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
       soilType: '',
       soilTypes: null,
       area: 0,
+      polygons: [],
     };
   }
 
@@ -55,6 +56,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
             placeType: res.data.placeType ? res.data.placeType.id : '',
             soilType: res.data.soilType ? res.data.soilType.id : '',
             area: res.data.area ? res.data.area : 0,
+            polygons: res.data.polygons ? res.data.polygons : [],
             isLoading: false,
           });
         })
@@ -96,7 +98,17 @@ class CreateorUpdateExplorationPlacePage extends Component {
     e.preventDefault();
     const { explorationId } = this.props.match.params;
     this.setState({ isLoading: true });
-    const { id, name, number, placeType, soilType, placeTypes, soilTypes, area } = this.state;
+    const {
+      id,
+      name,
+      number,
+      placeType,
+      soilType,
+      placeTypes,
+      soilTypes,
+      area,
+      polygons,
+    } = this.state;
     let errors = ExplorationValidations.validateCreateOrUpdatePlace(
       name,
       number,
@@ -105,38 +117,40 @@ class CreateorUpdateExplorationPlacePage extends Component {
       soilType,
       soilTypes,
       area,
+      polygons,
     );
     console.log(errors);
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
-      if(id){
-      let createPlaceResponse = PlaceService.createPlace(
-        {
-          id,
-          name,
-          number,
-          placeType,
-          soilType,
-          area,
-          areaUnit: 'ha',
-          exploration: explorationId,
-        },
-        true,
-      );
+      if (id) {
+        let createPlaceResponse = PlaceService.createPlace(
+          {
+            id,
+            name,
+            number,
+            placeType,
+            soilType,
+            area,
+            polygons,
+            areaUnit: 'ha',
+            exploration: explorationId,
+          },
+          true,
+        );
 
-      createPlaceResponse
-        .then(res => {
-          this.setState({ isLoading: false });
-          this.props.history.push(
-            `/livestock/explorations/${this.props.match.params.entityId}/place/${
-              this.props.match.params.explorationId
-            }`,
-          );
-        })
-        .catch(err => {
-          this.setState({ serverError: true, isLoading: false });
-        });
-      }else{
+        createPlaceResponse
+          .then(res => {
+            this.setState({ isLoading: false });
+            this.props.history.push(
+              `/livestock/explorations/${this.props.match.params.entityId}/place/${
+                this.props.match.params.explorationId
+              }`,
+            );
+          })
+          .catch(err => {
+            this.setState({ serverError: true, isLoading: false });
+          });
+      } else {
         let updatePlaceResponse = PlaceService.updatePlace(
           {
             id,
@@ -150,7 +164,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
           },
           true,
         );
-  
+
         updatePlaceResponse
           .then(res => {
             this.setState({ isLoading: false });
@@ -172,6 +186,10 @@ class CreateorUpdateExplorationPlacePage extends Component {
     this.props.history.push(`/livestock/explorations/${entityId}/place/${explorationId}`);
   };
 
+  handlePolygons = (polygons, area) => {
+    this.setState({ polygons, area });
+  };
+
   render() {
     const {
       placeTypes,
@@ -181,6 +199,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
       serverError,
       isLoading,
       area,
+      polygons,
       soilType,
       soilTypes,
     } = this.state;
@@ -220,7 +239,18 @@ class CreateorUpdateExplorationPlacePage extends Component {
                       </Select>
                     </FormControl>
                   )}
-                  <TerrainPolygon />
+                  <MapDraw
+                    language="pt-PT"
+                    style={{ width: '100%', height: '300px' }}
+                    polygons={polygons}
+                    onChangePolygons={this.handlePolygons}
+                    i18n={{
+                      area: 'Area',
+                      totalArea: 'Total Area',
+                      delete: 'Delete',
+                      deleteAll: 'Delete All',
+                    }}
+                  />
                   <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
                     <InputLabel>Área (ha)</InputLabel>
                     <Input name="area" value={area} onChange={this.handleChange} />

@@ -1,0 +1,135 @@
+.MapDraw {
+  background-color: white;
+  /* flex: 1; */
+}
+
+body.agMap-fullScreen .agDrawer,
+body.agMap-fullScreen .agAppBar {
+  z-index: auto;
+}
+
+.pac-container {
+  z-index: 65465464654654;
+}
+
+.MapDraw-input {
+  border: 5px solid #fff;
+  outline: none;
+  width: calc(100% - 60px);
+  max-width: 450px;
+  height: 28px;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  margin-top: 10px;
+  margin-left: 10px;
+  padding: 0;
+}
+
+.MapDraw-button {
+  border: 5px solid #fff;
+  outline: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  margin-top: 10px;
+  margin-right: 10px;
+  padding: 0;
+}
+
+.MapDraw-currentLocationButton {
+  background: #fff url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-2x.png)
+    no-repeat 0 0;
+  background-size: 180px 18px;
+}
+
+.MapDraw-currentLocationButton.loading {
+  animation: MapDraw-currentButton-loading 1s steps(2) infinite;
+}
+
+.MapDraw-currentLocationButton.default {
+  background-position: 0 0;
+}
+
+.MapDraw-currentLocationButton.fixed {
+  background-position: -144px 0;
+}
+
+.MapDraw-currentLocationButton.error {
+  background-position: -108px 0;
+}
+
+@keyframes MapDraw-currentButton-loading {
+  100% {
+    background-position: -36px 0;
+  }
+}
+
+.MapDraw-drawButton {
+  background: #fff url(https://maps.gstatic.com/mapfiles/drawing.png) no-repeat 0 0;
+  background-size: 18px 216px;
+}
+.MapDraw-drawButton[disabled] {
+  background-image: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.6) 0%,
+      rgba(255, 255, 255, 0.6) 100%
+    ),
+    url(https://maps.gstatic.com/mapfiles/drawing.png);
+}
+.MapDraw-drawButton.polygon {
+  background-position: 0 -72px;
+}
+.MapDraw-drawButton.polygon:hover {
+  background-position: 0 -108px;
+}
+.MapDraw-drawButton.hand {
+  background-position: 0 -90px;
+}
+.MapDraw-drawButton.hand:hover {
+  background-position: 0 -162px;
+}
+.MapDraw-drawButton.marker {
+  background-position: 0 -198px;
+}
+.MapDraw-drawButton.marker:hover:not([disabled]) {
+  background-position: 0 -126px;
+}
+
+.MapDraw-buttonCenter {
+  background-color: white;
+  vertical-align: middle;
+  line-height: 18px;
+  text-align: center;
+  color: #666666;
+  font-weight: bold;
+  padding: 0;
+}
+
+.MapDraw_IW {
+  display: flex;
+  align-items: center;
+  margin: 4px;
+}
+
+.MapDraw_IW > .icon-trash {
+  font-size: 24px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.MapDraw_IW > .icon-trash::before {
+  vertical-align: middle;
+}
+
+.MapDraw_Tooltip-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 8px;
+}
+
+.MapDraw_Tooltip.marker {
+  overflow: auto;
+  width: 220px;
+}

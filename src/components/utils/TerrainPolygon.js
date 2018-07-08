@@ -85,7 +85,9 @@ const MyMapComponent = compose(
           zIndex: 1,
         },
       }}
-      onPolygonComplete={p => console.log(p)}
+      onPolygonComplete={p => console.log(p.getPath()
+        .getArray()
+        .map(p => p.toJSON()))}
     />
   </GoogleMap>
 ));
