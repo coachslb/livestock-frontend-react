@@ -224,7 +224,7 @@ class Layout extends Component {
               pathname.startsWith('/livestock/management') ? 'menu-item-selected' : 'menu-item'
             }
             component={Link}
-            to="/livestock/management"
+            to={`/livestock/management/${entityId}`}
             style={{ padding: '20px' }}
             selected={pathname.startsWith('/livestock/management')}
           >

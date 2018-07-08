@@ -44,7 +44,7 @@ class CreateOrUpdateExplorationGroupPage extends Component {
           this.setState({
             id: res.data.id,
             name: res.data.name ? res.data.name : '',
-            place: res.data.places ? res.data.places[0].id : '',
+            place: res.data.places && res.data.length > 0 ? res.data.places[0].id : '',
             isLoading: false,
           });
         })
