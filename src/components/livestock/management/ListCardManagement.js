@@ -3,18 +3,19 @@ import { Typography, Button } from 'material-ui';
 
 const ListCardManagement = props => {
   function onEdit(e, id, type) {
-    props.onEdit(e, props.data.id, props.data.type.id);
+    console.log(props)
+    props.onEdit(e, props.data.id, props.data.managementType.id);
   }
 
   function onDelete(e, id, type) {
-    props.onDelete(e, props.data.id, props.data.type.id);
+    props.onDelete(e, props.data.id, props.data.managementType.id);
   }
 
   return (
     <div className="card-container">
       <div className="card-info">
         <Typography variant="title" style={{ marginTop: '20px' }}>
-          {props.data.type.name}
+          {props.data.managementType.name}
         </Typography>
         <p>00/00/00</p>
       </div>

@@ -43,3 +43,4 @@ export const GROUP = "/group"
 
 /** MANAGEMENT */
 export const MANAGEMENT = "/management";
+export const CHILD_BIRTH = "/childBirth";

@@ -80,7 +80,7 @@ class CreateOrUpdateExplorationGroupPage extends Component {
     let errors = ExplorationValidations.validateCreateOrUpdateGroup(name, place, placeList);
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
-      if (id) {
+      if (!id) {
         let createGroupResponse = GroupService.createGroup(
           {
             id,

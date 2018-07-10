@@ -38,7 +38,6 @@ class CreateorUpdateExplorationPlacePage extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
     const { id } = this.props.match.params;
-    console.log(id);
 
     const getPlaceTypes = FixedValuesService.getPlaceTypes(true);
     const getSoilTypes = FixedValuesService.getSoilTypes(true);
@@ -122,7 +121,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
     console.log(errors);
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
-      if (id) {
+      if (!id) {
         let createPlaceResponse = PlaceService.createPlace(
           {
             id,

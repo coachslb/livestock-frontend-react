@@ -7,13 +7,17 @@
     "@material-ui/icons": "^1.0.0-beta.43",
     "axios": "^0.18.0",
     "downshift": "^2.0.10",
+    "final-form": "^4.8.3",
+    "formik": "^0.11.11",
     "material-ui": "^1.0.0-beta.44",
     "react": "^16.2.0",
     "react-compose": "^2.0.0",
     "react-dom": "^16.2.0",
+    "react-final-form": "^3.6.4",
     "react-google-maps": "^9.4.5",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.1"
+    "react-scripts": "1.1.1",
+    "yup": "^0.25.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -164,7 +164,7 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
     );
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
-      if (id) {
+      if (!id) {
         let groupIds = group.map(
           elem => groupList.find(exp => exp.name === elem).id,
         );
