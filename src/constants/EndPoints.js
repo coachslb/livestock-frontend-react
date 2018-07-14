@@ -45,3 +45,4 @@ export const GROUP = "/group"
 export const MANAGEMENT = "/management";
 export const CHILD_BIRTH = "/childBirth";
 export const BIRTH_REGISTRATION = "/birthRegistration";
+export const WEIGHING = "/weighing";

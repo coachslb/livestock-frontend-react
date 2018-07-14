@@ -2,6 +2,7 @@ import React from 'react';
 import { Typography, Button } from 'material-ui';
 
 const ListCardManagement = props => {
+  console.log(props);
   function onEdit(e, id, type) {
     console.log(props)
     props.onEdit(e, props.data.id, props.data.managementType.id);
@@ -17,7 +18,7 @@ const ListCardManagement = props => {
         <Typography variant="title" style={{ marginTop: '20px' }}>
           {props.data.managementType.name}
         </Typography>
-        <p>00/00/00</p>
+        <p>{props.data.date ? new Date(props.data.date).toLocaleDateString().slice(0, 10) : "00/00/00"}</p>
       </div>
       <div className="card-actions">
         <Button

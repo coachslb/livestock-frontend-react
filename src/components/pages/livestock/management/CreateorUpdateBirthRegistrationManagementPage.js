@@ -29,11 +29,10 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
   onSubmit = async values => {
     const { entityId } = this.props.match.params;
     this.setState({ isLoading: true });
+    values.managementType = 2
+    values.agricolaEntity = entityId
     if (values.id) {
-      let updateBirthRegistrationResponse = ManagementBirthRegistrationService.update(
-        values,
-        true,
-      );
+      let updateBirthRegistrationResponse = ManagementBirthRegistrationService.update(values, true);
 
       updateBirthRegistrationResponse
         .then(res => {
@@ -41,14 +40,11 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
           this.props.history.push(`/livestock/management/${entityId}`);
         })
         .catch(err => {
-          console.log(err)
+          console.log(err);
           this.setState({ serverError: true, isLoading: false });
         });
     } else {
-      let createBirthRegistrationResponse = ManagementBirthRegistrationService.create(
-        values,
-        true,
-      );
+      let createBirthRegistrationResponse = ManagementBirthRegistrationService.create(values, true);
 
       createBirthRegistrationResponse
         .then(res => {
@@ -56,10 +52,9 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
           this.props.history.push(`/livestock/management/${entityId}`);
         })
         .catch(err => {
-          console.log(err)
+          console.log(err);
           this.setState({ serverError: true, isLoading: false });
         });
-      
     }
     //window.alert(JSON.stringify(values, 0, 2));
   };
@@ -80,12 +75,31 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
   };
 
   componentWillMount() {
-    const { entityId } = this.props.match.params;
+    const { entityId, id } = this.props.match.params;
     this.setState({ isLoading: true });
 
     let explorationsPromise = ExplorationService.get(null, entityId, true);
     let animalTypesPromise = FixedValuesService.getExplorationTypes(true);
     let sexTypesPromise = FixedValuesService.getSexTypes(true);
+
+    if (id) {
+      this.setState({ id });
+      const getBirthRegistrationResponse = ManagementBirthRegistrationService.get(
+        id,
+        entityId,
+        true,
+      );
+
+      getBirthRegistrationResponse
+        .then(res => {
+          console.log(res)
+          this.setState({birthRegistration: res.data})
+        })
+        .catch(err => {
+          console.log(err);
+          this.setState({ isLoading: false, serverError: true });
+        });
+    }
 
     sexTypesPromise
       .then(res => this.setState({ sexTypes: res.data }))
@@ -122,7 +136,7 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
               mutators={{
                 ...arrayMutators,
               }}
-              initialValues={{ ...birthRegistration }}
+              initialValues={{ ...birthRegistration,  }}
               validate={this.validate}
               render={({
                 handleSubmit,
@@ -226,11 +240,7 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
                               </i>
                             </div>
                             <div className="card-body">
-                              <InputForm
-                                name={`${name}.id`}
-                                required={false}
-                                type="hidden"
-                              />
+                              <InputForm name={`${name}.id`} required={false} type="hidden" />
                               <InputForm
                                 label="Nome"
                                 name={`${name}.name`}

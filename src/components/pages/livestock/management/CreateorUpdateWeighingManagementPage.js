@@ -8,6 +8,8 @@ import InputForm from '../../../UI/Inputs/InputForm';
 import SelectForm from '../../../UI/Inputs/SelectForm';
 import ManagementCreationCard from '../../../livestock/management/ManagementCreationCard';
 import ExplorationService from '../../../../services/ExplorationService';
+import AnimalService from '../../../../services/AnimalService';
+import ManagementWeighingService from '../../../../services/ManagementWeighingService';
 
 class CreateorUpdateWeighingManagementPage extends Component {
   constructor() {
@@ -16,6 +18,7 @@ class CreateorUpdateWeighingManagementPage extends Component {
       isLoading: null,
       serverError: null,
       explorationList: null,
+      exploration: null,
       weighing: {
         date: new Date().toJSON().slice(0, 10),
       },
@@ -24,24 +27,81 @@ class CreateorUpdateWeighingManagementPage extends Component {
 
   componentWillMount(){
     this.setState({ isLoading: true });
-    const {entityId} = this.props.match.params;
+    const {entityId, id} = this.props.match.params;
 
     let explorationsPromise = ExplorationService.get(null, entityId, true);
+    let animalPromise = AnimalService.get(null, 4, true);
+
+    if (id) {
+      this.setState({ id });
+      const getWeighingResponse = ManagementWeighingService.get(
+        id,
+        entityId,
+        true,
+      );
+
+      getWeighingResponse
+        .then(res => {
+          console.log(res)
+          this.setState({weighing: res.data})
+        })
+        .catch(err => {
+          console.log(err);
+          this.setState({ isLoading: false, serverError: true });
+        });
+    }
 
     explorationsPromise.then(res => {
-      this.setState({ explorationList: res.data, isLoading: false });
+      this.setState({ explorationList: res.data });
+    });
+
+    animalPromise.then(res => {
+      this.setState({ animalList: res.data, isLoading: false });
     });
   }
 
   onSubmit = async values => {
-    console.log('hello');
-    window.alert(JSON.stringify(values, 0, 2));
+    const { entityId } = this.props.match.params;
+    this.setState({ isLoading: true });
+    values.managementType = 3
+    values.agricolaEntity = entityId
+    if (values.id) {
+      let updateWeighingResponse = ManagementWeighingService.update(values, true);
+
+      updateWeighingResponse
+        .then(res => {
+          this.setState({ isLoading: false });
+          this.props.history.push(`/livestock/management/${entityId}`);
+        })
+        .catch(err => {
+          console.log(err);
+          this.setState({ serverError: true, isLoading: false });
+        });
+    } else {
+      let createWeighingResponse = ManagementWeighingService.create(values, true);
+
+      createWeighingResponse
+        .then(res => {
+          this.setState({ isLoading: false });
+          this.props.history.push(`/livestock/management/${entityId}`);
+        })
+        .catch(err => {
+          console.log(err);
+          this.setState({ serverError: true, isLoading: false });
+        });
+    }
+    //window.alert(JSON.stringify(values, 0, 2));
   };
 
   validate = values => {
     const errors = {};
     return errors;
   };
+
+  handleExplorationChange = (values, e) =>{
+    this.setState({exploration: e.target.value});
+    console.log(values);
+  }
 
   onDialogClose = e => {
     this.setState({ serverError: null });
@@ -54,7 +114,7 @@ class CreateorUpdateWeighingManagementPage extends Component {
 
   render() {
     const { entityId } = this.props.match.params;
-    const { isLoading, serverError, explorationList, weighing } = this.state;
+    const { isLoading, serverError, explorationList, animalList, weighing } = this.state;
     return (
       <Fragment>
         {!isLoading && (
@@ -96,7 +156,7 @@ class CreateorUpdateWeighingManagementPage extends Component {
                       </div>
                     </CardContent>
                   </Card>
-                  <FieldArray name="animals">
+                  <FieldArray name="animalData">
                     {({ fields }) =>
                       fields.map((name, index) => (
                         <Card style={{ marginTop: 20 }} key={name}>
@@ -110,13 +170,14 @@ class CreateorUpdateWeighingManagementPage extends Component {
                               </i>
                             </div>
                             <div className="card-body">
-                              <InputForm
+                            {animalList && (
+                              <SelectForm
                                 label="Animal"
-                                name={`${name}.name`}
+                                name={`${name}.animal`}
                                 required={true}
-                                type="text"
+                                list={animalList}
                                 style={{ width: '30%', margin: '10px', marginBottom: '40px' }}
-                              />
+                              />)}
                               <InputForm
                                 label="Peso"
                                 name={`${name}.weight`}
@@ -142,7 +203,7 @@ class CreateorUpdateWeighingManagementPage extends Component {
                       <Typography variant="headline" style={{ flexGrow: 1 }}>
                         Adicionar mais um animal
                       </Typography>
-                      <i className="material-icons" onClick={() => push('animals')}>
+                      <i className="material-icons" onClick={() => push('animalData')}>
                         add
                       </i>
                     </CardContent>

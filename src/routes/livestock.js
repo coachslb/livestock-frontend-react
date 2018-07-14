@@ -56,9 +56,9 @@ class LivestockPage extends Component {
             <Route path="/livestock/explorations/:id" component={ExplorationPage}/>
             <Route path="/livestock/management/:entityId/edit/childBirth/:id" component={CreateorUpdateChildBirthManagementPage} />
             <Route path="/livestock/management/:entityId/create/childBirth" component={CreateorUpdateChildBirthManagementPage} />
-            {/* <Route path="/livestock/management/:entityId/edit/birthRegistration/:id" component={CreateorUpdateBirthRegistrationManagementPage} /> */}
+            <Route path="/livestock/management/:entityId/edit/birthRegistration/:id" component={CreateorUpdateBirthRegistrationManagementPage} />
             <Route path="/livestock/management/:entityId/create/birthRegistration" component={CreateorUpdateBirthRegistrationManagementPage} />
-            {/* <Route path="/livestock/management/:entityId/edit/weighing/:id" component={CreateorUpdateWeighingManagementPage} /> */}
+            <Route path="/livestock/management/:entityId/edit/weighing/:id" component={CreateorUpdateWeighingManagementPage} />
             <Route path="/livestock/management/:entityId/create/weighing" component={CreateorUpdateWeighingManagementPage} />
             {/* <Route path="/livestock/management/:entityId/edit/feed/:id" component={CreateorUpdateFeedManagementPage} /> */}
             <Route path="/livestock/management/:entityId/create/feed" component={CreateorUpdateFeedManagementPage} />

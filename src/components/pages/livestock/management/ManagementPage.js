@@ -100,19 +100,20 @@ class ManagementPage extends Component {
       });
     return (
       <Fragment>
-        {!isLoading && render}
         {hasData &&
           !isLoading && (
             <Button
               className="placeholder-button-text"
               variant="raised"
-              style={{ width: '100%' }}
+              style={{ marginBottom: '20px', width: '100%' }}
               color="primary"
               onClick={this.onCreateManagement}
             >
               + Adicionar
             </Button>
           )}
+          {!isLoading && render}
+        
         {isLoading && (
           <CircularProgress
             style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'fixed' }}
