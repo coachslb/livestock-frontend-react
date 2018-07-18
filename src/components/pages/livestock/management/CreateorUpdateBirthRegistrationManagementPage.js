@@ -217,7 +217,7 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
                           style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
                         />
                         <InputForm
-                          label="Observations"
+                          label="Observações"
                           name="observations"
                           required={false}
                           type="text"

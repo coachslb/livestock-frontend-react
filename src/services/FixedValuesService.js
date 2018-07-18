@@ -38,7 +38,12 @@ let FixedValuesService = {
     let config = null;
     if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
     return axios.get(end.URL + end.VERSION + end.SEX, config).then(handleResponse);
-  }
+  },
+  getDeathCauses: async function(isAuthenticated){
+    let config = null;
+    if(isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.DEATH_CAUSES, config).then(handleResponse);
+  },
 };
 
 export default FixedValuesService;

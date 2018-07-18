@@ -6,12 +6,16 @@ import ManagementService from '../../../../services/ManagementService';
 import ManagementChildBirthService from '../../../../services/ManagementChildBirthService';
 import ManagementBirthRegistrationService from '../../../../services/ManagementBirthRegistrationService';
 import ManagementWeighingService from '../../../../services/ManagementWeighingService';
+import ManagementFeedingService from '../../../../services/ManagementFeedingService';
+import ManagementDeathService from '../../../../services/ManagementDeathService';
 
 const managementTypes = [
   //TODO transform in an object
   { id: 1, service: ManagementChildBirthService, name: 'childBirth' },
   { id: 2, service: ManagementBirthRegistrationService, name: 'birthRegistration' },
   { id: 3, service: ManagementWeighingService, name: 'weighing' },
+  { id: 4, service: ManagementFeedingService, name: 'feed' },
+  { id: 5, service: ManagementDeathService, name: 'death' },
 ];
 
 // const aa={

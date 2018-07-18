@@ -9,6 +9,7 @@ export const EXPLORATION_TYPES = "/fixedvalues/explorationTypes";
 export const PLACE_TYPES = "/fixedvalues/placeTypes";
 export const SOIL_TYPES = "/fixedvalues/soilTypes";
 export const SEX = "/fixedvalues/sexTypes";
+export const DEATH_CAUSES = "/fixedvalues/deathCauses";
 
 /** Accounts */
 export const REGISTRATION = "/registration";
@@ -46,3 +47,5 @@ export const MANAGEMENT = "/management";
 export const CHILD_BIRTH = "/childBirth";
 export const BIRTH_REGISTRATION = "/birthRegistration";
 export const WEIGHING = "/weighing";
+export const FEED = "/feed";
+export const DEATH = "/death";

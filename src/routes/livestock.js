@@ -60,13 +60,13 @@ class LivestockPage extends Component {
             <Route path="/livestock/management/:entityId/create/birthRegistration" component={CreateorUpdateBirthRegistrationManagementPage} />
             <Route path="/livestock/management/:entityId/edit/weighing/:id" component={CreateorUpdateWeighingManagementPage} />
             <Route path="/livestock/management/:entityId/create/weighing" component={CreateorUpdateWeighingManagementPage} />
-            {/* <Route path="/livestock/management/:entityId/edit/feed/:id" component={CreateorUpdateFeedManagementPage} /> */}
+            <Route path="/livestock/management/:entityId/edit/feed/:id" component={CreateorUpdateFeedManagementPage} />
             <Route path="/livestock/management/:entityId/create/feed" component={CreateorUpdateFeedManagementPage} />
             {/* <Route path="/livestock/management/:entityId/edit/sanitary/:id" component={CreateorUpdateSanitaryManagementPage} /> */}
             <Route path="/livestock/management/:entityId/create/sanitary" component={CreateorUpdateSanitaryManagementPage} />
             {/* <Route path="/livestock/management/:entityId/edit/sex/:id" component={CreateorUpdateCoberturaManagementPage} /> */}
             <Route path="/livestock/management/:entityId/create/sex" component={CreateorUpdateCoberturaManagementPage} />
-            {/* <Route path="/livestock/management/:entityId/edit/death/:id" component={CreateorUpdateDeathManagementPage} /> */}
+            <Route path="/livestock/management/:entityId/edit/death/:id" component={CreateorUpdateDeathManagementPage} />
             <Route path="/livestock/management/:entityId/create/death" component={CreateorUpdateDeathManagementPage} />
             {/* <Route path="/livestock/management/:entityId/edit/transfer/:id" component={CreateorUpdateTransferManagementPage} /> */}
             <Route path="/livestock/management/:entityId/create/transfer" component={CreateorUpdateTransferManagementPage} />
