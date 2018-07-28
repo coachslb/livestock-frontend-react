@@ -17,7 +17,7 @@ const ListCardGroup = props => {
         <Typography variant="title" style={{ marginTop: '20px' }}>
           {props.data.name}
         </Typography>
-        <p>Local</p>
+        <p>{props.data.place.name}</p>
       </div>
       <div className="card-actions">
         <Button

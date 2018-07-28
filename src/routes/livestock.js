@@ -62,17 +62,17 @@ class LivestockPage extends Component {
             <Route path="/livestock/management/:entityId/create/weighing" component={CreateorUpdateWeighingManagementPage} />
             <Route path="/livestock/management/:entityId/edit/feed/:id" component={CreateorUpdateFeedManagementPage} />
             <Route path="/livestock/management/:entityId/create/feed" component={CreateorUpdateFeedManagementPage} />
-            {/* <Route path="/livestock/management/:entityId/edit/sanitary/:id" component={CreateorUpdateSanitaryManagementPage} /> */}
+            <Route path="/livestock/management/:entityId/edit/sanitary/:id" component={CreateorUpdateSanitaryManagementPage} />
             <Route path="/livestock/management/:entityId/create/sanitary" component={CreateorUpdateSanitaryManagementPage} />
-            {/* <Route path="/livestock/management/:entityId/edit/sex/:id" component={CreateorUpdateCoberturaManagementPage} /> */}
+            <Route path="/livestock/management/:entityId/edit/sex/:id" component={CreateorUpdateCoberturaManagementPage} />
             <Route path="/livestock/management/:entityId/create/sex" component={CreateorUpdateCoberturaManagementPage} />
             <Route path="/livestock/management/:entityId/edit/death/:id" component={CreateorUpdateDeathManagementPage} />
             <Route path="/livestock/management/:entityId/create/death" component={CreateorUpdateDeathManagementPage} />
-            {/* <Route path="/livestock/management/:entityId/edit/transfer/:id" component={CreateorUpdateTransferManagementPage} /> */}
+            <Route path="/livestock/management/:entityId/edit/transfer/:id" component={CreateorUpdateTransferManagementPage} />
             <Route path="/livestock/management/:entityId/create/transfer" component={CreateorUpdateTransferManagementPage} />
-            {/* <Route path="/livestock/management/:entityId/edit/sellorPurchase/:id" component={CreateorUpdateSellorPurchaseManagementPage} /> */}
+            <Route path="/livestock/management/:entityId/edit/sellorPurchase/:id" component={CreateorUpdateSellorPurchaseManagementPage} />
             <Route path="/livestock/management/:entityId/create/sellorPurchase" component={CreateorUpdateSellorPurchaseManagementPage} />
-            {/* <Route path="/livestock/management/:entityId/edit/chip/:id" component={CreateorUpdateChipManagementPage} /> */}
+            <Route path="/livestock/management/:entityId/edit/chip/:id" component={CreateorUpdateChipManagementPage} />
             <Route path="/livestock/management/:entityId/create/chip" component={CreateorUpdateChipManagementPage} />
             <Route path="/livestock/management/:entityId/create" component={SelectManagementTypePage} />
             <Route path="/livestock/management/:entityId" component={ManagementPage} />

@@ -25,7 +25,6 @@ class ExplorationPage extends Component {
       getExplorationsResponse
         .then(res => {
           if (res.data.length > 0) {
-            console.log(res);
             this.setState({ hasData: true, isLoading: false, explorations: res.data });
           } else this.setState({ hasData: false, isLoading: false });
         })
@@ -73,6 +72,18 @@ class ExplorationPage extends Component {
       <Fragment>
         {!hasData && !isLoading && <EmptyExploration id={id} />}
         {hasData &&
+          !isLoading && (
+            <Button
+              className="placeholder-button-text"
+              variant="raised"
+              style={{ width: '100%', padding: '15px', marginBottom: '20px' }}
+              color="primary"
+              onClick={this.onCreateExploration}
+            >
+              + Adicionar
+            </Button>
+          )}
+        {hasData &&
           !isLoading &&
           explorations.map(el => {
             return (
@@ -85,18 +96,6 @@ class ExplorationPage extends Component {
               />
             );
           })}
-        {hasData &&
-          !isLoading && (
-            <Button
-              className="placeholder-button-text"
-              variant="raised"
-              style={{ width: '100%' }}
-              color="primary"
-              onClick={this.onCreateExploration}
-            >
-              + Adicionar
-            </Button>
-          )}
         {isLoading && (
           <CircularProgress
             style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'absolute' }}

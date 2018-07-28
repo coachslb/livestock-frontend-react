@@ -27,10 +27,10 @@ const AnimalService = {
     if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
     return axios.delete(end.URL + end.VERSION + end.ANIMAL + `?id=${animalId}&explorationId=${explorationId}&enabled=${enabled}`, config).then(handleResponse);
   },
-  getAnimalBySex: async function(sex, entityId, isAuthenticated) {
+  getAnimalBySex: async function(sex, entityId, explorationId, isAuthenticated) {
     let config = null;
     if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
-    return axios.get(end.URL + end.VERSION + end.ANIMAL + end.ANIMAL_SEX + `?sex=${sex}&entityId=${entityId}`, config).then(handleResponse);
+    return axios.get(end.URL + end.VERSION + end.ANIMAL + end.ANIMAL_SEX + `?sex=${sex}&entityId=${entityId}&explorationId=${explorationId}`, config).then(handleResponse);
   },
 };
 

@@ -31,7 +31,7 @@ class DashboardPage extends Component {
   }
 
   render() {
-    const { isLoading, serverError, freeTrial, license, firstUse, agricolaEntity, entityId } = this.state;
+    const { isLoading, serverError, freeTrial, license, firstUse, agricolaEntity, management, entityId } = this.state;
     console.log(this.state);
     const renderFirstUse = (
       <Fragment>
@@ -45,7 +45,7 @@ class DashboardPage extends Component {
 
     const renderStatistics = (
       <Fragment>
-        <StatisticsSection agricolaEntity={agricolaEntity}/>
+        <StatisticsSection agricolaEntity={agricolaEntity} management={management} entityId={entityId}/>
       </Fragment>
     );
     return (

@@ -10,10 +10,11 @@ import {
   Button,
   MenuItem,
   CircularProgress,
-  CardActions,
 } from 'material-ui';
+import ListExplorationAnimals from '../../../../livestock/animal/ListExplorationAnimals';
 import ErrorDialog from '../../../../UI/ErrorDialog/ErrorDialog';
 import ExplorationValidations from '../../../../../validations/ExplorationValidations';
+import AnimalService from '../../../../../services/AnimalService';
 import GroupService from '../../../../../services/GroupService';
 import PlaceService from '../../../../../services/PlaceService';
 
@@ -25,15 +26,22 @@ class CreateOrUpdateExplorationGroupPage extends Component {
       isLoading: null,
       serverError: null,
       errors: null,
+      animalList: null,
+      explorationAnimalList: null,
+      animal: '',
       name: '',
       place: '',
       placeList: null,
+      query: '',
+      columnToQuery: 'name',
+      addAnimal: false,
     };
   }
 
   componentDidMount() {
     const { id, explorationId } = this.props.match.params;
     const placeList = PlaceService.get(null, explorationId, true);
+    const explorationAnimalList = AnimalService.get(null, explorationId, true);
 
     if (id) {
       this.setState({ id, isLoading: true });
@@ -44,12 +52,12 @@ class CreateOrUpdateExplorationGroupPage extends Component {
           this.setState({
             id: res.data.id,
             name: res.data.name ? res.data.name : '',
-            place: res.data.places && res.data.length > 0 ? res.data.places[0].id : '',
+            place: res.data.place ? res.data.place.id : '',
+            animalList: res.data.animals ? res.data.animals : '',
             isLoading: false,
           });
         })
         .catch(err => {
-          console.log(err);
           this.setState({ isLoading: false, serverError: true });
         });
     }
@@ -59,7 +67,14 @@ class CreateOrUpdateExplorationGroupPage extends Component {
         this.setState({ placeList: res.data });
       })
       .catch(err => {
-        console.log(err);
+        this.setState({ isLoading: false, serverError: true });
+      });
+
+    explorationAnimalList
+      .then(res => {
+        this.setState({ explorationAnimalList: res.data });
+      })
+      .catch(err => {
         this.setState({ isLoading: false, serverError: true });
       });
   }
@@ -130,18 +145,106 @@ class CreateOrUpdateExplorationGroupPage extends Component {
     }
   };
 
+  handleRemove = i => {
+    /* const deleteAnimal = AnimalService.deleteAnimal(
+      i,
+      this.props.match.params.explorationId,
+      false,
+      true,
+    );
+
+    deleteAnimal
+      .then(res => {
+        if (res.data.length > 0) {
+          this.setState({ hasData: true, isLoading: false, animalList: res.data });
+        } else this.setState({ hasData: false, isLoading: false });
+      })
+      .catch(err => this.setState({ serverError: true, isLoading: false })); */
+  };
+
+  handleEdit = i => {
+    this.props.history.push(
+      `/livestock/explorations/${this.props.match.params.entityId}/animal/${
+        this.props.match.params.explorationId
+      }/edit/${i}`,
+    );
+  };
+
+  addAnimalForm = e => {
+    this.setState({ addAnimal: true });
+  };
+
   onCancel = e => {
     const { entityId, explorationId } = this.props.match.params;
     this.props.history.push(`/livestock/explorations/${entityId}/group/${explorationId}`);
   };
 
+  onCancelAddAnimal = e => {
+    this.setState({ animal: '', addAnimal: false });
+  };
+
+  handleAnimalChange = e => {
+    this.setState({ animal: e.target.value });
+  };
+
+  onAddAnimalToGroup = e => {
+    console.log('add animal to group');
+  };
+
   render() {
-    const { name, place, placeList, serverError, isLoading } = this.state;
+    const {
+      name,
+      place,
+      placeList,
+      animalList,
+      explorationAnimalList,
+      addAnimal,
+      animal,
+      query,
+      columnToQuery,
+      serverError,
+      isLoading,
+    } = this.state;
+    let renderAnimalList = (
+      <ListExplorationAnimals
+        handleRemove={this.handleRemove}
+        onEdit={this.handleEdit}
+        data={
+          query
+            ? animalList.filter(
+                item =>
+                  columnToQuery !== 'explorationType'
+                    ? item[columnToQuery] && item[columnToQuery].toLowerCase().includes(query)
+                    : item[columnToQuery].name &&
+                      item[columnToQuery].name.toLowerCase().includes(query),
+              )
+            : animalList
+        }
+        header={[
+          {
+            name: 'Nome',
+            prop: 'name',
+          },
+          {
+            name: 'Número',
+            prop: 'number',
+          },
+          {
+            name: 'Número do chip',
+            prop: 'chipNumber',
+          },
+          {
+            name: 'Tipo',
+            prop: 'explorationType',
+          },
+        ]}
+      />
+    );
     return (
       <Fragment>
         {!isLoading && (
           <Fragment>
-            <Card>
+            <Card style={{ marginBottom: 20 }}>
               <CardContent>
                 <div className="card-header">
                   <Typography variant="headline" className="card-header_title">
@@ -169,27 +272,88 @@ class CreateOrUpdateExplorationGroupPage extends Component {
                   )}
                 </div>
               </CardContent>
-              <CardActions style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Button
-                  size="medium"
-                  variant="raised"
-                  color="primary"
-                  className="card-button"
-                  onClick={this.onCancel}
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  size="medium"
-                  variant="raised"
-                  color="primary"
-                  className="card-button"
-                  onClick={this.onCreate}
-                >
-                  Guardar
-                </Button>
-              </CardActions>
             </Card>
+            <Card>
+              <CardContent>
+                <div className="card-header">
+                  <Typography variant="headline" className="card-header_title">
+                    Animais
+                  </Typography>
+                </div>
+                <div className="card-body">
+                  {animalList && animalList.length > 0
+                    ? renderAnimalList
+                    : 'Não existem animais presentes neste grupo'}
+                  {!addAnimal && explorationAnimalList && (
+                    <Button
+                      size="large"
+                      variant="raised"
+                      color="primary"
+                      style={{width: '100%', marginTop: 25}}
+                      onClick={this.addAnimalForm}
+                    >
+                      Adicionar Animal
+                    </Button>
+                  )}
+                  {addAnimal && (
+                      <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: 40, alignItems: 'center'}}>
+                        <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
+                          <InputLabel>Animal*</InputLabel>
+                          <Select name="animal" value={animal} onChange={this.handleAnimalChange}>
+                            {explorationAnimalList.map(a => {
+                              return (
+                                <MenuItem key={a.id} value={a.id}>
+                                  {a.name}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                        <div>
+                        <Button
+                          size="medium"
+                          variant="raised"
+                          color="primary"
+                          className="card-button"
+                          onClick={this.onCancelAddAnimal}
+                        >
+                          Cancelar
+                        </Button>
+                        <Button
+                          size="medium"
+                          variant="raised"
+                          color="primary"
+                          className="card-button"
+                          onClick={this.onAddAnimalToGroup}
+                        >
+                          Guardar
+                        </Button>
+                        </div>
+                      </div>
+                    )}
+                </div>
+              </CardContent>
+            </Card>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                size="medium"
+                variant="raised"
+                color="primary"
+                className="card-button"
+                onClick={this.onCancel}
+              >
+                Cancelar
+              </Button>
+              <Button
+                size="medium"
+                variant="raised"
+                color="primary"
+                className="card-button"
+                onClick={this.onCreate}
+              >
+                Guardar
+              </Button>
+            </div>
           </Fragment>
         )}
         {serverError && (

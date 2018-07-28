@@ -158,6 +158,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
             placeType,
             soilType,
             area,
+            polygons,
             areaUnit: 'ha',
             exploration: explorationId,
           },

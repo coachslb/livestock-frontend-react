@@ -8,14 +8,25 @@ import ManagementBirthRegistrationService from '../../../../services/ManagementB
 import ManagementWeighingService from '../../../../services/ManagementWeighingService';
 import ManagementFeedingService from '../../../../services/ManagementFeedingService';
 import ManagementDeathService from '../../../../services/ManagementDeathService';
+import ManagementCoberturaService from '../../../../services/ManagementCoberturaService';
+import ManagementSellOrPurchaseService from '../../../../services/ManagementSellOrPurchaseService';
+import ManagementSanitaryService from '../../../../services/ManagementSanitaryService';
+import ManagementChipService from '../../../../services/ManagementChipService';
+import ManagementTransferService from '../../../../services/ManagementTransferService';
 
-const managementTypes = [
+export const managementTypes = [
   //TODO transform in an object
   { id: 1, service: ManagementChildBirthService, name: 'childBirth' },
   { id: 2, service: ManagementBirthRegistrationService, name: 'birthRegistration' },
   { id: 3, service: ManagementWeighingService, name: 'weighing' },
   { id: 4, service: ManagementFeedingService, name: 'feed' },
   { id: 5, service: ManagementDeathService, name: 'death' },
+  { id: 6, service: ManagementCoberturaService, name: 'sex' },
+  { id: 7, service: ManagementSellOrPurchaseService, name: 'sellorPurchase' },
+  { id: 8, service: ManagementSellOrPurchaseService, name: 'sellorPurchase' },
+  { id: 9, service: ManagementTransferService, name: 'transfer' },
+  { id: 10, service: ManagementSanitaryService, name: 'sanitary' },
+  { id: 11, service: ManagementChipService, name: 'chip' },
 ];
 
 // const aa={
@@ -51,7 +62,7 @@ class ManagementPage extends Component {
     }
   }
 
-  getManagementType(managementTypeId){
+  getManagementType(managementTypeId) {
     return managementTypes.find(managementType => managementType.id === managementTypeId);
   }
 
@@ -59,27 +70,31 @@ class ManagementPage extends Component {
     e.preventDefault();
     const managementType = this.getManagementType(managementTypeId);
     const { entityId } = this.props.match.params;
-    this.props.history.push(`/livestock/management/${entityId}/edit/${managementType.name}/${managementId}`);
+    this.props.history.push(
+      `/livestock/management/${entityId}/edit/${managementType.name}/${managementId}`,
+    );
   };
 
-  onDelete = (e, managementId,  managementTypeId) => {
+  onDelete = (e, managementId, managementTypeId) => {
     e.preventDefault();
     this.setState({ isLoading: true });
     const { entityId } = this.props.match.params;
     const managementType = this.getManagementType(managementTypeId);
 
-    const deleteManagementResponse = managementType.service.delete(
-          managementId,
-          entityId,
-          true,
-        );
-        deleteManagementResponse
-          .then(res => {
-            if (res.data.length > 0) {
-              this.setState({ hasData: true, isLoading: false, groups: res.data });
-            } else this.setState({ hasData: false, isLoading: false });
-          })
-          .catch(err => this.setState({ serverError: true, isLoading: false })); 
+    const deleteManagement =
+      managementTypeId === 7
+        ? managementType.service.deleteSell
+        : managementTypeId === 8
+          ? managementType.service.deletePurchase
+          : managementType.service.delete;
+    const deleteManagementResponse = deleteManagement(managementId, entityId, true);
+    deleteManagementResponse
+      .then(res => {
+        if (res.data.length > 0) {
+          this.setState({ hasData: true, isLoading: false, managements: res.data });
+        } else this.setState({ hasData: false, isLoading: false });
+      })
+      .catch(err => this.setState({ serverError: true, isLoading: false }));
   };
 
   onCreateManagement = e => {
@@ -109,15 +124,15 @@ class ManagementPage extends Component {
             <Button
               className="placeholder-button-text"
               variant="raised"
-              style={{ marginBottom: '20px', width: '100%' }}
+              style={{ marginBottom: '20px', width: '100%', padding: '15px' }}
               color="primary"
               onClick={this.onCreateManagement}
             >
               + Adicionar
             </Button>
           )}
-          {!isLoading && render}
-        
+        {!isLoading && render}
+
         {isLoading && (
           <CircularProgress
             style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'fixed' }}

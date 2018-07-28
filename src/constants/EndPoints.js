@@ -10,6 +10,10 @@ export const PLACE_TYPES = "/fixedvalues/placeTypes";
 export const SOIL_TYPES = "/fixedvalues/soilTypes";
 export const SEX = "/fixedvalues/sexTypes";
 export const DEATH_CAUSES = "/fixedvalues/deathCauses";
+export const SANITARY_EVENT_TYPES = "/fixedvalues/eventTypes";
+export const COBERTURA_TYPES = "/fixedvalues/coberturaTypes";
+export const TRANSFER_TYPES = "/fixedvalues/transferTypes";
+export const SELL_OR_PURCHASE_TYPES = "/fixedvalues/sellOrPurchaseTypes";
 
 /** Accounts */
 export const REGISTRATION = "/registration";
@@ -44,8 +48,15 @@ export const GROUP = "/group"
 
 /** MANAGEMENT */
 export const MANAGEMENT = "/management";
+export const MANAGEMENT_TYPE = "/type";
 export const CHILD_BIRTH = "/childBirth";
 export const BIRTH_REGISTRATION = "/birthRegistration";
 export const WEIGHING = "/weighing";
 export const FEED = "/feed";
 export const DEATH = "/death";
+export const SANITARY = "/sanitary";
+export const COBERTURA = "/cobertura";
+export const TRANSFER = "/transfer";
+export const CHIP = "/chip";
+export const PURCHASE = "/purchase";
+export const SELL = "/sell";

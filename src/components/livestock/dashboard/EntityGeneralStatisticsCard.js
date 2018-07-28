@@ -17,9 +17,21 @@ const EntityGeneralStatisticsCard = props => {
           </p>
           <p className="statistic-element">
             <span className="statistic-element-number">
+              {props.places < 10 ? `0${props.places}` : props.places}
+            </span>{' '}
+            Locais
+          </p>
+          <p className="statistic-element">
+            <span className="statistic-element-number">
               {props.animals < 10 ? `0${props.animals}` : props.animals}
             </span>{' '}
             Animais
+          </p>
+          <p className="statistic-element">
+            <span className="statistic-element-number">
+              {props.managements < 10 ? `0${props.managements}` : props.managements}
+            </span>{' '}
+            Atividades
           </p>
           <p className="statistic-element">
             <span className="statistic-element-number">

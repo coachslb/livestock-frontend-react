@@ -2,7 +2,17 @@ import React, { Component, Fragment } from 'react';
 import { Form } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 import arrayMutators from 'final-form-arrays';
-import { Card, CardContent, Button, CircularProgress, Typography, FormControl, InputLabel, Select, MenuItem } from 'material-ui';
+import {
+  Card,
+  CardContent,
+  Button,
+  CircularProgress,
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from 'material-ui';
 import ErrorDialog from '../../../UI/ErrorDialog/ErrorDialog';
 import InputForm from '../../../UI/Inputs/InputForm';
 import SelectForm from '../../../UI/Inputs/SelectForm';
@@ -38,7 +48,14 @@ class CreateorUpdateWeighingManagementPage extends Component {
       getWeighingResponse
         .then(res => {
           console.log(res);
-          this.setState({ weighing: res.data });
+          this.setState({ weighing: res.data, exploration: res.data.exploration });
+          let animalPromise = AnimalService.get(null, res.data.exploration, true);
+
+          animalPromise
+            .then(res => {
+              this.setState({ animalList: res.data});
+            })
+            .catch(err => this.setState({ serverError: true, isLoading: false }));
         })
         .catch(err => {
           console.log(err);
@@ -98,11 +115,41 @@ class CreateorUpdateWeighingManagementPage extends Component {
           this.setState({ serverError: true, isLoading: false });
         });
     }
-    //window.alert(JSON.stringify(values, 0, 2));
+  };
+
+  validateArray = fields => {
+    const errors = {};
+    if (fields) {
+      fields.forEach(element => {
+        if(element !== undefined){
+          if (!element.weight) errors.weight = 'Required';
+          if (!element.animal) errors.animal = 'Required';
+        }else{
+          errors.number = 'Required';
+        }
+      });
+    }
+    return errors;
   };
 
   validate = values => {
     const errors = {};
+    if (!values.date) {
+      errors.date = 'Required';
+    }
+
+    if(new Date(values.date) > new Date()){
+      errors.date = 'Data inválida';
+    }
+
+    if (!values.exploration) {
+      errors.exploration = 'Required';
+    }
+
+    if(!values.animalData || !values.animalData.length > 0){
+      errors.data = 'Required';
+    }
+
     return errors;
   };
 
@@ -117,7 +164,14 @@ class CreateorUpdateWeighingManagementPage extends Component {
 
   render() {
     const { entityId } = this.props.match.params;
-    const { isLoading, serverError, explorationList, exploration, animalList, weighing } = this.state;
+    const {
+      isLoading,
+      serverError,
+      explorationList,
+      exploration,
+      animalList,
+      weighing,
+    } = this.state;
     return (
       <Fragment>
         {!isLoading && (
@@ -132,6 +186,8 @@ class CreateorUpdateWeighingManagementPage extends Component {
               validate={this.validate}
               render={({
                 handleSubmit,
+                pristine,
+                invalid,
                 values,
                 form: {
                   mutators: { push, pop },
@@ -157,7 +213,7 @@ class CreateorUpdateWeighingManagementPage extends Component {
                           <FormControl
                             style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
                           >
-                            <InputLabel>Exploração</InputLabel>
+                            <InputLabel required>Exploração</InputLabel>
                             <Select
                               name="exploration"
                               value={exploration}
@@ -183,10 +239,10 @@ class CreateorUpdateWeighingManagementPage extends Component {
                       </div>
                     </CardContent>
                   </Card>
-                  {exploration &&
+                  {exploration && animalList &&
                     animalList.length > 0 && (
                       <Fragment>
-                        <FieldArray name="animalData">
+                        <FieldArray name="animalData" validate={this.validateArray}>
                           {({ fields }) =>
                             fields.map((name, index) => (
                               <Card style={{ marginTop: 20 }} key={name}>
@@ -264,6 +320,7 @@ class CreateorUpdateWeighingManagementPage extends Component {
                       color="primary"
                       className="card-button"
                       type="submit"
+                      disabled={pristine || invalid}
                     >
                       Guardar
                     </Button>

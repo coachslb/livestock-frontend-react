@@ -1,5 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import { CircularProgress, FormControl, Input, InputLabel, Select, MenuItem, Button } from 'material-ui';
+import {
+  CircularProgress,
+  FormControl,
+  Input,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+} from 'material-ui';
 import EmptyAnimal from '../../../../livestock/animal/EmptyAnimal';
 import ListExplorationAnimals from '../../../../../components/livestock/animal/ListExplorationAnimals';
 import AnimalService from '../../../../../services/AnimalService';
@@ -18,7 +26,6 @@ class ExplorationAnimalPage extends Component {
   }
   componentDidMount() {
     this.setState({ isLoading: true });
-    console.log(this.props.match.params);
     const { explorationId } = this.props.match.params;
 
     if (explorationId) {
@@ -37,7 +44,9 @@ class ExplorationAnimalPage extends Component {
   onCreateAnimal = e => {
     e.preventDefault();
     this.props.history.push(
-      `/livestock/explorations/${this.props.match.params.entityId}/animal/${this.props.match.params.explorationId}/create`,
+      `/livestock/explorations/${this.props.match.params.entityId}/animal/${
+        this.props.match.params.explorationId
+      }/create`,
     );
   };
 
@@ -78,13 +87,20 @@ class ExplorationAnimalPage extends Component {
           <div style={{ width: '100%', margin: '20px 0' }}>
             <FormControl style={{ width: '200px', marginRight: '20px' }}>
               <InputLabel>Pesquisa</InputLabel>
-              <Input name="query" value={query} onChange={e => this.setState({query: e.target.value.toLowerCase()})} />
+              <Input
+                name="query"
+                value={query}
+                onChange={e => this.setState({ query: e.target.value.toLowerCase() })}
+              />
             </FormControl>
             <FormControl style={{ width: '200px' }}>
               <InputLabel>Coluna</InputLabel>
-              <Select 
-                value={columnToQuery} 
-                onChange={(event) => { this.setState({columnToQuery: event.target.value})}}>
+              <Select
+                value={columnToQuery}
+                onChange={event => {
+                  this.setState({ columnToQuery: event.target.value });
+                }}
+              >
                 <MenuItem value="name">Nome</MenuItem>
                 <MenuItem value="number">Número</MenuItem>
                 <MenuItem value="chipNumber">número do chip</MenuItem>
@@ -96,7 +112,16 @@ class ExplorationAnimalPage extends Component {
           <ListExplorationAnimals
             handleRemove={this.handleRemove}
             onEdit={this.handleEdit}
-            data={query ? animals.filter(item => columnToQuery !== 'explorationType' ? item[columnToQuery].toLowerCase().includes(query) : item[columnToQuery].name.toLowerCase().includes(query)) : animals}
+            data={
+              query
+                ? animals.filter(
+                    item =>
+                      columnToQuery !== 'explorationType'
+                        ? item[columnToQuery] && item[columnToQuery].toLowerCase().includes(query)
+                        : item[columnToQuery].name && item[columnToQuery].name.toLowerCase().includes(query),
+                  )
+                : animals
+            }
             header={[
               {
                 name: 'Nome',
@@ -124,19 +149,19 @@ class ExplorationAnimalPage extends Component {
       );
     return (
       <Fragment>
-        {!isLoading && render}
         {hasData &&
           !isLoading && (
             <Button
               className="placeholder-button-text"
               variant="raised"
-              style={{ width: '100%' }}
+              style={{ width: '100%', padding: '15px', marginBottom: '20px' }}
               color="primary"
               onClick={this.onCreateAnimal}
             >
               + Adicionar
             </Button>
           )}
+        {!isLoading && render}
         {isLoading && (
           <CircularProgress
             style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'absolute' }}

@@ -44,6 +44,26 @@ let FixedValuesService = {
     if(isAuthenticated) config = await AuthenticationService.checkAndGetToken();
     return axios.get(end.URL + end.VERSION + end.DEATH_CAUSES, config).then(handleResponse);
   },
+  getSanitaryEventTypes: async function(isAuthenticated){
+    let config = null;
+    if(isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.SANITARY_EVENT_TYPES, config).then(handleResponse);
+  },
+  getCoberturaTypes: async function(isAuthenticated){
+    let config = null;
+    if(isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.COBERTURA_TYPES, config).then(handleResponse);
+  },
+  getTranferTypes: async function(isAuthenticated){
+    let config = null;
+    if(isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.TRANSFER_TYPES, config).then(handleResponse);
+  },
+  getSellOrPurchase: async function(isAuthenticated){
+    let config = null;
+    if(isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.SELL_OR_PURCHASE_TYPES, config).then(handleResponse);
+  },
 };
 
 export default FixedValuesService;

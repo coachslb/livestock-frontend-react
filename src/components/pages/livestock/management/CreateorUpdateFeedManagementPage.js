@@ -122,8 +122,44 @@ class CreateorUpdateFeedManagementPage extends Component {
     }
   };
 
+  validateArray = fields => {
+    const errors = {};
+    if (fields) {
+      fields.forEach(element => {
+        if (element !== undefined) {
+          if (!element.food) errors.food = 'Required';
+          if (!element.qty) errors.qty = 'Required';
+        } else {
+          errors.number = 'Required';
+        }
+      });
+    }
+    return errors;
+  };
+
+  //TODO
   validate = values => {
     const errors = {};
+    if (!values.date) {
+      errors.date = 'Required';
+    }
+    if (new Date(values.date) > new Date()) {
+      errors.date = 'Data inválida';
+    }
+
+    if (!this.state.exploration) {
+      errors.exploration = 'Required';
+    }
+
+    if (!values.group) {
+      errors.group = 'Required';
+    }
+
+    if (!values.foodData || !values.foodData.length > 0) {
+      errors.data = 'Required';
+    }
+
+    console.log(errors);
     return errors;
   };
 
@@ -153,6 +189,8 @@ class CreateorUpdateFeedManagementPage extends Component {
               validate={this.validate}
               render={({
                 handleSubmit,
+                pristine,
+                invalid,
                 values,
                 form: {
                   mutators: { push, pop },
@@ -179,7 +217,7 @@ class CreateorUpdateFeedManagementPage extends Component {
                           <FormControl
                             style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
                           >
-                            <InputLabel>Exploração</InputLabel>
+                            <InputLabel required>Exploração</InputLabel>
                             <Select
                               name="exploration"
                               value={exploration}
@@ -200,7 +238,7 @@ class CreateorUpdateFeedManagementPage extends Component {
                           required={false}
                           type="text"
                           label="Observações"
-                          style={{ width: '60%', margin: '10px', marginBottom: '40px' }}
+                          style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
                         />
                       </div>
                     </CardContent>
@@ -228,7 +266,7 @@ class CreateorUpdateFeedManagementPage extends Component {
                   {exploration &&
                     values.group && (
                       <Fragment>
-                        <FieldArray name="foodData">
+                        <FieldArray name="foodData" validate={this.validateArray}>
                           {({ fields }) =>
                             fields.map((name, index) => (
                               <Card style={{ marginTop: 20 }} key={name}>
@@ -258,6 +296,7 @@ class CreateorUpdateFeedManagementPage extends Component {
                                       name={`${name}.qty`}
                                       required={false}
                                       type="number"
+                                      inputAdornment="kg"
                                       style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
                                     />
                                   </div>
@@ -295,6 +334,7 @@ class CreateorUpdateFeedManagementPage extends Component {
                       color="primary"
                       className="card-button"
                       type="submit"
+                      disabled={pristine || invalid}
                     >
                       Guardar
                     </Button>

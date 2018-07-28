@@ -29,8 +29,8 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
   onSubmit = async values => {
     const { entityId } = this.props.match.params;
     this.setState({ isLoading: true });
-    values.managementType = 2
-    values.agricolaEntity = entityId
+    values.managementType = 2;
+    values.agricolaEntity = entityId;
     if (values.id) {
       let updateBirthRegistrationResponse = ManagementBirthRegistrationService.update(values, true);
 
@@ -59,9 +59,46 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
     //window.alert(JSON.stringify(values, 0, 2));
   };
 
+  validateArray = fields => {
+    console.log(fields);
+    const errors = {};
+    if (fields) {
+      fields.forEach(element => {
+        if(element !== undefined){
+          if (!element.number) errors.number = 'Required';
+          if (!element.sex) errors.sex = 'Required';
+        }else{
+          errors.number = 'Required';
+        }
+      });
+    }
+    return errors;
+  };
+
   //TODO
   validate = values => {
     const errors = {};
+    if (!values.date) {
+      errors.data = 'Required';
+    }
+    if(new Date(values.date) > new Date()){
+      errors.date = 'Data inválida';
+    }
+    
+    if (!values.exploration) {
+      errors.exploration = 'Required';
+    }
+    if (!values.motherNumber) {
+      errors.motherNumber = 'Required';
+    }
+    if (!values.animalType) {
+      errors.animalType = 'Required';
+    }
+
+    if (!values.animalData) {
+      errors.animalData = 'Required';
+    }
+
     return errors;
   };
 
@@ -92,8 +129,8 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
 
       getBirthRegistrationResponse
         .then(res => {
-          console.log(res)
-          this.setState({birthRegistration: res.data})
+          console.log(res);
+          this.setState({ birthRegistration: res.data });
         })
         .catch(err => {
           console.log(err);
@@ -136,10 +173,12 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
               mutators={{
                 ...arrayMutators,
               }}
-              initialValues={{ ...birthRegistration,  }}
+              initialValues={{ ...birthRegistration }}
               validate={this.validate}
               render={({
                 handleSubmit,
+                pristine,
+                invalid,
                 values,
                 form: {
                   mutators: { push, pop },
@@ -175,7 +214,7 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
                           label="Número da mãe"
                           name="motherNumber"
                           required={true}
-                          type="text"
+                          type="number"
                           style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
                         />
                         <InputForm
@@ -189,7 +228,7 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
                           label="Número do pai"
                           name="fatherNumber"
                           required={false}
-                          type="text"
+                          type="number"
                           style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
                         />
                         <InputForm
@@ -226,7 +265,7 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
                       </div>
                     </CardContent>
                   </Card>
-                  <FieldArray name="animalData">
+                  <FieldArray name="animalData" validate={this.validateArray}>
                     {({ fields }) =>
                       fields.map((name, index) => (
                         <Card style={{ marginTop: 20 }} key={name}>
@@ -283,6 +322,7 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
                                 name={`${name}.weight`}
                                 required={false}
                                 type="number"
+                                step="0.01"
                                 style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
                               />
                             </div>
@@ -317,6 +357,7 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
                       color="primary"
                       className="card-button"
                       type="submit"
+                      disabled={pristine || invalid}
                     >
                       Guardar
                     </Button>

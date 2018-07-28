@@ -20,8 +20,6 @@ let ExplorationValidations = {
     area,
   ) {
     let errors = [];
-    console.log(placeType);
-    console.log(placeTypes);
 
     if (name === null || name === '') errors.push(['name', 'Campo obrigatório']);
 
@@ -44,7 +42,6 @@ let ExplorationValidations = {
 
     if (isNaN(area) || area < 0) errors.push(['area', 'Área inválida']);
 
-    console.log(errors);
     return errors;
   },
   validateCreateOrUpdateAnimal: function(

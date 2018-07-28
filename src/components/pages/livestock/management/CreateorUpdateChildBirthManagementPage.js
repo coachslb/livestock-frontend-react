@@ -56,7 +56,9 @@ class CreateorUpdateChildBirthManagementPage extends Component {
           this.setState({
             id: res.data.id,
             obs: res.data.observations || '',
-            date: res.data.date ? DateUtilsService.formatDate(res.data.date) : new Date().toJSON().slice(0, 10),
+            date: res.data.date
+              ? DateUtilsService.formatDate(res.data.date)
+              : new Date().toJSON().slice(0, 10),
             exploration:
               res.data.animals !== null && res.data.animals.length > 0
                 ? res.data.animals[0].exploration.id
@@ -69,9 +71,12 @@ class CreateorUpdateChildBirthManagementPage extends Component {
               res.data.animals !== null && res.data.animals.length > 0
                 ? res.data.animals.find(animal => animal.sex.id === 2).id
                 : '',
-            male: res.data.animals !== null && res.data.animals.length > 0
-                ? res.data.animals.find(animal => animal.sex.id === 1) ? 
-                res.data.animals.find(animal => animal.sex.id === 1).id : '' : '',
+            male:
+              res.data.animals !== null && res.data.animals.length > 0
+                ? res.data.animals.find(animal => animal.sex.id === 1)
+                  ? res.data.animals.find(animal => animal.sex.id === 1).id
+                  : ''
+                : '',
             childNumber: res.data.numberOfChilds || '',
             isLoading: false,
           });
@@ -84,8 +89,8 @@ class CreateorUpdateChildBirthManagementPage extends Component {
 
     let animalTypePromise = FixedValuesService.getExplorationTypes(true);
     let explorationsPromise = ExplorationService.get(null, entityId, true);
-    let animalMalePromise = AnimalService.getAnimalBySex(1, entityId, true);
-    let animalFemalePromise = AnimalService.getAnimalBySex(2, entityId, true);
+    let animalMalePromise = AnimalService.getAnimalBySex(1, entityId, 4, true);
+    let animalFemalePromise = AnimalService.getAnimalBySex(2, entityId, 4, true);
 
     explorationsPromise.then(res => {
       this.setState({ explorationList: res.data });
@@ -198,14 +203,16 @@ class CreateorUpdateChildBirthManagementPage extends Component {
       childNumber,
       currentAnimalFemaleList,
       currentAnimalMaleList,
+      exploration,
     } = this.state;
+
     if (!id) {
       let createChildBirthResponse = ManagementChildBirthService.create(
         {
-          id,
           date,
           managementType: 1,
           agricolaEntityId: entityId,
+          exploration: exploration,
           observations: obs,
           animals: [female, male].filter(Boolean),
           motherChipNumber:
@@ -232,10 +239,13 @@ class CreateorUpdateChildBirthManagementPage extends Component {
           date,
           managementType: 1,
           agricolaEntityId: entityId,
+          exploration: exploration,
           observations: obs,
           animals: [female, male].filter(Boolean),
-          motherChipNumber: female && currentAnimalFemaleList.find(animal => animal.id === female).chipNumber,
-          fatherChipNumber: male && currentAnimalMaleList.find(animal => animal.id === male).chipNumber,
+          motherChipNumber:
+            female && currentAnimalFemaleList.find(animal => animal.id === female).chipNumber,
+          fatherChipNumber:
+            male && currentAnimalMaleList.find(animal => animal.id === male).chipNumber,
           numberOfChilds: childNumber,
         },
         true,
@@ -283,13 +293,14 @@ class CreateorUpdateChildBirthManagementPage extends Component {
                       label="Data"
                       name="date"
                       value={date}
+                      required
                       onChange={this.handleChange}
                       InputLabelProps={{ shrink: true }}
                     />
                   </FormControl>
                   {animalTypeList && (
                     <FormControl style={{ width: '30%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>Tipo de animal</InputLabel>
+                      <InputLabel required>Tipo de animal</InputLabel>
                       <Select
                         name="animalType"
                         value={animalType}
@@ -307,7 +318,7 @@ class CreateorUpdateChildBirthManagementPage extends Component {
                   )}
                   {explorationList && (
                     <FormControl style={{ width: '30%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>Exploração</InputLabel>
+                      <InputLabel required>Exploração</InputLabel>
                       <Select
                         name="exploration"
                         value={exploration}
@@ -325,12 +336,14 @@ class CreateorUpdateChildBirthManagementPage extends Component {
                   )}
                   {currentAnimalFemaleList && (
                     <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>Femea</InputLabel>
+                      <InputLabel required>Femea</InputLabel>
                       <Select name="female" value={female} onChange={this.handleChange}>
                         {currentAnimalFemaleList.map(animal => {
                           return (
                             <MenuItem key={animal.id} value={animal.id}>
-                              {`${animal.number} - ${animal.name} (${animal.chipNumber})`}
+                              {`${animal.number} - ${animal.name ? animal.name : ''} (${
+                                animal.chipNumber
+                              })`}
                             </MenuItem>
                           );
                         })}
@@ -344,7 +357,9 @@ class CreateorUpdateChildBirthManagementPage extends Component {
                         {currentAnimalMaleList.map(animal => {
                           return (
                             <MenuItem key={animal.id} value={animal.id}>
-                              {`${animal.number} - ${animal.name} (${animal.chipNumber})`}
+                              {`${animal.number} - ${animal.name ? animal.name : ''} (${
+                                animal.chipNumber ? animal.chipNumber : ''
+                              })`}
                             </MenuItem>
                           );
                         })}
@@ -352,7 +367,7 @@ class CreateorUpdateChildBirthManagementPage extends Component {
                     </FormControl>
                   )}
                   <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                    <InputLabel>Quantidade de crias</InputLabel>
+                    <InputLabel required>Quantidade de crias</InputLabel>
                     <Input
                       name="childNumber"
                       type="number"
@@ -382,6 +397,7 @@ class CreateorUpdateChildBirthManagementPage extends Component {
                 variant="raised"
                 color="primary"
                 className="card-button"
+                disabled={!female || !date || !animalType || !exploration || !childNumber}
                 onClick={this.onCreate}
               >
                 Guardar

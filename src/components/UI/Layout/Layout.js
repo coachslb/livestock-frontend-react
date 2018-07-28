@@ -233,18 +233,6 @@ class Layout extends Component {
           </MenuItem>
           <MenuItem
             className={
-              pathname.startsWith('/livestock/inventory') ? 'menu-item-selected' : 'menu-item'
-            }
-            component={Link}
-            to="/livestock/inventory"
-            style={{ padding: '20px' }}
-            selected={pathname.startsWith('/livestock/inventory')}
-          >
-            <i className="material-icons material-icons-menu">shopping_cart</i>
-            Inventário
-          </MenuItem>
-          <MenuItem
-            className={
               pathname.startsWith('/livestock/results') ? 'menu-item-selected' : 'menu-item'
             }
             component={Link}

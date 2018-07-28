@@ -9,6 +9,11 @@ const ManagementService = {
     if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
     return axios.get(end.URL + end.VERSION + end.MANAGEMENT + `?entityId=${entityId}`, config).then(handleResponse);
   },
+  getType: async function(managementId, isAuthenticated) {
+    let config = null;
+    if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.MANAGEMENT + end.MANAGEMENT_TYPE + `?managementId=${managementId}`, config).then(handleResponse);
+  },
 };
 
 export default ManagementService;
