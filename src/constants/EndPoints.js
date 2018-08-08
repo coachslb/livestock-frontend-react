@@ -42,6 +42,7 @@ export const PLACE = "/place";
 /** Animal */
 export const ANIMAL = "/animal";
 export const ANIMAL_SEX = "/sex";
+export const ADD_TO_GROUP = "/addToGroup";
 
 /** Group */
 export const GROUP = "/group"
@@ -60,3 +61,7 @@ export const TRANSFER = "/transfer";
 export const CHIP = "/chip";
 export const PURCHASE = "/purchase";
 export const SELL = "/sell";
+
+/** Workers */
+export const WORKER = "/worker";
+export const FIND_USER_EMAIL = "/userEmail";

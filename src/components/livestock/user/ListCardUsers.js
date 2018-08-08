@@ -1,8 +1,12 @@
 import React from 'react';
-import { Typography, Button } from 'material-ui';
-import '../exploration/exploration.css';
+import { Typography } from 'material-ui';
+import { Button } from 'material-ui';
 
-const ListCardGroup = props => {
+const ListCardUsers = props => {
+  function onClick(e, id) {
+    props.onClick(e, props.data.id);
+  }
+
   function onEdit(e, id) {
     props.onEdit(e, props.data.id);
   }
@@ -13,11 +17,11 @@ const ListCardGroup = props => {
 
   return (
     <div className="card-container">
-      <div className="card-info">
+      <div className="card-info" onClick={onClick}>
         <Typography variant="title" style={{ marginTop: '20px' }}>
-          {props.data.name}
+          {`${props.data.username} ${props.data.manage ? '(Gerente)' : ''}` }
         </Typography>
-        <p>{props.data.place ? props.data.place.name : ''}</p>
+        <p>{props.data.function}</p>
       </div>
       <div className="card-actions">
         <Button
@@ -29,18 +33,21 @@ const ListCardGroup = props => {
         >
           Editar
         </Button>
-        <Button
+        {!props.data.manage && (
+          <Button
           size="medium"
           variant="raised"
           color="primary"
           className="card-button"
           onClick={onDelete}
         >
-          Remover
+          Desassociar
         </Button>
+        )}
+        
       </div>
     </div>
   );
 };
 
-export default ListCardGroup;
+export default ListCardUsers;

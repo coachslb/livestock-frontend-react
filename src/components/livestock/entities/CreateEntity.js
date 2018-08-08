@@ -75,10 +75,10 @@ class CreateEntity extends Component {
 
     return (
       <Fragment>
-      {!isLoading &&
+      {!isLoading && (
         <div className="createEntityForm">
         <Typography variant="headline" className="form-title">
-          Create Entity
+          Criar entidade agricola
         </Typography>
         <form onSubmit={this.onSubmitCreateEntity.bind(this)}>
           <InputField
@@ -86,7 +86,7 @@ class CreateEntity extends Component {
             name="name"
             onChange={this.onChange}
             required={true}
-            label="Name"
+            label="Nome"
             errorMessage={
               errors != null &&
               errors.filter(error => {
@@ -108,7 +108,7 @@ class CreateEntity extends Component {
             }
           />
           <FormControl style={{ width: '45%', margin: '10px' }}>
-            <InputLabel required>Country</InputLabel>
+            <InputLabel required>País</InputLabel>
             <Select
               name="country"
               value={country !== '' ? country : 'Portugal'}
@@ -124,13 +124,13 @@ class CreateEntity extends Component {
             </Select>
           </FormControl>
           <SubmitButton
-            style={{ marginTop: '50px', width: '20%', marginLeft: '10px', padding: '15px' }}
+            style={{ marginTop: '50px', width: '20%', marginLeft: '10px' }}
             color="primary"
             variant="raised"
           >
-            Conclude
+            Concluir
           </SubmitButton>
-        </form> </div>}
+      </form> </div>)}
         {errors && (
           <ErrorDialog
             title="Input Errors"
@@ -147,7 +147,6 @@ class CreateEntity extends Component {
           />
         )}
          {isLoading && <CircularProgress style={{height:'80px', width:'80px', top:"50%", left:"50%", position: 'absolute'}}/>}
-        )}
         </Fragment>
       
     );

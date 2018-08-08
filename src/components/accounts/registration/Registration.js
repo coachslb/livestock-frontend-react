@@ -101,13 +101,13 @@ class Registration extends Component {
             name="name"
             onChange={this.onChange}
             required={true}
-            label="Name"
+            label="Nome"
             errorMessage={errors != null && errors.filter(error => {
               return error[0] === 'name';
             })}
           />
           <FormControl style={{ width: '30%', margin: '10px' }}>
-            <InputLabel required>Country</InputLabel>
+            <InputLabel required>País</InputLabel>
             <Select
               name="country"
               value={country !== '' ? country : 'Portugal'}
@@ -127,7 +127,7 @@ class Registration extends Component {
             name="phone"
             onChange={this.onChange}
             required={true}
-            label="Phone Number"
+            label="Contacto"
             errorMessage={errors != null && errors.filter(error => {
               return error[0] === 'phone';
             })}
@@ -136,7 +136,7 @@ class Registration extends Component {
             style={{ width: '60%', margin: '10px' }}
             name="email"
             onChange={this.onChange}
-            required={false}
+            required={true}
             label="E-mail"
             errorMessage={errors != null && errors.filter(error => {
               return error[0] === 'email';
@@ -147,7 +147,7 @@ class Registration extends Component {
             name="password"
             onChange={this.onChange}
             required={true}
-            label="Password"
+            label="Palavra-passe"
             type="password"
             errorMessage={errors != null && errors.filter(error => {
               console.log(error[0])
@@ -159,7 +159,7 @@ class Registration extends Component {
             name="repeatPassword"
             onChange={this.onChange}
             required={true}
-            label="Repeat password"
+            label="Repetir palavra-passe"
             type="password"
             errorMessage={errors != null && errors.filter(error => {
               return error[0] === 'password';
@@ -170,14 +170,14 @@ class Registration extends Component {
             color="primary"
             variant="raised"
           >
-            Next
+            Seguinte
             <i className="material-icons">arrow_forward</i>
           </SubmitButton>
         </form>
         {errors && (
           <ErrorDialog
-            title="Registration Error"
-            text="There are some input errors"
+            title="Erro no Registo"
+            text="Existem campos inválidos"
             errors={errors}
             onDialogClose={this.onDialogClose}
           />

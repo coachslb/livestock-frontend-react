@@ -26,7 +26,7 @@ class Login extends Component {
     this.setState({isLoading: true})
     let errors = AccountsValidations.validateLogin(this.state.email, this.state.password);
     if (errors.length > 0) {
-      this.setState({ errors });
+      this.setState({ errors, isLoading: false });
     } else {
       const { email, password } = this.state;
 
@@ -53,6 +53,7 @@ class Login extends Component {
         }
         else{
           localStorage.setItem('entityId', res.data.entityId);
+          localStorage.setItem('workerId', res.data.workerId);
           this.props.history.push('/');
         }
       }).catch((err) => {

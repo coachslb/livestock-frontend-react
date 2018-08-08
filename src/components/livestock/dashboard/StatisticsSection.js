@@ -1,9 +1,9 @@
 import React from 'react';
+
 import EntityGeneralStatisticsCard from './EntityGeneralStatisticsCard';
 import LastManagementsCard from './LastManagementsCard';
 
 const StatisticsSection = (props) => {
-    console.log('Statistics', props)
     return (
     <div className="statistics-section">
         <EntityGeneralStatisticsCard 

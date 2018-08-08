@@ -25,7 +25,6 @@ class EntityDetailPage extends Component {
       getOneEntityResponse
         .then(res => {
           this.setState({...res.data});
-          console.log(this.state);
         })
         .catch(err => this.setState({ serverError: true }));
     }

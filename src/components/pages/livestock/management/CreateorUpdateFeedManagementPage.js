@@ -53,11 +53,9 @@ class CreateorUpdateFeedManagementPage extends Component {
 
           getGroupResponse
             .then(res => {
-              console.log(res);
               this.setState({ groupList: res.data, isLoading: false });
             })
             .catch(err => {
-              console.log(err);
               this.setState({ isLoading: false, serverError: true });
             });
         })
@@ -104,7 +102,6 @@ class CreateorUpdateFeedManagementPage extends Component {
           this.props.history.push(`/livestock/management/${entityId}`);
         })
         .catch(err => {
-          console.log(err);
           this.setState({ serverError: true, isLoading: false });
         });
     } else {
@@ -116,7 +113,6 @@ class CreateorUpdateFeedManagementPage extends Component {
           this.props.history.push(`/livestock/management/${entityId}`);
         })
         .catch(err => {
-          console.log(err);
           this.setState({ serverError: true, isLoading: false });
         });
     }
@@ -159,7 +155,6 @@ class CreateorUpdateFeedManagementPage extends Component {
       errors.data = 'Required';
     }
 
-    console.log(errors);
     return errors;
   };
 

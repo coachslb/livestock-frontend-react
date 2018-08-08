@@ -32,6 +32,11 @@ const AnimalService = {
     if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
     return axios.get(end.URL + end.VERSION + end.ANIMAL + end.ANIMAL_SEX + `?sex=${sex}&entityId=${entityId}&explorationId=${explorationId}`, config).then(handleResponse);
   },
+  addOrRemoveOfGroup: async function(animalId, groupId, add, isAuthenticated) {
+    let config = null;
+    if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.ANIMAL + end.ADD_TO_GROUP + `?animalId=${animalId}&groupId=${groupId}&add=${add}`, config).then(handleResponse);
+  },
 };
 
 export default AnimalService;

@@ -47,7 +47,6 @@ class CreateorUpdateWeighingManagementPage extends Component {
 
       getWeighingResponse
         .then(res => {
-          console.log(res);
           this.setState({ weighing: res.data, exploration: res.data.exploration });
           let animalPromise = AnimalService.get(null, res.data.exploration, true);
 
@@ -58,7 +57,6 @@ class CreateorUpdateWeighingManagementPage extends Component {
             .catch(err => this.setState({ serverError: true, isLoading: false }));
         })
         .catch(err => {
-          console.log(err);
           this.setState({ isLoading: false, serverError: true });
         });
     }
@@ -99,7 +97,6 @@ class CreateorUpdateWeighingManagementPage extends Component {
           this.props.history.push(`/livestock/management/${entityId}`);
         })
         .catch(err => {
-          console.log(err);
           this.setState({ serverError: true, isLoading: false });
         });
     } else {
@@ -111,7 +108,6 @@ class CreateorUpdateWeighingManagementPage extends Component {
           this.props.history.push(`/livestock/management/${entityId}`);
         })
         .catch(err => {
-          console.log(err);
           this.setState({ serverError: true, isLoading: false });
         });
     }

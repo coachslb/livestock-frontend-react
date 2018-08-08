@@ -45,7 +45,7 @@ class ManagementPage extends Component {
       managements: null,
     };
   }
-  componentDidMount() {
+  componentWillMount() {
     this.setState({ isLoading: true });
     const { entityId } = this.props.match.params;
 
@@ -121,17 +121,26 @@ class ManagementPage extends Component {
       <Fragment>
         {hasData &&
           !isLoading && (
-            <Button
-              className="placeholder-button-text"
-              variant="raised"
-              style={{ marginBottom: '20px', width: '100%', padding: '15px' }}
-              color="primary"
-              onClick={this.onCreateManagement}
-            >
-              + Adicionar
-            </Button>
+              <Button
+                className="placeholder-button-text"
+                variant="raised"
+                style={{
+                  marginBottom: '20px',
+                  width: '100%',
+                  padding: '15px',
+                  zIndex: 1,
+                }}
+                color="primary"
+                onClick={this.onCreateManagement}
+              >
+                + Adicionar
+              </Button>
           )}
-        {!isLoading && render}
+        {!isLoading && (
+          <div style={{ maxHeight: 750, overflow: 'scroll', overflowX: 'hidden'}}>
+            {render}
+          </div>
+        )}
 
         {isLoading && (
           <CircularProgress

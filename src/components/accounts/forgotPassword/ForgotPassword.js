@@ -91,7 +91,7 @@ export default class ForgotPassword extends Component {
             color="primary"
             variant="raised"
           >
-            Send
+            Enviar
           </SubmitButton>
           }
         </form>

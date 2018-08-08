@@ -52,7 +52,6 @@ class CreateorUpdateChildBirthManagementPage extends Component {
 
       getChildBirthResponse
         .then(res => {
-          console.log(res);
           this.setState({
             id: res.data.id,
             obs: res.data.observations || '',
@@ -82,7 +81,6 @@ class CreateorUpdateChildBirthManagementPage extends Component {
           });
         })
         .catch(err => {
-          console.log(err);
           this.setState({ isLoading: false, serverError: true });
         });
     }

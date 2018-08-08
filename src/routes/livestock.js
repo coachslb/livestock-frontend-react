@@ -7,6 +7,8 @@ import ManagementPage from '../components/pages/livestock/management/ManagementP
 import ResultsPage from '../components/pages/livestock/results/ResultsPage';
 import InventoryPage from '../components/pages/livestock/inventory/InventoryPage';
 import UsersPage from '../components/pages/livestock/users/UsersPage';
+import CreateOrUpdateUserPage from '../components/pages/livestock/users/CreateOrUpdateUserPage';
+import UserDetailPage from '../components/pages/livestock/users/UserDetailPage';
 import SupportPage from '../components/pages/livestock/support/SupportPage';
 import Logout from '../components/accounts/logout/Logout';
 import ExplorationDetailPage from '../components/pages/livestock/explorations/ExplorationDetailPage';
@@ -16,7 +18,6 @@ import EditExplorationPage from '../components/pages/livestock/explorations/Edit
 import ExplorationPlacePage from '../components/pages/livestock/explorations/place/ExplorationPlacePage';
 import CreateorUpdateExplorationPlacePage from '../components/pages/livestock/explorations/place/CreateorUpdateExplorationPlacePage';
 import ExplorationAnimalPage from '../components/pages/livestock/explorations/animal/ExplorationAnimalPage';
-import LoginUserDetailPage from '../components/pages/livestock/loginUser/LoginUserDetailPage';
 import CreateOrUpdateExplorationAnimalPage from '../components/pages/livestock/explorations/animal/CreateOrUpdateExplorationAnimalPage';
 import CreateOrUpdateExplorationGroupPage from '../components/pages/livestock/explorations/group/CreateOrUpdateExplorationGroupPage'
 import ExplorationGroupPage from '../components/pages/livestock/explorations/group/ExplorationGroupPage';
@@ -31,6 +32,7 @@ import CreateorUpdateTransferManagementPage from '../components/pages/livestock/
 import CreateorUpdateDeathManagementPage from '../components/pages/livestock/management/CreateorUpdateDeathManagementPage';
 import CreateorUpdateSellorPurchaseManagementPage from '../components/pages/livestock/management/CreateorUpdateSellorPurchaseManagementPage';
 import CreateorUpdateChipManagementPage from '../components/pages/livestock/management/CreateorUpdateChipManagementPage';
+import CalendarPage from '../components/livestock/calendar/CalendarPage';
 
 class LivestockPage extends Component {
   render() {
@@ -39,7 +41,6 @@ class LivestockPage extends Component {
         <Layout>
           <Switch>
             <Route path="/livestock/entity/:id" component={EntityDetailPage} />
-            <Route path="/livestock/user/:id" component={LoginUserDetailPage} />
             <Route path="/livestock/dashboard" component={DashboardPage} />
             <Route path="/livestock/explorations/:entityId/detail/:id" component={ExplorationDetailPage}/>
             <Route path="/livestock/explorations/:entityId/place/:explorationId/create" component={CreateorUpdateExplorationPlacePage}/> 
@@ -79,8 +80,12 @@ class LivestockPage extends Component {
             <Route path="/livestock/management" component={ManagementPage} />
             <Route path="/livestock/inventory" component={InventoryPage} />
             <Route path="/livestock/results" component={ResultsPage} />
-            <Route path="/livestock/users" component={UsersPage} />
+            <Route path="/livestock/users/:entityId/detail/:id" component={UserDetailPage}/>
+            <Route path="/livestock/users/:entityId/edit/:id" component={CreateOrUpdateUserPage}/> 
+            <Route path="/livestock/users/:entityId/create" component={CreateOrUpdateUserPage}/>
+            <Route path="/livestock/users/:id" component={UsersPage} />
             <Route path="/livestock/support" component={SupportPage} />
+            <Route path="/livestock/tasks" component={CalendarPage} />
             <Route path="/logout" component={Logout} />
             <Route path="/" exact component={DashboardPage} />
           </Switch>

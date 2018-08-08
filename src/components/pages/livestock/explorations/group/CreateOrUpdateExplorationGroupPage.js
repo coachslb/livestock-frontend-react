@@ -38,7 +38,7 @@ class CreateOrUpdateExplorationGroupPage extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const { id, explorationId } = this.props.match.params;
     const placeList = PlaceService.get(null, explorationId, true);
     const explorationAnimalList = AnimalService.get(null, explorationId, true);
@@ -146,20 +146,21 @@ class CreateOrUpdateExplorationGroupPage extends Component {
   };
 
   handleRemove = i => {
-    /* const deleteAnimal = AnimalService.deleteAnimal(
-      i,
-      this.props.match.params.explorationId,
-      false,
-      true,
+    const removeAnimalFromGroup = AnimalService.addOrRemoveOfGroup(
+      i, this.state.id, false, true
     );
-
-    deleteAnimal
+    
+    removeAnimalFromGroup
       .then(res => {
-        if (res.data.length > 0) {
-          this.setState({ hasData: true, isLoading: false, animalList: res.data });
-        } else this.setState({ hasData: false, isLoading: false });
+        this.setState({
+          id: res.data.id,
+          name: res.data.name ? res.data.name : '',
+          place: res.data.place ? res.data.place.id : '',
+          animalList: res.data.animals ? res.data.animals : '',
+          isLoading: false,
+        });
       })
-      .catch(err => this.setState({ serverError: true, isLoading: false })); */
+      .catch(err => this.setState({ serverError: true, isLoading: false }));  
   };
 
   handleEdit = i => {
@@ -188,7 +189,23 @@ class CreateOrUpdateExplorationGroupPage extends Component {
   };
 
   onAddAnimalToGroup = e => {
-    console.log('add animal to group');
+    this.setState({ isLoading: true });
+    let addAnimalToGroupResponse = AnimalService.addOrRemoveOfGroup(this.state.animal, this.state.id, true, true);
+
+    addAnimalToGroupResponse
+      .then(res => {
+        this.setState({
+          id: res.data.id,
+          name: res.data.name ? res.data.name : '',
+          place: res.data.place ? res.data.place.id : '',
+          animalList: res.data.animals ? res.data.animals : '',
+          isLoading: false,
+          addAnimal: false,
+        });
+      })
+      .catch(err => {
+        this.setState({ isLoading: false, serverError: true });
+      });
   };
 
   render() {
@@ -284,32 +301,41 @@ class CreateOrUpdateExplorationGroupPage extends Component {
                   {animalList && animalList.length > 0
                     ? renderAnimalList
                     : 'Não existem animais presentes neste grupo'}
-                  {!addAnimal && explorationAnimalList && (
-                    <Button
-                      size="large"
-                      variant="raised"
-                      color="primary"
-                      style={{width: '100%', marginTop: 25}}
-                      onClick={this.addAnimalForm}
-                    >
-                      Adicionar Animal
-                    </Button>
-                  )}
+                  {!addAnimal &&
+                    explorationAnimalList && (
+                      <Button
+                        size="large"
+                        variant="raised"
+                        color="primary"
+                        style={{ width: '100%', marginTop: 25 }}
+                        onClick={this.addAnimalForm}
+                      >
+                        Adicionar Animal
+                      </Button>
+                    )}
                   {addAnimal && (
-                      <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: 40, alignItems: 'center'}}>
-                        <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                          <InputLabel>Animal*</InputLabel>
-                          <Select name="animal" value={animal} onChange={this.handleAnimalChange}>
-                            {explorationAnimalList.map(a => {
-                              return (
-                                <MenuItem key={a.id} value={a.id}>
-                                  {a.name}
-                                </MenuItem>
-                              );
-                            })}
-                          </Select>
-                        </FormControl>
-                        <div>
+                    <div
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginTop: 40,
+                        alignItems: 'center',
+                      }}
+                    >
+                      <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
+                        <InputLabel>Animal*</InputLabel>
+                        <Select name="animal" value={animal} onChange={this.handleAnimalChange}>
+                          {explorationAnimalList.map(a => {
+                            return (
+                              <MenuItem key={a.id} value={a.id}>
+                                {a.name}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
+                      <div>
                         <Button
                           size="medium"
                           variant="raised"
@@ -328,9 +354,9 @@ class CreateOrUpdateExplorationGroupPage extends Component {
                         >
                           Guardar
                         </Button>
-                        </div>
                       </div>
-                    )}
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

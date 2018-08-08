@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, Button } from 'material-ui';
 
 const FirstUseCard = (props) => {
-    console.log(props)
-
     return (
         <Card className="first-use-card"> 
             <CardContent>

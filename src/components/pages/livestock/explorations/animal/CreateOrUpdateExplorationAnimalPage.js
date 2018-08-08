@@ -71,7 +71,6 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
     if(id){
       const animalResponse = AnimalService.get(id, null, true);
       animalResponse.then(res => {
-        console.log(res.data);
         this.setState({ 
           name: res.data.name ? res.data.name : '',
           number: res.data.number ? res.data.number : '',

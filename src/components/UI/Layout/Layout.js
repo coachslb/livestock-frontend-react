@@ -62,6 +62,7 @@ const styles = theme => ({
     width: drawerWidth,
     [theme.breakpoints.up('md')]: {
       position: 'relative',
+      height: 0,
     },
   },
   drawerTabs: {
@@ -108,9 +109,10 @@ class Layout extends Component {
 
   handleUserDetailClick = e => {
     e.preventDefault();
-    const userId = localStorage.getItem('userId');
-    if (userId !== null) {
-      this.props.history.push(`/livestock/user/${userId}`);
+    const workerId = localStorage.getItem('workerId');
+    const entityId = localStorage.getItem('entityId');
+    if (workerId !== null) {
+      this.props.history.push(`/livestock/users/${entityId}/detail/${workerId}`);
     }
   };
 
@@ -183,9 +185,9 @@ class Layout extends Component {
     } = this.props;
 
     const { mobileOpen, value, entityName, entityId, errors, serverError } = this.state;
-    
+
     const drawer = (
-      <div>
+      <div style={{ top: '0%', position: 'fixed' }}>
         <Hidden smDown>
           <div
             className={classes.toolbar}
@@ -197,7 +199,11 @@ class Layout extends Component {
         <MenuList>
           <MenuItem
             className={
-              pathname.startsWith('/livestock/dashboard') || pathname === '/' || pathname === '/livestock' ? 'menu-item-selected' : 'menu-item'
+              pathname.startsWith('/livestock/dashboard') ||
+              pathname === '/' ||
+              pathname === '/livestock'
+                ? 'menu-item-selected'
+                : 'menu-item'
             }
             component={Link}
             to={`/livestock/dashboard/${entityId}`}
@@ -244,9 +250,19 @@ class Layout extends Component {
             Resultados
           </MenuItem>
           <MenuItem
+            className={pathname.startsWith('/livestock/tasks') ? 'menu-item-selected' : 'menu-item'}
+            component={Link}
+            to={`/livestock/tasks/${entityId}`}
+            style={{ padding: '20px' }}
+            selected={pathname.startsWith('/livestock/tasks')}
+          >
+            <i className="material-icons material-icons-menu">assignment</i>
+            Tarefas
+          </MenuItem>
+          <MenuItem
             className={pathname.startsWith('/livestock/users') ? 'menu-item-selected' : 'menu-item'}
             component={Link}
-            to="/livestock/users"
+            to={`/livestock/users/${entityId}`}
             style={{ padding: '20px' }}
             selected={pathname.startsWith('/livestock/users')}
           >
@@ -285,7 +301,11 @@ class Layout extends Component {
       <Fragment>
         <CssBaseline />
         <div className={classes.root}>
-          <AppBar position="absolute" className={classes.appBar}>
+          <AppBar
+            position="absolute"
+            className={classes.appBar}
+            style={{ top: '0%', position: 'fixed' }}
+          >
             <Toolbar>
               <IconButton
                 color="inherit"
@@ -308,11 +328,7 @@ class Layout extends Component {
               >
                 <i className="material-icons">domain</i>
               </IconButton>
-              <IconButton
-                aria-haspopup="true"
-                onClick={this.handleUserDetailClick}
-                color="inherit"
-              >
+              <IconButton aria-haspopup="true" onClick={this.handleUserDetailClick} color="inherit">
                 <i className="material-icons">account_circle</i>
               </IconButton>
             </Toolbar>

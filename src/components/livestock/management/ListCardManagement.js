@@ -2,9 +2,7 @@ import React from 'react';
 import { Typography, Button } from 'material-ui';
 
 const ListCardManagement = props => {
-  console.log(props);
   function onEdit(e, id, type) {
-    console.log(props)
     props.onEdit(e, props.data.id, props.data.managementType.id);
   }
 

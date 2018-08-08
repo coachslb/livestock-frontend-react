@@ -54,7 +54,6 @@ class CreateorUpdateTransferManagementPage extends Component {
       getTransferResponse
         .then(res => {
           res.data.animalData.forEach(animal => {
-            console.log(this.state.animalList)
             AnimalService.get(animal.animal, null, true).then(res =>
               this.setState(previousState => ({
                 animalList: [...previousState.animalList, res.data],

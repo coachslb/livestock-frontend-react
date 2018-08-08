@@ -32,7 +32,6 @@ class DashboardPage extends Component {
 
   render() {
     const { isLoading, serverError, freeTrial, license, firstUse, agricolaEntity, management, entityId } = this.state;
-    console.log(this.state);
     const renderFirstUse = (
       <Fragment>
         <WelcomeCard />

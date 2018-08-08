@@ -85,8 +85,6 @@ class CreateorUpdateCoberturaManagementPage extends Component {
         .catch(err => {
           this.setState({ serverError: true });
         });
-
-      console.log(this.state);
     }
 
     coberturaTypesPromise
