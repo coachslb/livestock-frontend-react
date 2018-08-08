@@ -1,4 +1,4 @@
-export const URL = "http://35.197.254.111:9000/api/";
+export const URL = "https://livestock.netlify.com/api/";
 export const VERSION = "v1";
 
 /** Fixed Values */
