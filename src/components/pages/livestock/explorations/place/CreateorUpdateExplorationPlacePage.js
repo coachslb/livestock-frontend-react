@@ -312,7 +312,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
                   width: '80px',
                   top: '50%',
                   left: '50%',
-                  position: 'absolute',
+                  position: 'fixed',
                 }}
               />
             )}

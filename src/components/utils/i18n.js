@@ -9,6 +9,7 @@ import exploration from '../pages/livestock/explorations/i18n'
 import management from '../pages/livestock/management/i18n'
 import task from '../pages/livestock/task/i18n'
 import users from '../pages/livestock/users/i18n'
+import license from '../pages/livestock/license/i18n'
 import general from '../pages/i18n'
 
 export default {
@@ -24,6 +25,7 @@ export default {
         management: management.pt,
         task: task.pt,
         users: users.pt,
+        license: license.pt,
         general: general.pt,
     },
     'en-UK': {
@@ -38,6 +40,7 @@ export default {
         management: management.en,
         task: task.en,
         users: users.en,
+        license: license.en,
         general:general.en,
     }
 }

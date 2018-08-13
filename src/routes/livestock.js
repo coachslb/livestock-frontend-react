@@ -36,6 +36,7 @@ import TaskPage from '../components/pages/livestock/task/TaskPage';
 import UserChangeEmailPage from '../components/pages/livestock/users/preferences/UserChangeEmailPage';
 import UserChangePasswordPage from '../components/pages/livestock/users/preferences/UserChangePasswordPage';
 import UserChangeLanguagePage from '../components/pages/livestock/users/preferences/UserChangeLanguagePage';
+import LicensePage from '../components/pages/livestock/license/LicensePage';
 
 class LivestockPage extends Component {
   render() {
@@ -181,9 +182,19 @@ class LivestockPage extends Component {
           <Route path="/livestock/inventory" component={InventoryPage} />
           <Route path="/livestock/results" component={ResultsPage} />
           <Route path="/livestock/users/:entityId/detail/:id" component={UserDetailPage} />
-          <Route path="/livestock/users/:entityId/changeEmail/:id" component={UserChangeEmailPage} />
-          <Route path="/livestock/users/:entityId/changePassword/:id" component={UserChangePasswordPage} />
-          <Route path="/livestock/users/:entityId/changeLanguage/:id" component={UserChangeLanguagePage} />
+          <Route
+            path="/livestock/users/:entityId/changeEmail/:id"
+            component={UserChangeEmailPage}
+          />
+          <Route
+            path="/livestock/users/:entityId/changePassword/:id"
+            component={UserChangePasswordPage}
+          />
+          <Route
+            path="/livestock/users/:entityId/changeLanguage/:id"
+            component={UserChangeLanguagePage}
+          />
+          <Route path="/livestock/users/:entityId/license/:id" component={LicensePage} />
           <Route path="/livestock/users/:entityId/edit/:id" component={CreateOrUpdateUserPage} />
           <Route path="/livestock/users/:entityId/create" component={CreateOrUpdateUserPage} />
           <Route path="/livestock/users/:id" component={UsersPage} />

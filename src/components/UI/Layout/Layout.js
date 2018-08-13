@@ -202,23 +202,21 @@ class Layout extends Component {
         {({ i18n, changeLanguage, language }) => (
           <div style={{ top: '0%', position: 'fixed' }}>
             <Hidden smDown>
-              <div
-                className={classes.toolbar}
-              />
+              <div className={classes.toolbar} />
             </Hidden>
             <MenuList>
               <MenuItem
                 className={'menu-item'}
                 component={Link}
                 to={`/livestock/dashboard/${entityId}`}
-                onClick={()=> this.setState({ userPreferences: false })}
+                onClick={() => this.setState({ userPreferences: false })}
                 style={{ padding: '20px' }}
               >
                 <i className="material-icons material-icons-menu">arrow_back</i>
                 {i18n.general.users}
               </MenuItem>
             </MenuList>
-            <Divider/>
+            <Divider />
             <MenuList>
               <MenuItem
                 className={
@@ -272,6 +270,44 @@ class Layout extends Component {
                 selected={pathname.startsWith(`/livestock/users/${entityId}/changeLanguage`)}
               >
                 {i18n.general.changeLanguage}
+              </MenuItem>
+              <MenuItem
+                className={
+                  pathname.startsWith(`/livestock/users/${entityId}/license`)
+                    ? 'menu-item-selected'
+                    : 'menu-item'
+                }
+                component={Link}
+                to={`/livestock/users/${entityId}/license/${workerId}`}
+                style={{ padding: '20px' }}
+                selected={pathname.startsWith(`/livestock/users/${entityId}/license`)}
+              >
+                {i18n.general.license}
+              </MenuItem>
+            </MenuList>
+            <Divider />
+            <MenuList>
+              <MenuItem
+                className={
+                  pathname.startsWith('/livestock/support') ? 'menu-item-selected' : 'menu-item'
+                }
+                component={Link}
+                to="/livestock/support"
+                style={{ padding: '20px' }}
+                selected={pathname.startsWith('/livestock/support')}
+              >
+                <i className="material-icons material-icons-menu">headset_mic</i>
+                {i18n.general.support}
+              </MenuItem>
+              <MenuItem
+                className={pathname.startsWith('/logout') ? 'menu-item-selected' : 'menu-item'}
+                component={Link}
+                to="/logout"
+                style={{ padding: '20px' }}
+                selected={pathname.startsWith('/logout')}
+              >
+                <i className="material-icons material-icons-menu">exit_to_app</i>
+                {i18n.general.logout}
               </MenuItem>
             </MenuList>
           </div>
