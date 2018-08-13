@@ -25,33 +25,31 @@ const Calendar = props => (
       day: props.i18n.task.calendar.day,
       agenda: props.i18n.task.calendar.agenda,
     }}
-    eventPropGetter={
-      (event, start, end, isSelected) => {
-        let newStyle = {
-          backgroundColor: "lightgrey",
-          color: 'black',
-          borderRadius: "0px",
-          border: "none"
-        };
-  
-        // eslint-disable-next-line
-        if (event.target == localStorage.getItem('workerId')){
-          newStyle.backgroundColor = "primary"
-        }
-  
-        return {
-          className: "",
-          style: newStyle
-        };
+    eventPropGetter={(event, start, end, isSelected) => {
+      let newStyle = {
+        backgroundColor: 'lightgrey',
+        color: 'black',
+        borderRadius: '0px',
+        border: 'none',
+      };
+
+      // eslint-disable-next-line
+      if (event.target == localStorage.getItem('workerId')) {
+        newStyle.backgroundColor = 'primary';
       }
-    }
-    // onSelectSlot={slotInfo =>
-    //   /* alert(
-    //     `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
-    //       `\nend: ${slotInfo.end.toLocaleString()}` +
-    //       `\naction: ${slotInfo.action}`,
-    //   ) */
-    // }
+
+      return {
+        className: '',
+        style: newStyle,
+      };
+    }}
+    onSelectSlot={event => props.addNewTask(event)}
+    /* slotInfo =>alert(
+        `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
+          `\nend: ${slotInfo.end.toLocaleString()}` +
+          `\naction: ${slotInfo.action}`,
+      ) 
+    } */
   />
 );
 

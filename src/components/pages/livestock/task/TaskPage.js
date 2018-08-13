@@ -40,6 +40,7 @@ class TaskPage extends Component {
       task: null,
       openTask: false,
       editingTask: false,
+      createNewTask: false,
       date: null,
     };
   }
@@ -103,7 +104,18 @@ class TaskPage extends Component {
     this.setState({ isLoading: true });
     values.creator = localStorage.getItem('workerId');
 
-    const updateTaskResponse = TaskService.update(values, true);
+    if(this.state.createNewTask){
+      const createTaskResponse = TaskService.create(values, true);
+
+      createTaskResponse
+        .then(res => {
+          this.setState({ isLoading: false, tasks: res.data, openTask: false, editingTask: false, createNewTask: false });
+        })
+        .catch(err => {
+          this.setState({ serverError: true, isLoading: false, openTask: false, editingTask: false, createNewTask: false });
+        }); 
+    }else{
+      const updateTaskResponse = TaskService.update(values, true);
 
     updateTaskResponse
       .then(res => {
@@ -112,10 +124,13 @@ class TaskPage extends Component {
       .catch(err => {
         this.setState({ serverError: true, isLoading: false, openTask: false, editingTask: false });
       }); 
+    }
+
+    
   };
 
   render() {
-    const { isLoading, serverError, task, openTask, editingTask, workerList } = this.state;
+    const { isLoading, serverError, task, openTask, editingTask, createNewTask, workerList } = this.state;
     return (
       <I18nContext.Consumer>
         {({ i18n }) => (
@@ -129,6 +144,7 @@ class TaskPage extends Component {
                     showTaskDetail={(task) =>
                       this.setState({ task: task, openTask: true })
                     }
+                    addNewTask={(event) => this.setState({createNewTask: true, task: {start: event.start, end: event.end }})}
                   />
                   <CreateTask i18n={i18n} addTask={tasks => this.setState({ tasks })} />
                 </Fragment>
@@ -198,8 +214,8 @@ class TaskPage extends Component {
                   </DialogActions>
                 </Dialog>
               )}
-            {task &&
-              editingTask && (
+            {(task &&
+              editingTask) || createNewTask && (
                 <Dialog
                   open={editingTask}
                   TransitionComponent={Transition}
