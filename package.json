@@ -15,7 +15,6 @@
     "iana-tz-data": "^2017.1.0",
     "material-ui": "^1.0.0-beta.44",
     "moment": "^2.22.2",
-    "query-string": "^6.1.0",
     "react": "^16.2.0",
     "react-big-calendar": "^0.19.2",
     "react-compose": "^2.0.0",
