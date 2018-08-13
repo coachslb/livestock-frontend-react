@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Typography, Card, CardContent, Button } from 'material-ui';
 import ExplorationService from '../../../../services/ExplorationService';
 import FixedValuesService from '../../../../services/FixedValuesService';
+import { I18nContext } from '../../../App';
 
 function getExplorationTypesFromId(explorationTypes) {
   explorationTypes.sort();
@@ -72,58 +73,62 @@ class ExplorationDetailPage extends Component {
   render() {
     const { name, types, address, district, postalCode } = this.state;
     return (
-      <Card>
-        <CardContent>
-          <div className="card-header">
-            <Typography variant="headline" className="card-header_title">
-              Exploração
-            </Typography>
-          </div>
-          <div className="card-body">
-            {name && (
-              <div className="card-field col-6">
-                <p className="field-info">{name}</p>
-                <label className="field-label">Nome</label>
+      <I18nContext.Consumer>
+        {({ i18n }) => (
+          <Card>
+            <CardContent>
+              <div className="card-header">
+                <Typography variant="headline" className="card-header_title">
+                  {i18n.exploration.explorationTitle}
+                </Typography>
               </div>
-            )}
-            {types && (
-              <div className="card-field col-6">
-                <p className="field-info">{getExplorationTypesFromId(types)}</p>
-                <label className="field-label">Tipo de exploração</label>
+              <div className="card-body">
+                {name && (
+                  <div className="card-field col-6">
+                    <p className="field-info">{name}</p>
+                    <label className="field-label">{i18n.exploration.name}</label>
+                  </div>
+                )}
+                {types && (
+                  <div className="card-field col-6">
+                    <p className="field-info">{getExplorationTypesFromId(types)}</p>
+                    <label className="field-label">{i18n.exploration.explorationType}</label>
+                  </div>
+                )}
+                {address && (
+                  <div className="card-field col-6">
+                    <p className="field-info">{address}</p>
+                    <label className="field-label">{i18n.exploration.address}</label>
+                  </div>
+                )}
+                {district && (
+                  <div className="card-field col-3">
+                    <p className="field-info">{district}</p>
+                    <label className="field-label">{i18n.exploration.district}</label>
+                  </div>
+                )}
+                {postalCode && (
+                  <div className="card-field col-2">
+                    <p className="field-info">{postalCode}</p>
+                    <label className="field-label">{i18n.exploration.postalCode}</label>
+                  </div>
+                )}
               </div>
-            )}
-            {address && (
-              <div className="card-field col-6">
-                <p className="field-info">{address}</p>
-                <label className="field-label">Morada</label>
-              </div>
-            )}
-            {district && (
-              <div className="card-field col-3">
-                <p className="field-info">{district}</p>
-                <label className="field-label">Distrito</label>
-              </div>
-            )}
-            {postalCode && (
-              <div className="card-field col-2">
-                <p className="field-info">{postalCode}</p>
-                <label className="field-label">Código Postal</label>
-              </div>
-            )}
-          </div>
-        </CardContent>
-        <div className="card-actions">
-          <Button
-            size="medium"
-            variant="raised"
-            color="primary"
-            className="card-button"
-            onClick={this.onEdit}
-          >
-            Editar
-          </Button>
-        </div>
-      </Card>
+            </CardContent>
+            <div className="card-actions">
+              <Button
+                size="medium"
+                variant="raised"
+                color="primary"
+                className="card-button"
+                onClick={this.onEdit}
+              >
+                {i18n.exploration.button.edit}
+              </Button>
+            </div>
+          </Card>
+        )}
+      </I18nContext.Consumer>
     );
   }
 }

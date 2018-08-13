@@ -20,6 +20,7 @@ import ManagementCreationCard from '../../../livestock/management/ManagementCrea
 import ExplorationService from '../../../../services/ExplorationService';
 import AnimalService from '../../../../services/AnimalService';
 import ManagementWeighingService from '../../../../services/ManagementWeighingService';
+import { I18nContext } from '../../../App';
 
 class CreateorUpdateWeighingManagementPage extends Component {
   constructor() {
@@ -52,7 +53,7 @@ class CreateorUpdateWeighingManagementPage extends Component {
 
           animalPromise
             .then(res => {
-              this.setState({ animalList: res.data});
+              this.setState({ animalList: res.data });
             })
             .catch(err => this.setState({ serverError: true, isLoading: false }));
         })
@@ -113,37 +114,37 @@ class CreateorUpdateWeighingManagementPage extends Component {
     }
   };
 
-  validateArray = fields => {
+  validateArray = (fields, i18n) => {
     const errors = {};
     if (fields) {
       fields.forEach(element => {
-        if(element !== undefined){
-          if (!element.weight) errors.weight = 'Required';
-          if (!element.animal) errors.animal = 'Required';
-        }else{
-          errors.number = 'Required';
+        if (element !== undefined) {
+          if (!element.weight) errors.weight = i18n.management.errors.required;
+          if (!element.animal) errors.animal = i18n.management.errors.required;
+        } else {
+          errors.number = i18n.management.errors.required;
         }
       });
     }
     return errors;
   };
 
-  validate = values => {
+  validate = (values, i18n) => {
     const errors = {};
     if (!values.date) {
-      errors.date = 'Required';
+      errors.date = i18n.management.errors.required;
     }
 
-    if(new Date(values.date) > new Date()){
-      errors.date = 'Data inválida';
+    if (new Date(values.date) > new Date()) {
+      errors.date = i18n.management.errors.invalidDate;
     }
 
     if (!values.exploration) {
-      errors.exploration = 'Required';
+      errors.exploration = i18n.management.errors.required;
     }
 
-    if(!values.animalData || !values.animalData.length > 0){
-      errors.data = 'Required';
+    if (!values.animalData || !values.animalData.length > 0) {
+      errors.data = i18n.management.errors.required;
     }
 
     return errors;
@@ -169,176 +170,198 @@ class CreateorUpdateWeighingManagementPage extends Component {
       weighing,
     } = this.state;
     return (
-      <Fragment>
-        {!isLoading && (
+      <I18nContext.Consumer>
+        {({ i18n }) => (
           <Fragment>
-            <ManagementCreationCard step={2} entityId={entityId} title="Pesagem" />
-            <Form
-              onSubmit={this.onSubmit}
-              mutators={{
-                ...arrayMutators,
-              }}
-              initialValues={{ ...weighing }}
-              validate={this.validate}
-              render={({
-                handleSubmit,
-                pristine,
-                invalid,
-                values,
-                form: {
-                  mutators: { push, pop },
-                },
-              }) => (
-                <form onSubmit={handleSubmit}>
-                  <Card style={{ marginTop: 20 }}>
-                    <CardContent>
-                      <div className="card-header">
-                        <Typography variant="headline" className="card-header_title">
-                          Dados gerais
-                        </Typography>
-                      </div>
-                      <div className="card-body">
-                        <InputForm
-                          name="date"
-                          required={true}
-                          type="date"
-                          label="Data"
-                          style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                        />
-                        {explorationList && (
-                          <FormControl
-                            style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                          >
-                            <InputLabel required>Exploração</InputLabel>
-                            <Select
-                              name="exploration"
-                              value={exploration}
-                              onChange={this.handleExplorationChange.bind(this, values)}
-                            >
-                              {explorationList.map(ex => {
-                                return (
-                                  <MenuItem key={ex.id} value={ex.id}>
-                                    {ex.name}
-                                  </MenuItem>
-                                );
-                              })}
-                            </Select>
-                          </FormControl>
-                        )}
-                        <InputForm
-                          name="observations"
-                          required={false}
-                          type="text"
-                          label="Observações"
-                          style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                        />
-                      </div>
-                    </CardContent>
-                  </Card>
-                  {exploration && animalList &&
-                    animalList.length > 0 && (
-                      <Fragment>
-                        <FieldArray name="animalData" validate={this.validateArray}>
-                          {({ fields }) =>
-                            fields.map((name, index) => (
-                              <Card style={{ marginTop: 20 }} key={name}>
-                                <CardContent>
-                                  <div className="card-header">
-                                    <Typography variant="headline" className="card-header_title">
-                                      {index + 1}. Animal
-                                    </Typography>
-                                    <i
-                                      className="material-icons"
-                                      onClick={() => fields.remove(index)}
-                                    >
-                                      delete
-                                    </i>
-                                  </div>
-                                  <div className="card-body">
-                                    {animalList && (
-                                      <SelectForm
-                                        label="Animal"
-                                        name={`${name}.animal`}
-                                        required={true}
-                                        list={animalList}
-                                        style={{
-                                          width: '30%',
-                                          margin: '10px',
-                                          marginBottom: '40px',
-                                        }}
-                                      />
-                                    )}
-                                    <InputForm
-                                      label="Peso"
-                                      name={`${name}.weight`}
-                                      required={true}
-                                      type="number"
-                                      style={{ width: '30%', margin: '10px', marginBottom: '40px' }}
-                                    />
-                                    <InputForm
-                                      label="Razão da pesagem"
-                                      name={`${name}.reason`}
-                                      required={false}
-                                      type="text"
-                                      style={{ width: '30%', margin: '10px', marginBottom: '40px' }}
-                                    />
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            ))
-                          }
-                        </FieldArray>
-                        <Card style={{ marginTop: 20 }}>
-                          <CardContent style={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography variant="headline" style={{ flexGrow: 1 }}>
-                              Adicionar mais um animal
+            {!isLoading && (
+              <Fragment>
+                <ManagementCreationCard step={2} entityId={entityId} title={i18n.management.managementType.weighing}/>
+                <Form
+                  onSubmit={this.onSubmit}
+                  mutators={{
+                    ...arrayMutators,
+                  }}
+                  initialValues={{ ...weighing }}
+                  validate={fields => this.validate(fields, i18n)}
+                  render={({
+                    handleSubmit,
+                    pristine,
+                    invalid,
+                    values,
+                    form: {
+                      mutators: { push, pop },
+                    },
+                  }) => (
+                    <form onSubmit={handleSubmit}>
+                      <Card style={{ marginTop: 20 }}>
+                        <CardContent>
+                          <div className="card-header">
+                            <Typography variant="headline" className="card-header_title">
+                              {i18n.management.generalData}
                             </Typography>
-                            <i className="material-icons" onClick={() => push('animalData')}>
-                              add
-                            </i>
-                          </CardContent>
-                        </Card>
-                      </Fragment>
-                    )}
-                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button
-                      size="medium"
-                      variant="raised"
-                      color="primary"
-                      className="card-button"
-                      onClick={this.onCancel}
-                    >
-                      Cancelar
-                    </Button>
-                    <Button
-                      size="medium"
-                      variant="raised"
-                      color="primary"
-                      className="card-button"
-                      type="submit"
-                      disabled={pristine || invalid}
-                    >
-                      Guardar
-                    </Button>
-                  </div>
-                </form>
-              )}
-            />
+                          </div>
+                          <div className="card-body">
+                            <InputForm
+                              name="date"
+                              required={true}
+                              type="date"
+                              label={i18n.management.date}
+                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
+                            />
+                            {explorationList && (
+                              <FormControl
+                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
+                              >
+                                <InputLabel required>{i18n.management.exploration}</InputLabel>
+                                <Select
+                                  name="exploration"
+                                  value={exploration}
+                                  onChange={this.handleExplorationChange.bind(this, values)}
+                                >
+                                  {explorationList.map(ex => {
+                                    return (
+                                      <MenuItem key={ex.id} value={ex.id}>
+                                        {ex.name}
+                                      </MenuItem>
+                                    );
+                                  })}
+                                </Select>
+                              </FormControl>
+                            )}
+                            <InputForm
+                              name="observations"
+                              required={false}
+                              type="text"
+                              label={i18n.management.obs}
+                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
+                            />
+                          </div>
+                        </CardContent>
+                      </Card>
+                      {exploration &&
+                        animalList &&
+                        animalList.length > 0 && (
+                          <Fragment>
+                            <FieldArray name="animalData" validate={fields => this.validateArray(fields, i18n)}>
+                              {({ fields }) =>
+                                fields.map((name, index) => (
+                                  <Card style={{ marginTop: 20 }} key={name}>
+                                    <CardContent>
+                                      <div className="card-header">
+                                        <Typography
+                                          variant="headline"
+                                          className="card-header_title"
+                                        >
+                                          {index + 1}. Animal
+                                        </Typography>
+                                        <i
+                                          className="material-icons"
+                                          onClick={() => fields.remove(index)}
+                                        >
+                                          delete
+                                        </i>
+                                      </div>
+                                      <div className="card-body">
+                                        {animalList && (
+                                          <SelectForm
+                                            label="Animal"
+                                            name={`${name}.animal`}
+                                            required={true}
+                                            list={animalList}
+                                            style={{
+                                              width: '30%',
+                                              margin: '10px',
+                                              marginBottom: '40px',
+                                            }}
+                                          />
+                                        )}
+                                        <InputForm
+                                          label={i18n.management.weight}
+                                          name={`${name}.weight`}
+                                          required={true}
+                                          type="number"
+                                          style={{
+                                            width: '30%',
+                                            margin: '10px',
+                                            marginBottom: '40px',
+                                          }}
+                                        />
+                                        <InputForm
+                                          label={i18n.management.weighingReason}
+                                          name={`${name}.reason`}
+                                          required={false}
+                                          type="text"
+                                          style={{
+                                            width: '30%',
+                                            margin: '10px',
+                                            marginBottom: '40px',
+                                          }}
+                                        />
+                                      </div>
+                                    </CardContent>
+                                  </Card>
+                                ))
+                              }
+                            </FieldArray>
+                            <Card style={{ marginTop: 20 }}>
+                              <CardContent style={{ display: 'flex', alignItems: 'center' }}>
+                                <Typography variant="headline" style={{ flexGrow: 1 }}>
+                                  {i18n.management.addAnimal}
+                                </Typography>
+                                <i className="material-icons" onClick={() => push('animalData')}>
+                                  add
+                                </i>
+                              </CardContent>
+                            </Card>
+                          </Fragment>
+                        )}
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button
+                          size="medium"
+                          variant="raised"
+                          color="primary"
+                          className="card-button"
+                          onClick={this.onCancel}
+                        >
+                          {i18n.management.button.cancel}
+                        </Button>
+                        <Button
+                          size="medium"
+                          variant="raised"
+                          color="primary"
+                          className="card-button"
+                          type="submit"
+                          disabled={pristine || invalid}
+                        >
+                          {i18n.management.button.save}
+                        </Button>
+                      </div>
+                    </form>
+                  )}
+                />
+              </Fragment>
+            )}
+            {serverError && (
+              <ErrorDialog
+                title={i18n.general.serverErrorTitle}
+                text={i18n.general.serverErrorMessage}
+                onDialogClose={this.onDialogClose}
+              />
+            )}
+            {isLoading && (
+              <CircularProgress
+                style={{
+                  height: '80px',
+                  width: '80px',
+                  top: '50%',
+                  left: '50%',
+                  position: 'fixed',
+                }}
+              />
+            )}
           </Fragment>
         )}
-        {serverError && (
-          <ErrorDialog
-            title="Server Error"
-            text="There are some server problem"
-            onDialogClose={this.onDialogClose}
-          />
-        )}
-        {isLoading && (
-          <CircularProgress
-            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'fixed' }}
-          />
-        )}
-      </Fragment>
+      </I18nContext.Consumer>
     );
   }
 }

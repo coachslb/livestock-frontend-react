@@ -1,0 +1,32 @@
+{
+    "serverErrorTitle": "Erro de Servidor",
+    "inputErrorTitle": "Campos inválidos",
+    "genericErrorTitle": "Erro",
+    "genericErrorMessage": "Existe algum erro",
+    "serverErrorMessage": "Erro na comunicação com o servidor",
+    "emailInvalid": "E-mail inválido",
+    "explorations": "Explorações",
+    "managements": "Maneios",
+    "results": "Resultados",
+    "tasks": "Tarefas",
+    "weather": "Meteorologia",
+    "users": "Utilizadores",
+    "support": "Suporte ao cliente",
+    "logout": "Terminar sessão",
+    "exploration":{
+        "profile": "Perfil",
+        "places": "Locais",
+        "animals": "Animais",
+        "groups": "Grupos"
+    },
+    "profile": "Perfil",
+    "changeEmail": "Mudar e-mail",
+    "changePassword": "Mudar palavra-passe",
+    "changeLanguage": "Língua",
+    "actions": "Ações",
+    "search": "Pesquisa",
+    "column": "Coluna",
+    "close": "Fechar",
+    "edit": "Editar"
+}
+

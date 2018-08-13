@@ -16,6 +16,7 @@ import FixedValuesService from '../../../../../services/FixedValuesService';
 import ExplorationValidations from '../../../../../validations/ExplorationValidations';
 import PlaceService from '../../../../../services/PlaceService';
 import MapDraw from '../../../../UI/MapDraw';
+import { I18nContext } from '../../../../App';
 
 class CreateorUpdateExplorationPlacePage extends Component {
   constructor() {
@@ -92,7 +93,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
     this.setState({ serverError: null });
   };
 
-  onCreate = e => {
+  onCreate = (e, i18n) => {
     //falta a parte do mapa
     e.preventDefault();
     const { explorationId } = this.props.match.params;
@@ -117,8 +118,8 @@ class CreateorUpdateExplorationPlacePage extends Component {
       soilTypes,
       area,
       polygons,
+      i18n,
     );
-    console.log(errors);
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
       if (!id) {
@@ -204,109 +205,120 @@ class CreateorUpdateExplorationPlacePage extends Component {
       soilTypes,
     } = this.state;
     return (
-      <Fragment>
-        {!isLoading && (
+      <I18nContext.Consumer>
+        {({ i18n }) => (
           <Fragment>
-            <Card>
-              <CardContent>
-                <div className="card-header">
-                  <Typography variant="headline" className="card-header_title">
-                    Local
-                  </Typography>
+            {!isLoading && (
+              <Fragment>
+                <Card>
+                  <CardContent>
+                    <div className="card-header">
+                      <Typography variant="headline" className="card-header_title">
+                        {i18n.exploration.place.placeTitle}
+                      </Typography>
+                    </div>
+                    <div className="card-body">
+                      <FormControl style={{ width: '40%', margin: '10px', marginBottom: '40px' }}>
+                        <InputLabel>{i18n.exploration.name}*</InputLabel>
+                        <Input name="name" value={name} onChange={this.handleChange} />
+                      </FormControl>
+                      <FormControl style={{ width: '10%', margin: '10px', marginBottom: '40px' }}>
+                        <InputLabel>{i18n.exploration.place.number}*</InputLabel>
+                        <Input name="number" value={number} onChange={this.handleChange} />
+                      </FormControl>
+                      {placeTypes && (
+                        <FormControl style={{ width: '40%', margin: '10px', marginBottom: '40px' }}>
+                          <InputLabel htmlFor="select-multiple-checkbox">
+                            {i18n.exploration.place.placeType}*
+                          </InputLabel>
+                          <Select name="placeType" value={placeType} onChange={this.handleChange}>
+                            {placeTypes.map(place => {
+                              return (
+                                <MenuItem key={place.id} value={place.id}>
+                                  {place.name}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                      )}
+                      <MapDraw
+                      //TODO
+                        language="pt-PT"
+                        style={{ width: '100%', height: '300px' }}
+                        polygons={polygons}
+                        onChangePolygons={this.handlePolygons}
+                        i18n={{
+                          area: i18n.exploration.place.area,
+                          totalArea: i18n.exploration.place.totalArea,
+                          delete: i18n.exploration.place.delete,
+                          deleteAll: i18n.exploration.place.deleteAll,
+                        }}
+                      />
+                      <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
+                        <InputLabel>{i18n.exploration.place.area} (ha)</InputLabel>
+                        <Input name="area" value={area} onChange={this.handleChange} />
+                      </FormControl>
+                      {soilTypes && (
+                        <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
+                          <InputLabel>{i18n.exploration.place.soilType}</InputLabel>
+                          <Select name="soilType" value={soilType} onChange={this.handleChange}>
+                            {soilTypes.map(soilType => {
+                              return (
+                                <MenuItem key={soilType.id} value={soilType.id}>
+                                  {soilType.name}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button
+                    size="medium"
+                    variant="raised"
+                    color="primary"
+                    className="card-button"
+                    onClick={this.onCancel}
+                  >
+                    {i18n.exploration.button.cancel}
+                  </Button>
+                  <Button
+                    size="medium"
+                    variant="raised"
+                    color="primary"
+                    className="card-button"
+                    onClick={e => this.onCreate(e, i18n)}
+                  >
+                    {i18n.exploration.button.save}
+                  </Button>
                 </div>
-                <div className="card-body">
-                  <FormControl style={{ width: '40%', margin: '10px', marginBottom: '40px' }}>
-                    <InputLabel>Nome*</InputLabel>
-                    <Input name="name" value={name} onChange={this.handleChange} />
-                  </FormControl>
-                  <FormControl style={{ width: '10%', margin: '10px', marginBottom: '40px' }}>
-                    <InputLabel>Número*</InputLabel>
-                    <Input name="number" value={number} onChange={this.handleChange} />
-                  </FormControl>
-                  {placeTypes && (
-                    <FormControl style={{ width: '40%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel htmlFor="select-multiple-checkbox">
-                        Tipo de exploração*
-                      </InputLabel>
-                      <Select name="placeType" value={placeType} onChange={this.handleChange}>
-                        {placeTypes.map(place => {
-                          return (
-                            <MenuItem key={place.id} value={place.id}>
-                              {place.name}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                    </FormControl>
-                  )}
-                  <MapDraw
-                    language="pt-PT"
-                    style={{ width: '100%', height: '300px' }}
-                    polygons={polygons}
-                    onChangePolygons={this.handlePolygons}
-                    i18n={{
-                      area: 'Area',
-                      totalArea: 'Total Area',
-                      delete: 'Delete',
-                      deleteAll: 'Delete All',
-                    }}
-                  />
-                  <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                    <InputLabel>Área (ha)</InputLabel>
-                    <Input name="area" value={area} onChange={this.handleChange} />
-                  </FormControl>
-                  {soilTypes && (
-                    <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>Tipo de solo</InputLabel>
-                      <Select name="soilType" value={soilType} onChange={this.handleChange}>
-                        {soilTypes.map(soilType => {
-                          return (
-                            <MenuItem key={soilType.id} value={soilType.id}>
-                              {soilType.name}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                    </FormControl>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button
-                size="medium"
-                variant="raised"
-                color="primary"
-                className="card-button"
-                onClick={this.onCancel}
-              >
-                Cancelar
-              </Button>
-              <Button
-                size="medium"
-                variant="raised"
-                color="primary"
-                className="card-button"
-                onClick={this.onCreate}
-              >
-                Guardar
-              </Button>
-            </div>
+              </Fragment>
+            )}
+            {serverError && (
+              <ErrorDialog
+                title={i18n.general.serverErrorTitle}
+                text={i18n.general.serverErrorMessage}
+                onDialogClose={this.onDialogClose}
+              />
+            )}
+            {isLoading && (
+              <CircularProgress
+                style={{
+                  height: '80px',
+                  width: '80px',
+                  top: '50%',
+                  left: '50%',
+                  position: 'absolute',
+                }}
+              />
+            )}
           </Fragment>
         )}
-        {serverError && (
-          <ErrorDialog
-            title="Server Error"
-            text="There are some server problem"
-            onDialogClose={this.onDialogClose}
-          />
-        )}
-        {isLoading && (
-          <CircularProgress
-            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'absolute' }}
-          />
-        )}
-      </Fragment>
+      </I18nContext.Consumer>
     );
   }
 }

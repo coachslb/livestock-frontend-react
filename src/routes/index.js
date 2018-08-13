@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import LoginPage from '../components/pages/accounts/login/LoginPage';
 import RegistrationPage from '../components/pages/accounts/registration/RegistrationPage';
 import ForgotPasswordPage from '../components/pages/accounts/forgotPassword/ForgotPasswordPage';
+import ChangePasswordPage from '../components/pages/accounts/changePassword/ChangePasswordPage';
 import SelectEntityPage from '../components/pages/livestock/entities/SelectEntityPage';
 import CreateEntityPage from '../components/pages/livestock/entities/CreateEntityPage';
 import LivestockPage from './livestock';
@@ -17,6 +18,7 @@ export default () => {
             <Route path="/forgot-password" component={ForgotPasswordPage} />
             <Route path="/create-entity" component={CreateEntityPage} />
             <Route path="/select-entity" component={SelectEntityPage} />
+            <Route path="/newPassword" component={ChangePasswordPage} />
             <Route path="/logout" component={Logout} />
             <Route path="/" component={LivestockPage} />
         </Switch>

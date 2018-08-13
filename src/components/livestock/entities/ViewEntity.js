@@ -2,21 +2,21 @@ import React from 'react';
 import { Card, CardContent, Typography, Button } from 'material-ui';
 
 const ViewEntity = props => {
-  console.log(props);
   const entity = props.entityData;
+  const {i18n} = props;
   return (
     <Card>
       <CardContent>
         <div className="card-header">
           <Typography variant="headline" className="card-header_title">
-            Empresa agrícola
+            {i18n.entity.agricolaEntity}
           </Typography>
         </div>
         <div className="card-body">
           {entity.name && (
             <div className="card-field col-6">
               <p className="field-info">{entity.name}</p>
-              <label className="field-label">Nome</label>
+              <label className="field-label">{i18n.entity.name}</label>
             </div>
           )}
           {entity.nif && (
@@ -34,34 +34,34 @@ const ViewEntity = props => {
           {entity.phone && (
             <div className="card-field col-6">
               <p className="field-info">{entity.phone}</p>
-              <label className="field-label">Contacto</label>
+              <label className="field-label">{i18n.entity.phone}</label>
             </div>
           )}
           {entity.address &&
             entity.address.detail && (
               <div className="card-field col-6">
                 <p className="field-info">{entity.address.detail}</p>
-                <label className="field-label">Morada</label>
+                <label className="field-label">{i18n.entity.address}</label>
               </div>
             )}
           {entity.address &&
             entity.address.postalCode && (
               <div className="card-field col-6">
                 <p className="field-info">{entity.address.postalCode}</p>
-                <label className="field-label">Código postal</label>
+                <label className="field-label">{i18n.entity.postalCode}</label>
               </div>
             )}
           {entity.address &&
             entity.address.district && (
               <div className="card-field col-6">
                 <p className="field-info">{entity.address.district}</p>
-                <label className="field-label">Distrito</label>
+                <label className="field-label">{i18n.entity.district}</label>
               </div>
             )}
           {entity.country && (
             <div className="card-field col-6">
               <p className="field-info">{entity.country.name}</p>
-              <label className="field-label">País</label>
+              <label className="field-label">{i18n.entity.country}</label>
             </div>
           )}
         </div>
@@ -69,7 +69,7 @@ const ViewEntity = props => {
         ((entity.region && entity.region.name) || entity.nifap) && (
           <div className="card-header">
             <Typography variant="headline" className="card-header_title">
-              Dados agrícolas
+              {i18n.entity.agricolaData}
             </Typography>
           </div>
         )}
@@ -97,7 +97,7 @@ const ViewEntity = props => {
           className="card-button"
           onClick={props.onClick}
         >
-          Editar
+          {i18n.entity.edit}
         </Button>
       </div>
     </Card>

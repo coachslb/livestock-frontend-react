@@ -1,0 +1,19 @@
+{
+    "createUser": "Create user",
+    "name": "Name",
+    "country": "Country",
+    "phone": "Phone",
+    "password": "Password",
+    "repeatPassword": "Repeat password",
+    "next": "Next",
+    "errorTitle": "Registration error",
+    "errorMessage": "There are some input errors",
+    "errors":{
+        "invalidName": "Invalid name",
+        "invalidCountry": "Invalid country",
+        "invalidPhone": "Phone required",
+        "passwordMinLenght": "Password must have at least 6 characters",
+        "passwordDidNotMatch": "Passwords did not match",
+        "invalidEmail": "Invalid e-mail"
+    }
+}

@@ -40,7 +40,7 @@ let AuthenticationService = {
               localStorage.setItem('deviceToken', res.data.deviceToken);
               localStorage.setItem('language', res.data.language.code);
               localStorage.setItem('userId', res.data.userId);
-              localStorage.setItem('username', res.data.userId);
+              localStorage.setItem('username', res.data.username);
               expirationDate = new Date().getTime() + 900000
               localStorage.setItem('expirationDate', expirationDate);
               return res.data.token;

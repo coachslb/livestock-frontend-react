@@ -5,9 +5,10 @@ const EmptyManagement = props => {
   return (
     <EmptyListPlaceholder 
         img="management-img" 
-        section="Maneios"
-        description="Aqui pode adicionar novos maneios efectuados aos seus animais. Clique em Adicionar"
+        section={props.i18n.managements}
+        description={props.i18n.description}
         route={`/livestock/management/${props.entityId}/create`} 
+        add={props.i18n.button.add}
     />);
 };
 

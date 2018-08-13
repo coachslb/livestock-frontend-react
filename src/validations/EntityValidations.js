@@ -1,20 +1,20 @@
 let EntityValidations = {
-    validateCreateEntity: function(name, country) {
+    validateCreateEntity: function(name, country, i18n) {
       let errors = [];
     
       if (name == null || name === '') {
-        errors.push(["name", "name invalid"]);
+        errors.push(["name", i18n.entity.errors.invalidName]);
       }
   
-      if (country === null) errors.push(['country', 'country invalid']);
+      if (country === null) errors.push(['country', i18n.entity.errors.invalidCountry]);
 
       return errors;
     },
-    validateGetOneEntity: function(entityId) {
+    validateGetOneEntity: function(entityId, i18n) {
       let errors = [];
     
       if (entityId == null || entityId === '') {
-        errors.push(["entityId", "Entity ID is not present"]);
+        errors.push(["entityId", ""]);
       }
 
       return errors;

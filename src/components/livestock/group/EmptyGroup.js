@@ -5,9 +5,10 @@ const EmptyGroup = props => {
   return (
     <EmptyListPlaceholder 
         img="exploration-img" 
-        section="Grupos"
-        description="Aqui pode adicionar novos grupos de animais à sua exploração. Clique em Adicionar"
+        section={props.i18n.groups.groupsTitle}
+        description={props.i18n.groups.description}
         route={`/livestock/explorations/${props.entityId}/group/${props.explorationId}/create`} 
+        add={props.i18n.button.add}
     />);
 };
 

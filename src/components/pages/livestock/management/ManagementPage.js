@@ -13,6 +13,7 @@ import ManagementSellOrPurchaseService from '../../../../services/ManagementSell
 import ManagementSanitaryService from '../../../../services/ManagementSanitaryService';
 import ManagementChipService from '../../../../services/ManagementChipService';
 import ManagementTransferService from '../../../../services/ManagementTransferService';
+import { I18nContext } from '../../../App';
 
 export const managementTypes = [
   //TODO transform in an object
@@ -105,49 +106,67 @@ class ManagementPage extends Component {
   render() {
     const { entityId } = this.props.match.params;
     const { hasData, managements, isLoading } = this.state;
-    let render = <EmptyManagement entityId={entityId} />;
+    let render = (
+      <I18nContext.Consumer>
+        {({ i18n }) => <EmptyManagement entityId={entityId} i18n={i18n.management} />}
+      </I18nContext.Consumer>
+    );
     if (hasData && !isLoading)
       render = managements.map(management => {
         return (
-          <ListCardManagement
-            key={management.id}
-            data={management}
-            onEdit={this.onEdit}
-            onDelete={this.onDelete}
-          />
+          <I18nContext.Consumer key={management.id}>
+            {({ i18n }) => (
+              <ListCardManagement
+                data={management}
+                onEdit={this.onEdit}
+                onDelete={this.onDelete}
+                i18n={i18n}
+              />
+            )}
+          </I18nContext.Consumer>
         );
       });
     return (
-      <Fragment>
-        {hasData &&
-          !isLoading && (
-              <Button
-                className="placeholder-button-text"
-                variant="raised"
-                style={{
-                  marginBottom: '20px',
-                  width: '100%',
-                  padding: '15px',
-                  zIndex: 1,
-                }}
-                color="primary"
-                onClick={this.onCreateManagement}
-              >
-                + Adicionar
-              </Button>
-          )}
-        {!isLoading && (
-          <div style={{ maxHeight: 750, overflow: 'scroll', overflowX: 'hidden'}}>
-            {render}
-          </div>
-        )}
+      <I18nContext.Consumer>
+        {({ i18n }) => (
+          <Fragment>
+            {hasData &&
+              !isLoading && (
+                <Button
+                  className="placeholder-button-text"
+                  variant="raised"
+                  style={{
+                    marginBottom: '20px',
+                    width: '100%',
+                    padding: '15px',
+                    zIndex: 1,
+                  }}
+                  color="primary"
+                  onClick={this.onCreateManagement}
+                >
+                  + {i18n.management.button.add}
+                </Button>
+              )}
+            {!isLoading && (
+              <div style={{ maxHeight: 750, overflow: 'scroll', overflowX: 'hidden' }}>
+                {render}
+              </div>
+            )}
 
-        {isLoading && (
-          <CircularProgress
-            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'fixed' }}
-          />
+            {isLoading && (
+              <CircularProgress
+                style={{
+                  height: '80px',
+                  width: '80px',
+                  top: '50%',
+                  left: '50%',
+                  position: 'fixed',
+                }}
+              />
+            )}
+          </Fragment>
         )}
-      </Fragment>
+      </I18nContext.Consumer>
     );
   }
 }

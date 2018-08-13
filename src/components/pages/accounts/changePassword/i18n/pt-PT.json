@@ -1,0 +1,13 @@
+{
+    "changePasswordTitle": "Mudar palavra-passe",
+    "changePasswordHelper": "Introduza a nova palavra-passe",
+    "newPassword":"Nova palavra-passe",
+    "repeatPassword": "Repetir palavra-passe",
+    "confirm": "Confirmar",
+    "sendSuccess": "Sucesso",
+    "sendMessage": "Palavra-passe alterada com sucesso.",
+    "invalidPassword": "Palavra-passe inválida",
+    "requiredPassword": "Campo obrigatório",
+    "passwordDidNotMatch": "As palavras-passe não combinam"
+}
+

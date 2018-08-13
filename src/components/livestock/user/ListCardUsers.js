@@ -19,7 +19,7 @@ const ListCardUsers = props => {
     <div className="card-container">
       <div className="card-info" onClick={onClick}>
         <Typography variant="title" style={{ marginTop: '20px' }}>
-          {`${props.data.username} ${props.data.manage ? '(Gerente)' : ''}` }
+          {`${props.data.name} ${props.data.manage ? '(Gerente)' : ''}`}
         </Typography>
         <p>{props.data.function}</p>
       </div>
@@ -31,20 +31,19 @@ const ListCardUsers = props => {
           className="card-button"
           onClick={onEdit}
         >
-          Editar
+          {props.i18n.button.edit}
         </Button>
         {!props.data.manage && (
           <Button
-          size="medium"
-          variant="raised"
-          color="primary"
-          className="card-button"
-          onClick={onDelete}
-        >
-          Desassociar
-        </Button>
+            size="medium"
+            variant="raised"
+            color="primary"
+            className="card-button"
+            onClick={onDelete}
+          >
+            {props.i18n.button.desassociate}
+          </Button>
         )}
-        
       </div>
     </div>
   );

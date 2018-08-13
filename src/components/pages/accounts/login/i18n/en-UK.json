@@ -1,0 +1,10 @@
+{
+    "username": "E-mail",
+    "password": "Password",
+    "submit": "Enter",
+    "forgotPassword": "Forgot your password?",
+    "newAccount": "Don't have an account? <strong>Create account</strong>",
+    "errorTitle": "Login Error",
+    "errorMessage": "There are some input errors",
+    "requiredEmail": "E-mail is required"
+}

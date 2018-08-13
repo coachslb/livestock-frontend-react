@@ -1,4 +1,5 @@
-export const URL = "https://livestock.netlify.com/api/";
+//export const URL = "https://livestock.netlify.com/api/";
+export const URL = "http://localhost:9000/api/";
 export const VERSION = "v1";
 
 /** Fixed Values */
@@ -25,7 +26,9 @@ export const DEVICE_TOKEN = "/deviceToken";
 export const PREFERENCES = "/user/preferences";
 export const LANGUAGE = "/language";
 export const PASSWORD = "/password/change";
-export const FORGOT_PASSWORD = "/password/request";
+export const EMAIL = "/email/change";
+export const FORGOT_PASSWORD_REQUEST = "/password/request";
+export const FORGOT_PASSWORD_CONFIRM = "/password/confirm";
 
 /** Entity */
 export const AGRICOLA_ENTITY = "/agricolaentity";
@@ -61,6 +64,9 @@ export const TRANSFER = "/transfer";
 export const CHIP = "/chip";
 export const PURCHASE = "/purchase";
 export const SELL = "/sell";
+
+/** Task */
+export const TASK = "/task";
 
 /** Workers */
 export const WORKER = "/worker";

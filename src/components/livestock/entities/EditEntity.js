@@ -158,6 +158,7 @@ class EditEntity extends Component {
 
   render() {
     const { countries, country, regions, drap, isLoading, serverError } = this.state;
+    const {i18n} = this.props;
     return (
       <Fragment>
         {!isLoading &&
@@ -165,12 +166,12 @@ class EditEntity extends Component {
           <CardContent>
             <div className="card-header">
               <Typography variant="headline" className="card-header_title">
-                Empresa agrícola
+                {i18n.entity.agricolaEntity}
               </Typography>
             </div>
             <div className="card-body">
               <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                <InputLabel>Name</InputLabel>
+                <InputLabel>{i18n.entity.name}</InputLabel>
                 <Input
                   name="name"
                   value={this.state.name ? this.state.name : ''}
@@ -194,7 +195,7 @@ class EditEntity extends Component {
                 />
               </FormControl>
               <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                <InputLabel>Contacto</InputLabel>
+                <InputLabel>{i18n.entity.phone}</InputLabel>
                 <Input
                   name="phone"
                   value={this.state.phone ? this.state.phone : ''}
@@ -202,7 +203,7 @@ class EditEntity extends Component {
                 />
               </FormControl>
               <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                <InputLabel>Morada</InputLabel>
+                <InputLabel>{i18n.entity.address}</InputLabel>
                 <Input
                   name="detail"
                   value={this.state.detail ? this.state.detail : ''}
@@ -210,7 +211,7 @@ class EditEntity extends Component {
                 />
               </FormControl>
               <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                <InputLabel>Código Postal</InputLabel>
+                <InputLabel>{i18n.entity.postalCode}</InputLabel>
                 <Input
                   name="postalCode"
                   value={this.state.postalCode ? this.state.postalCode : ''}
@@ -218,7 +219,7 @@ class EditEntity extends Component {
                 />
               </FormControl>
               <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                <InputLabel>Distrito</InputLabel>
+                <InputLabel>{i18n.entity.district}</InputLabel>
                 <Input
                   name="district"
                   value={this.state.district ? this.state.district : ''}
@@ -226,7 +227,7 @@ class EditEntity extends Component {
                 />
               </FormControl>
               <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                <InputLabel>País</InputLabel>
+                <InputLabel>{i18n.entity.country}</InputLabel>
                 <Select
                   name="country"
                   value={country !== '' ? country : 'Portugal'}
@@ -244,7 +245,7 @@ class EditEntity extends Component {
             </div>
             <div className="card-header">
               <Typography variant="headline" className="card-header_title">
-                Dados agrícolas
+                {i18n.entity.agricolaData}
               </Typography>
             </div>
             <div className="card-body">
@@ -282,7 +283,7 @@ class EditEntity extends Component {
               className="card-button"
               onClick={this.props.onCancel}
             >
-              Cancelar
+              {i18n.entity.cancel}
             </Button>
             <Button
               size="medium"
@@ -291,14 +292,14 @@ class EditEntity extends Component {
               className="card-button"
               onClick={this.onSave}
             >
-              Guardar
+              {i18n.entity.save}
             </Button>
           </div>
         </Card>}
         {serverError && (
           <ErrorDialog
-            title="Server Error"
-            text="There are some server problem"
+            title={i18n.general.serverErrorTitle}
+            text={i18n.general.serverErrorMessage}
             onDialogClose={this.onDialogClose}
           />
         )}

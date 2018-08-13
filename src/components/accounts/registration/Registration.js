@@ -42,7 +42,7 @@ class Registration extends Component {
 
   onSubmitRegistration(e) {
     this.setState({ isLoading: true })
-    let errors = RegistrationValidations.validateRegistration(this.state);
+    let errors = RegistrationValidations.validateRegistration(this.state, this.props.i18n);
 
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
@@ -52,7 +52,7 @@ class Registration extends Component {
         email,
         password,
         //todo language prop from page
-        lang: 'pt-PT',
+        lang: this.props.language,
         username: name,
         phoneNumber: phone,
         country,
@@ -89,11 +89,12 @@ class Registration extends Component {
 
   render() {
     const { countries, country, errors, serverError, isLoading } = this.state;
+    const { i18n } = this.props;
 
     let render = (
       <div className="registrationForm">
         <Typography variant="headline" className="form-title">
-          Criar Utilizador
+          {i18n.registration.createUser}
         </Typography>
         <form onSubmit={this.onSubmitRegistration.bind(this)}>
           <InputField
@@ -101,13 +102,13 @@ class Registration extends Component {
             name="name"
             onChange={this.onChange}
             required={true}
-            label="Nome"
+            label={i18n.registration.name}
             errorMessage={errors != null && errors.filter(error => {
               return error[0] === 'name';
             })}
           />
           <FormControl style={{ width: '30%', margin: '10px' }}>
-            <InputLabel required>País</InputLabel>
+            <InputLabel required>{i18n.registration.country}</InputLabel>
             <Select
               name="country"
               value={country !== '' ? country : 'Portugal'}
@@ -127,7 +128,7 @@ class Registration extends Component {
             name="phone"
             onChange={this.onChange}
             required={true}
-            label="Contacto"
+            label={i18n.registration.phone}
             errorMessage={errors != null && errors.filter(error => {
               return error[0] === 'phone';
             })}
@@ -147,7 +148,7 @@ class Registration extends Component {
             name="password"
             onChange={this.onChange}
             required={true}
-            label="Palavra-passe"
+            label={i18n.registration.password}
             type="password"
             errorMessage={errors != null && errors.filter(error => {
               console.log(error[0])
@@ -159,7 +160,7 @@ class Registration extends Component {
             name="repeatPassword"
             onChange={this.onChange}
             required={true}
-            label="Repetir palavra-passe"
+            label={i18n.registration.repeatPassword}
             type="password"
             errorMessage={errors != null && errors.filter(error => {
               return error[0] === 'password';
@@ -170,22 +171,22 @@ class Registration extends Component {
             color="primary"
             variant="raised"
           >
-            Seguinte
+            {i18n.registration.next}
             <i className="material-icons">arrow_forward</i>
           </SubmitButton>
         </form>
         {errors && (
           <ErrorDialog
-            title="Erro no Registo"
-            text="Existem campos inválidos"
+            title={i18n.registration.errorTitle}
+            text={i18n.registration.errorMessage}
             errors={errors}
             onDialogClose={this.onDialogClose}
           />
         )}
         {serverError && (
           <ErrorDialog
-            title="Server Error"
-            text="There are some server problem"
+            title={i18n.general.serverErrorTitle}
+            text={i18n.general.serverErrorMessage}
             onDialogClose={this.onDialogClose}
           />
         )}

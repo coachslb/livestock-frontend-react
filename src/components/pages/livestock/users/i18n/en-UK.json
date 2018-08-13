@@ -1,0 +1,28 @@
+{
+  "currentPassword": "Current password",
+  "newPassword": "New password",
+  "repeatNewPassword": "Repeat new password",
+  "button": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "add": "Add",
+    "desassociate": "Desassociate"
+  },
+  "errors": {
+    "currentPasswordRequired": "Current password required",
+    "newPasswordRequired": "New password required",
+    "oldPasswordEqualToNewPassword": "Choose a different password than the one you had",
+    "passwordsDidNotMatch": "The passwords did not match"
+  },
+  "searchUser": "Search User",
+  "email": "User e-mail",
+  "addUser": "Add user",
+  "newUser": "New user",
+  "worker": "Worker",
+  "name": "Name",
+  "role": "Role",
+  "phone": "Phone",
+  "country": "Country",
+  "manager": "Manager"
+}

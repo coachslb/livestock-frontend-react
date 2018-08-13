@@ -1,0 +1,65 @@
+{
+    "explorationTitle": "Exploration",
+    "explorations": "Explorations",
+    "explorationDescription": "Here you can add new explorations. Click Add.",
+    "name": "Name",
+    "explorationType": "Exploration type(s)",
+    "address": "Address",
+    "district": "District",
+    "postalCode": "Postal code",
+    "place":{
+        "placeTitle": "Place",
+        "number": "Number",
+        "placeType": "Place type",
+        "area": "Area",
+        "totalArea":"Total area",
+        "delete": "Delete",
+        "deleteAll": "Delete all",
+        "soilType": "Soil type",
+        "places":"Places",
+        "description": "Here you can add new places to the exploration. Click Add."
+    },
+    "animals":{
+        "animalsTitle": "Animals",
+        "animal": "Animal",
+        "sex": "Sex",
+        "breed": "Breed",
+        "gestationPeriod": "Gestation period",
+        "reproductionAge": "Reproduction age",
+        "reproductionWeight": "Reproduction weight",
+        "motherChipNumber": "Chip number (mother)",
+        "motherName": "Mother name",
+        "fatherChipNumber": "Chip number (father)",
+        "fatherName": "Father name",
+        "bloodType": "Blood type",
+        "number": "Number",
+        "chipNumber": "Chip number",
+        "birthDate": "Birth date",
+        "animalType": "Type"
+    },
+    "groups":{
+        "groupsTitle": "Groups",
+        "description": "Here you can add new animal groups to your exploration. Click Add.",
+        "group": "Group",
+        "addAnimal": "Add animal",
+        "noAnimals": "There is no animals in this group."
+    },
+    "button":{
+        "cancel": "Cancel",
+        "create": "Create",
+        "save": "Save",
+        "edit": "Edit",
+        "add": "Add",
+        "remove": "Remove"
+    },
+    "errors":{
+        "invalidName": "Name is required",
+        "fieldRequired": "Field required",
+        "invalidPlaceType": "Invalid place type",
+        "invalidSoilType": "Invalid soil type",
+        "invalidArea": "Invalid area",
+        "invalidAnimalType": "Invalid animal type",
+        "invalidSexType": "Invalid sex type",
+        "invalidPlace": "Invalid place"
+    }
+}

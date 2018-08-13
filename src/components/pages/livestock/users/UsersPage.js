@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Button, CircularProgress } from 'material-ui';
 import ListCardUsers from '../../../livestock/user/ListCardUsers';
 import WorkerService from '../../../../services/WorkerService';
+import { I18nContext } from '../../../App';
 
 class UsersPage extends Component {
   constructor() {
@@ -67,38 +68,49 @@ class UsersPage extends Component {
   render() {
     const { isLoading, hasData, workers } = this.state;
     return (
-      <Fragment>
-        {hasData &&
-          !isLoading && (
-            <Button
-              className="placeholder-button-text"
-              variant="raised"
-              style={{ width: '100%', padding: '15px', marginBottom: '20px' }}
-              color="primary"
-              onClick={this.onCreateUser}
-            >
-              + Adicionar
-            </Button>
-          )}
-        {hasData &&
-          !isLoading &&
-          workers.map(w => {
-            return (
-              <ListCardUsers
-                key={w.id}
-                data={w}
-                onEdit={this.onEdit}
-                onDelete={this.onDelete}
-                onClick={this.onClick}
+      <I18nContext.Consumer>
+        {({ i18n }) => (
+          <Fragment>
+            {hasData &&
+              !isLoading && (
+                <Button
+                  className="placeholder-button-text"
+                  variant="raised"
+                  style={{ width: '100%', padding: '15px', marginBottom: '20px' }}
+                  color="primary"
+                  onClick={this.onCreateUser}
+                >
+                  + {i18n.users.button.add}
+                </Button>
+              )}
+            {hasData &&
+              !isLoading &&
+              workers.map(w => {
+                return (
+                  <ListCardUsers
+                    key={w.id}
+                    data={w}
+                    onEdit={this.onEdit}
+                    onDelete={this.onDelete}
+                    onClick={this.onClick}
+                    i18n={i18n.users}
+                  />
+                );
+              })}
+            {(isLoading || !hasData) && (
+              <CircularProgress
+                style={{
+                  height: '80px',
+                  width: '80px',
+                  top: '50%',
+                  left: '50%',
+                  position: 'absolute',
+                }}
               />
-            );
-          })}
-        {(isLoading || !hasData) && (
-          <CircularProgress
-            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'absolute' }}
-          />
+            )}
+          </Fragment>
         )}
-      </Fragment>
+      </I18nContext.Consumer>
     );
   }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem, FormHelperText } from 'material-ui';
 import { Field } from 'react-final-form';
 
-const SelectForm = ({ name, style, required, label, list }) => (
+const SelectForm = ({ name, style, required, label, list, isLanguage }) => (
   <Field
     name={name}
     render={({ input, meta }) => (
@@ -11,7 +11,7 @@ const SelectForm = ({ name, style, required, label, list }) => (
         <Select {...input}>
           {list.map(value => {
             return (
-              <MenuItem key={value.id} value={value.id}>
+              <MenuItem key={isLanguage ? value.code : value.id} value={isLanguage ? value.code : value.id}>
                 {value.name}
               </MenuItem>
             );

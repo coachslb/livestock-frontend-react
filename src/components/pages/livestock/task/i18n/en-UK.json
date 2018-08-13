@@ -1,0 +1,20 @@
+{
+    "addNewTask": "Add new task",
+    "task": "Task",
+    "title": "Title",
+    "description": "Description",
+    "target": "Target",
+    "beginDate": "Begin date",
+    "endDate": "End date",
+    "cancel": "Cancel",
+    "save": "Save",
+    "calendar":{
+        "today": "Today",
+        "previous": "Previous",
+        "next": "Next",
+        "month": "Month",
+        "week": "Week",
+        "day": "Day",
+        "agenda": "Agenda"
+    }
+}

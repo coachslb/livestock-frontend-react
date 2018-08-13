@@ -25,13 +25,13 @@ const row = (x, i, header, handleRemove, onEdit) => {
 
 class ListExplorationAnimals extends Component {
   render() {
-    const { header, data, handleRemove, onEdit } = this.props;
+    const { header, data, handleRemove, onEdit, i18n } = this.props;
     return (
       <Table>
         <TableHead>
           <TableRow>
             {header.map((x, i) => <TableCell key={`thc-${i}`}>{x.name}</TableCell>)}
-            <TableCell>Ações</TableCell>
+            <TableCell>{i18n.general.actions}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>{data.map(x => row(x, x.id, header, handleRemove, onEdit))}</TableBody>

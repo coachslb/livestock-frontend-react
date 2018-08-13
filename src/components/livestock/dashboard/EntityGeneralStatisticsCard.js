@@ -6,38 +6,38 @@ const EntityGeneralStatisticsCard = props => {
     <Card className="statistics-card">
       <CardContent>
         <Typography variant="title" color="primary">
-          Dados da entidade
+          {props.i18n.entityData}
         </Typography>
         <div className="statistics-data">
           <p className="statistic-element">
             <span className="statistic-element-number">
               {props.explorations < 10 ? `0${props.explorations}` : props.explorations}
             </span>{' '}
-            Explorações
+            {props.i18n.explorations}
           </p>
           <p className="statistic-element">
             <span className="statistic-element-number">
               {props.places < 10 ? `0${props.places}` : props.places}
             </span>{' '}
-            Locais
+            {props.i18n.places}
           </p>
           <p className="statistic-element">
             <span className="statistic-element-number">
               {props.animals < 10 ? `0${props.animals}` : props.animals}
             </span>{' '}
-            Animais
+            {props.i18n.animals}
           </p>
           <p className="statistic-element">
             <span className="statistic-element-number">
               {props.managements < 10 ? `0${props.managements}` : props.managements}
             </span>{' '}
-            Atividades
+            {props.i18n.managements}
           </p>
           <p className="statistic-element">
             <span className="statistic-element-number">
               {props.users < 10 ? `0${props.users}` : props.users}
             </span>{' '}
-            Trabalhadores
+            {props.i18n.workers}
           </p>
         </div>
       </CardContent>

@@ -1,0 +1,31 @@
+{
+    "welcomeTitle":"<strong>Bem-vindo à Agroop Livestock</strong>",
+    "welcomeMessage":"É uma aplicação que lhe permitirá gerir a sua exploração de forma mais intuitiva, simples, moderna, eficiente e cool...",
+    "welcomeMessage2": "Caso tenha alguma dúvida contacte-nos na secção de suporte!!!<br/>Boa gestão ;)",
+    "firstUse":{
+        "card1":{
+            "step": "1. Complete os dados da sua entidade",
+            "buttonText": "Completar"
+        },
+        "card2":{
+            "stepSee":"2. Ver explorações",
+            "stepCreate":"2. Crie uma exploração",
+            "buttonTextSee":"Ir para explorações",
+            "buttonTextCreate":"Criar exploração"
+        },
+        "card3":{
+            "step":"3. Insira os seus animais",
+            "buttonTextCreate":"Criar Animal",
+            "buttonTextCreateHasNoExploration":"Crie primeiro uma exploração"
+        }
+    },
+    "entityGeneralStatistics":{
+        "entityData": "Dados da entidade agricola",
+        "explorations": "Explorações",
+        "places": "Locais",
+        "animals": "Animais",
+        "managements": "Maneios",
+        "workers": "Trabalhadores"
+    },
+    "lastManagements": "Últimos maneios"
+}

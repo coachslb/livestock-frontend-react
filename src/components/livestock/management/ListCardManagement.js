@@ -26,7 +26,7 @@ const ListCardManagement = props => {
           className="card-button"
           onClick={onEdit}
         >
-          Editar
+          {props.i18n.management.button.edit}
         </Button>
         <Button
           size="medium"
@@ -35,7 +35,7 @@ const ListCardManagement = props => {
           className="card-button"
           onClick={onDelete}
         >
-          Remover
+          {props.i18n.management.button.remove}
         </Button>
       </div>
     </div>

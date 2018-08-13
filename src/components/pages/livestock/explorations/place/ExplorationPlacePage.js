@@ -3,6 +3,7 @@ import { CircularProgress, Button } from 'material-ui';
 import PlaceService from '../../../../../services/PlaceService';
 import EmptyPlace from '../../../../livestock/place/EmptyPlace';
 import ListCardPlace from '../../../../livestock/place/ListCardPlace';
+import { I18nContext } from '../../../../App';
 
 class ExplorationPlacePage extends Component {
   constructor() {
@@ -42,12 +43,7 @@ class ExplorationPlacePage extends Component {
     const { id } = this.props.match.params;
     this.setState({ isLoading: true });
 
-    const deleteExplorationPlaceResponse = PlaceService.deletePlace(
-      placeId,
-      id,
-      false,
-      true,
-    );
+    const deleteExplorationPlaceResponse = PlaceService.deletePlace(placeId, id, false, true);
     deleteExplorationPlaceResponse
       .then(res => {
         if (res.data.length > 0) {
@@ -57,47 +53,71 @@ class ExplorationPlacePage extends Component {
       .catch(err => this.setState({ serverError: true, isLoading: false }));
   };
 
-  onCreatePlace = (e) => {
+  onCreatePlace = e => {
     e.preventDefault();
-    this.props.history.push(`/livestock/explorations/${this.props.match.params.entityId}/place/${this.props.match.params.id}/create`);
-  }
+    this.props.history.push(
+      `/livestock/explorations/${this.props.match.params.entityId}/place/${
+        this.props.match.params.id
+      }/create`,
+    );
+  };
 
   render() {
     const { id, entityId } = this.props.match.params;
     const { hasData, places, isLoading } = this.state;
-    let render = <EmptyPlace explorationId={id} entityId={entityId} />;
+    let render = (
+      <I18nContext.Consumer>
+        {({ i18n }) => (
+          <EmptyPlace explorationId={id} entityId={entityId} i18n={i18n.exploration} />
+        )}
+      </I18nContext.Consumer>
+    );
     if (hasData && !isLoading)
       render = places.map(place => {
         return (
-          <ListCardPlace
-            key={place.id}
-            data={place}
-            onEdit={this.onEdit}
-            onDelete={this.onDelete}
-          />
+          <I18nContext.Consumer key={place.id}>
+            {({ i18n }) => (
+              <ListCardPlace
+                data={place}
+                onEdit={this.onEdit}
+                onDelete={this.onDelete}
+                i18n={i18n.exploration}
+              />
+            )}
+          </I18nContext.Consumer>
         );
       });
     return (
-      <Fragment>
-        {hasData &&
-          !isLoading && (
-            <Button
-              className="placeholder-button-text"
-              variant="raised"
-              style={{ width: '100%', padding: '15px', marginBottom: '20px' }}
-              color="primary"
-              onClick={this.onCreatePlace}
-            >
-              + Adicionar
-            </Button>
-          )}
-        {!isLoading && render}
-        {isLoading && (
-          <CircularProgress
-            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'absolute' }}
-          />
+      <I18nContext.Consumer>
+        {({ i18n }) => (
+          <Fragment>
+            {hasData &&
+              !isLoading && (
+                <Button
+                  className="placeholder-button-text"
+                  variant="raised"
+                  style={{ width: '100%', padding: '15px', marginBottom: '20px' }}
+                  color="primary"
+                  onClick={this.onCreatePlace}
+                >
+                  + {i18n.exploration.button.add}
+                </Button>
+              )}
+            {!isLoading && render}
+            {isLoading && (
+              <CircularProgress
+                style={{
+                  height: '80px',
+                  width: '80px',
+                  top: '50%',
+                  left: '50%',
+                  position: 'absolute',
+                }}
+              />
+            )}
+          </Fragment>
         )}
-      </Fragment>
+      </I18nContext.Consumer>
     );
   }
 }

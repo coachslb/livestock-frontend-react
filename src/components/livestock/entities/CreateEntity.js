@@ -39,7 +39,7 @@ class CreateEntity extends Component {
     e.preventDefault();
     this.setState({ isLoading: true })
     const {name, country, email} = this.state;
-    let errors = EntityValidations.validateCreateEntity(name, country);
+    let errors = EntityValidations.validateCreateEntity(name, country, this.props.i18n);
 
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
@@ -70,15 +70,15 @@ class CreateEntity extends Component {
   }
 
   render() {
-
     const { countries, country, errors, serverError, isLoading } = this.state;
+    const { i18n } = this.props;
 
     return (
       <Fragment>
       {!isLoading && (
         <div className="createEntityForm">
         <Typography variant="headline" className="form-title">
-          Criar entidade agricola
+          {i18n.entity.createAgricolaEntity}
         </Typography>
         <form onSubmit={this.onSubmitCreateEntity.bind(this)}>
           <InputField
@@ -86,7 +86,7 @@ class CreateEntity extends Component {
             name="name"
             onChange={this.onChange}
             required={true}
-            label="Nome"
+            label={i18n.entity.name}
             errorMessage={
               errors != null &&
               errors.filter(error => {
@@ -108,7 +108,7 @@ class CreateEntity extends Component {
             }
           />
           <FormControl style={{ width: '45%', margin: '10px' }}>
-            <InputLabel required>País</InputLabel>
+            <InputLabel required>{i18n.entity.country}</InputLabel>
             <Select
               name="country"
               value={country !== '' ? country : 'Portugal'}
@@ -128,21 +128,21 @@ class CreateEntity extends Component {
             color="primary"
             variant="raised"
           >
-            Concluir
+            {i18n.entity.conclude}
           </SubmitButton>
       </form> </div>)}
         {errors && (
           <ErrorDialog
-            title="Input Errors"
-            text="There are some input errors"
+            title={i18n.general.inputErrorTitle}
+            text={i18n.general.genericErrorMessage}
             errors={errors}
             onDialogClose={this.onDialogClose}
           />
         )}
         {serverError && (
           <ErrorDialog
-            title="Server Error"
-            text="There is some server problem"
+            title={i18n.general.serverErrorTitle}
+            text={i18n.general.serverErrorMessage}
             onDialogClose={this.onDialogClose}
           />
         )}

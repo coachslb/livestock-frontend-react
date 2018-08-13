@@ -1,0 +1,8 @@
+{
+    "recoverPassword": "Repor palavra-passe",
+    "send": "Enviar",
+    "sendSuccess": "Sucesso",
+    "sendMessage": "Enviámos um email para que possa recuperar a sua palavra-passe",
+    "invalidEmail": "E-mail inválido"
+}
+

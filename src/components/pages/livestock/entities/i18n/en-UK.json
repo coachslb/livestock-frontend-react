@@ -1,0 +1,20 @@
+{
+    "createAgricolaEntity": "Create agricola entity",
+    "name": "Name",
+    "country": "Country",
+    "conclude": "Conclude",
+    "agricolaEntity": "Agricola entity",
+    "phone": "Phone",
+    "address": "Address",
+    "postalCode": "Postal code",
+    "district": "District",
+    "agricolaData": "Agricola data",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "errors": {
+        "invalidName": "Name required",
+        "invalidCountry": "Country required",
+        "entityIdIsNotPresent": "Entity ID is not present"
+    }
+}

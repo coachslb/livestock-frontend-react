@@ -4,7 +4,7 @@ import InputField from '../../UI/Inputs/InputField';
 import SubmitButton from '../../UI/Buttons/SubmitButton';
 import AuthenticationService from '../../../services/AuthenticationService';
 import ErrorDialog from '../../UI/ErrorDialog/ErrorDialog';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import AccountsValidations from '../../../validations/AccountsValidations';
 
 class Login extends Component {
@@ -15,7 +15,7 @@ class Login extends Component {
       password: '',
       errors: null,
       serverError: null,
-      isLoading: false
+      isLoading: false,
     };
     this.onChange = this.onChange.bind(this);
     this.onDialogClose = this.onDialogClose.bind(this);
@@ -23,8 +23,8 @@ class Login extends Component {
 
   onSubmitLogin(e) {
     e.preventDefault();
-    this.setState({isLoading: true})
-    let errors = AccountsValidations.validateLogin(this.state.email, this.state.password);
+    this.setState({ isLoading: true });
+    let errors = AccountsValidations.validateLogin(this.state.email, this.state.password, this.props.i18n);
     if (errors.length > 0) {
       this.setState({ errors, isLoading: false });
     } else {
@@ -34,31 +34,32 @@ class Login extends Component {
         {
           username: email,
           password,
-          language: 'pt-PT',
+          language: this.props.language,
         },
         false,
       );
 
-      loginResponse.then((res)=>{
-        localStorage.setItem('token', res.data.token);
-        localStorage.setItem('deviceToken', res.data.deviceToken);
-        localStorage.setItem('language', res.data.language.code);
-        localStorage.setItem('userId', res.data.userId);
-        localStorage.setItem('username', res.data.username);
-        let expirationDate = new Date().getTime() + 900000
-        localStorage.setItem('expirationDate', expirationDate);
-        this.setState({ isLoading: false })
-        if(!res.data.entityId){
-          this.props.history.push('/create-entity');
-        }
-        else{
-          localStorage.setItem('entityId', res.data.entityId);
-          localStorage.setItem('workerId', res.data.workerId);
-          this.props.history.push('/');
-        }
-      }).catch((err) => {
-        this.setState({ serverError: true, isLoading: false })
-      });
+      loginResponse
+        .then(res => {
+          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('deviceToken', res.data.deviceToken);
+          localStorage.setItem('language', res.data.language.code);
+          localStorage.setItem('userId', res.data.userId);
+          localStorage.setItem('username', res.data.username);
+          let expirationDate = new Date().getTime() + 900000;
+          localStorage.setItem('expirationDate', expirationDate);
+          this.setState({ isLoading: false });
+          if (!res.data.entityId) {
+            this.props.history.push('/create-entity');
+          } else {
+            localStorage.setItem('entityId', res.data.entityId);
+            localStorage.setItem('workerId', res.data.workerId);
+            this.props.history.push('/');
+          }
+        })
+        .catch(err => {
+          this.setState({ serverError: true, isLoading: false });
+        });
     }
   }
 
@@ -73,6 +74,7 @@ class Login extends Component {
 
   render() {
     const { errors, serverError, isLoading } = this.state;
+    const { i18n } = this.props;
     return (
       <div className="loginForm">
         <form onSubmit={this.onSubmitLogin.bind(this)}>
@@ -81,7 +83,7 @@ class Login extends Component {
             name="email"
             onChange={this.onChange}
             required={true}
-            label="E-mail"
+            label={i18n.login.username}
             errorMessage={
               errors != null &&
               errors.filter(error => {
@@ -95,7 +97,7 @@ class Login extends Component {
             type="password"
             onChange={this.onChange}
             required={true}
-            label="Password"
+            label={i18n.login.password}
             errorMessage={
               errors != null &&
               errors.filter(error => {
@@ -108,26 +110,28 @@ class Login extends Component {
             style={{ marginTop: '50px', width: '40%' }}
             color="primary"
           >
-            Entrar
+            {i18n.login.submit}
             <i className="material-icons">arrow_forward</i>
           </SubmitButton>
         </form>
         {errors && (
           <ErrorDialog
-            title="Login Error"
-            text="There are some input errors"
+            title={i18n.login.errorTitle}
+            text={i18n.login.errorMessage}
             onDialogClose={this.onDialogClose}
           />
         )}
         {serverError && (
           <ErrorDialog
-            title="Server Error"
-            text="There are some server problem"
+            title={i18n.general.serverErrorTitle}
+            text={i18n.general.serverErrorMessage}
             onDialogClose={this.onDialogClose}
           />
         )}
         {isLoading && (
-          <CircularProgress style={{height:'80px', width:'80px', top:"50%", left:"50%", position: 'absolute'}}/>
+          <CircularProgress
+            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'absolute' }}
+          />
         )}
       </div>
     );

@@ -5,6 +5,7 @@ import EditEntity from '../../../livestock/entities/EditEntity';
 import EntityService from '../../../../services/EntityService';
 import ErrorDialog from '../../../UI/ErrorDialog/ErrorDialog';
 import { CircularProgress } from 'material-ui';
+import { I18nContext } from '../../../App';
 
 class EntityDetailPage extends Component {
   constructor() {
@@ -24,7 +25,7 @@ class EntityDetailPage extends Component {
 
       getOneEntityResponse
         .then(res => {
-          this.setState({...res.data});
+          this.setState({ ...res.data });
         })
         .catch(err => this.setState({ serverError: true }));
     }
@@ -47,7 +48,7 @@ class EntityDetailPage extends Component {
 
       getOneEntityResponse
         .then(res => {
-          this.setState({...res.data, isLoading: false});
+          this.setState({ ...res.data, isLoading: false });
         })
         .catch(err => this.setState({ serverError: true, isLoading: false }));
     }
@@ -55,24 +56,47 @@ class EntityDetailPage extends Component {
 
   render() {
     const { edit, serverError, isLoading } = this.state;
-    let view = <ViewEntity onClick={this.onClick} entityData={this.state} />;
+    let view = (
+      <I18nContext.Consumer>
+        {({ i18n }) => <ViewEntity i18n={i18n} onClick={this.onClick} entityData={this.state} />}
+      </I18nContext.Consumer>
+    );
 
-    if (edit) view = <EditEntity onCancel={this.onCancel} entityData={this.state}/>;
+    if (edit)
+      view = (
+        <I18nContext.Consumer>
+          {({ i18n }) => (
+            <EditEntity i18n={i18n} onCancel={this.onCancel} entityData={this.state} />
+          )}
+        </I18nContext.Consumer>
+      );
 
     return (
-      <Fragment>
-        {view}
-        {serverError && (
-          <ErrorDialog
-            title="Server Error"
-            text="There are some server problem"
-            onDialogClose={this.onDialogClose}
-          />
+      <I18nContext.Consumer>
+        {({ i18n }) => (
+          <Fragment>
+            {view}
+            {serverError && (
+              <ErrorDialog
+                title={i18n.general.serverErrorTitle}
+                text={i18n.general.serverErrorMessage}
+                onDialogClose={this.onDialogClose}
+              />
+            )}
+            {isLoading && (
+              <CircularProgress
+                style={{
+                  height: '80px',
+                  width: '80px',
+                  top: '50%',
+                  left: '50%',
+                  position: 'absolute',
+                }}
+              />
+            )}
+          </Fragment>
         )}
-        {isLoading && (
-          <CircularProgress/>
-        )}
-      </Fragment>
+      </I18nContext.Consumer>
     );
   }
 }

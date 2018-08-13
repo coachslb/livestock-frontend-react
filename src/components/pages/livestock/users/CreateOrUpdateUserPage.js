@@ -17,6 +17,8 @@ import InputForm from '../../../UI/Inputs/InputForm';
 import ErrorDialog from '../../../UI/ErrorDialog/ErrorDialog';
 import WorkerService from '../../../../services/WorkerService';
 import FixedValuesService from '../../../../services/FixedValuesService';
+import i18n from '../task/i18n';
+import { I18nContext } from '../../../App';
 
 class CreateOrUpdateUserPage extends Component {
   constructor() {
@@ -80,7 +82,7 @@ class CreateOrUpdateUserPage extends Component {
   onSubmitUserEntity = async values => {
     const { entityId } = this.props.match.params;
     values.agricolaEntity = entityId;
-    values.lang = 'pt-PT' //TODO
+    values.lang = localStorage.getItem('language');
     if (values.id) {
       let updateWorkerResponse = WorkerService.update(values, true);
       updateWorkerResponse
@@ -106,7 +108,7 @@ class CreateOrUpdateUserPage extends Component {
   };
 
   //TODO
-  validateSearchEmail = values => {
+  validateSearchEmail = (values, i18n) => {
     const errors = {};
     return errors;
   };
@@ -117,10 +119,8 @@ class CreateOrUpdateUserPage extends Component {
 
   onCancel = e => {
     const { entityId, id } = this.props.match.params;
-    if(id)
-      this.props.history.push(`/livestock/users/${entityId}/detail/${id}`);
-    else
-      this.props.history.push(`/livestock/users/${entityId}`);
+    if (id) this.props.history.push(`/livestock/users/${entityId}/detail/${id}`);
+    else this.props.history.push(`/livestock/users/${entityId}`);
   };
 
   onCallUserForm = e => {
@@ -142,198 +142,203 @@ class CreateOrUpdateUserPage extends Component {
     return (
       <Fragment>
         {!isLoading && (
-          <Fragment>
-            {isCreate && (
-              <Form
-                onSubmit={this.onSubmitSearchEmail}
-                mutators={{
-                  ...arrayMutators,
-                }}
-                initialValues={{}}
-                validate={this.validateSearchEmail}
-                render={({ handleSubmit, pristine, invalid, values }) => (
-                  <form onSubmit={handleSubmit}>
-                    <Card style={{ marginTop: 20 }}>
-                      <CardContent>
-                        <Typography variant="headline" className="card-header_title">
-                          Pesquisa utilizador
-                        </Typography>
-                        <div>
-                          <InputForm
-                            name="email"
-                            required={true}
-                            type="email"
-                            label="Email do utilizador"
-                            style={{ width: '80%', margin: '10px', marginBottom: '40px' }}
-                          />
+          <I18nContext.Consumer>
+            {({ i18n }) => (
+              <Fragment>
+                {isCreate && (
+                  <Form
+                    onSubmit={this.onSubmitSearchEmail}
+                    mutators={{
+                      ...arrayMutators,
+                    }}
+                    initialValues={{}}
+                    validate={fields => this.validateSearchEmail(fields, i18n)}
+                    render={({ handleSubmit, pristine, invalid, values }) => (
+                      <form onSubmit={handleSubmit}>
+                        <Card style={{ marginTop: 20 }}>
+                          <CardContent>
+                            <Typography variant="headline" className="card-header_title">
+                              {i18n.users.searchUser}
+                            </Typography>
+                            <div>
+                              <InputForm
+                                name="email"
+                                required={true}
+                                type="email"
+                                label={i18n.users.email}
+                                style={{ width: '80%', margin: '10px', marginBottom: '40px' }}
+                              />
 
-                          <Button
-                            size="medium"
-                            variant="raised"
-                            color="primary"
-                            className="card-button"
-                            type="submit"
-                            disabled={pristine || invalid}
-                          >
-                            Pesquisar
-                          </Button>
-                        </div>
-                        {user && (
-                          <div className="card-container">
-                            <div className="card-info">
-                              <Typography variant="title" style={{ marginTop: '20px' }}>
-                                {user.username}
-                              </Typography>
-                              <p>{user.email}</p>
-                            </div>
-                            <div className="card-actions">
                               <Button
                                 size="medium"
                                 variant="raised"
                                 color="primary"
                                 className="card-button"
-                                onClick={this.onCallUserForm}
+                                type="submit"
+                                disabled={pristine || invalid}
                               >
-                                Adicionar Utilizador
+                                {i18n.general.search}
                               </Button>
                             </div>
-                          </div>
-                        )}
-                        {!user &&
-                          search && (
-                            <div className="card-container">
-                              <div className="card-info">
-                                <Typography variant="title">
-                                  Novo Utilizador
-                                </Typography>
+                            {user && (
+                              <div className="card-container">
+                                <div className="card-info">
+                                  <Typography variant="title" style={{ marginTop: '20px' }}>
+                                    {user.username}
+                                  </Typography>
+                                  <p>{user.email}</p>
+                                </div>
+                                <div className="card-actions">
+                                  <Button
+                                    size="medium"
+                                    variant="raised"
+                                    color="primary"
+                                    className="card-button"
+                                    onClick={this.onCallUserForm}
+                                  >
+                                    {i18n.users.addUser}
+                                  </Button>
+                                </div>
                               </div>
-                              <div className="card-actions">
-                                <Button
-                                  size="medium"
-                                  variant="raised"
-                                  color="primary"
-                                  className="card-button"
-                                  onClick={this.onCallUserForm}
-                                >
-                                  Adicionar Utilizador
-                                </Button>
-                              </div>
-                            </div>
-                          )}
-                      </CardContent>
-                    </Card>
-                  </form>
-                )}
-              />
-            )}
-            {(addUser || !isCreate) && (
-              <Form
-                onSubmit={this.onSubmitUserEntity}
-                mutators={{
-                  ...arrayMutators,
-                }}
-                initialValues={{ ...userEntity, email: emailSearch ? emailSearch : userEntity.email }}
-                validate={this.validateUserEntity}
-                render={({ handleSubmit, pristine, invalid, values }) => (
-                  <form onSubmit={handleSubmit}>
-                    <Card style={{ marginTop: 20 }}>
-                      <CardContent>
-                        <Typography variant="headline" className="card-header_title">
-                          Trabalhador
-                        </Typography>
-                        <div>
-                          <InputForm name="id" type="hidden" />
-                          <InputForm
-                            name="username"
-                            required={true}
-                            type="text"
-                            label="Nome"
-                            style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                          />
-                          <InputForm
-                            name="email"
-                            required={true}
-                            type="email"
-                            label="Email"
-                            disabled={!isCreate}
-                            style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                          />
-                          <InputForm
-                            name="function"
-                            required={true}
-                            type="text"
-                            label="Função"
-                            style={{ width: '30%', margin: '10px', marginBottom: '40px' }}
-                          />
-                          <InputForm
-                            name="phone"
-                            required={true}
-                            type="text"
-                            label="Contacto"
-                            style={{ width: '28%', margin: '10px', marginBottom: '40px' }}
-                          />
-                          {countries && (
-                            <Field
-                              name="country"
-                              render={({ input, meta }) => (
-                                <FormControl
-                                  style={{ width: '30%', margin: '10px', marginBottom: '40px' }}
-                                  error={meta.touched && meta.error ? true : false}
-                                >
-                                  <InputLabel required>País</InputLabel>
-                                  <Select {...input}>
-                                    {countries.map(value => {
-                                      return (
-                                        <MenuItem key={value.name} value={value.name}>
-                                          {value.name}
-                                        </MenuItem>
-                                      );
-                                    })}
-                                  </Select>
-                                  {meta.touched &&
-                                    meta.error && (
-                                      <FormHelperText id="name-error-text">
-                                        {meta.error}
-                                      </FormHelperText>
-                                    )}
-                                </FormControl>
+                            )}
+                            {!user &&
+                              search && (
+                                <div className="card-container">
+                                  <div className="card-info">
+                                    <Typography variant="title">{i18n.users.newUser}</Typography>
+                                  </div>
+                                  <div className="card-actions">
+                                    <Button
+                                      size="medium"
+                                      variant="raised"
+                                      color="primary"
+                                      className="card-button"
+                                      onClick={this.onCallUserForm}
+                                    >
+                                      {i18n.users.addUser}
+                                    </Button>
+                                  </div>
+                                </div>
                               )}
-                            />
-                          )}
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                          <Button
-                            size="medium"
-                            variant="raised"
-                            color="primary"
-                            className="card-button"
-                            onClick={this.onCancel}
-                          >
-                            Cancelar
-                          </Button>
-                          <Button
-                            size="medium"
-                            variant="raised"
-                            color="primary"
-                            className="card-button"
-                            type="submit"
-                            disabled={pristine || invalid}
-                          >
-                            Guardar
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </form>
+                          </CardContent>
+                        </Card>
+                      </form>
+                    )}
+                  />
                 )}
-              />
+                {(addUser || !isCreate) && (
+                  <Form
+                    onSubmit={this.onSubmitUserEntity}
+                    mutators={{
+                      ...arrayMutators,
+                    }}
+                    initialValues={{
+                      ...userEntity,
+                      email: emailSearch ? emailSearch : userEntity.email,
+                    }}
+                    validate={this.validateUserEntity}
+                    render={({ handleSubmit, pristine, invalid, values }) => (
+                      <form onSubmit={handleSubmit}>
+                        <Card style={{ marginTop: 20 }}>
+                          <CardContent>
+                            <Typography variant="headline" className="card-header_title">
+                              {i18n.users.worker}
+                            </Typography>
+                            <div>
+                              <InputForm name="id" type="hidden" />
+                              <InputForm
+                                name="name"
+                                required={true}
+                                type="text"
+                                label={i18n.users.name}
+                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
+                              />
+                              <InputForm
+                                name="email"
+                                required={true}
+                                type="email"
+                                label="E-mail"
+                                disabled={!isCreate}
+                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
+                              />
+                              <InputForm
+                                name="function"
+                                required={true}
+                                type="text"
+                                label={i18n.users.role}
+                                style={{ width: '30%', margin: '10px', marginBottom: '40px' }}
+                              />
+                              <InputForm
+                                name="phone"
+                                required={true}
+                                type="text"
+                                label={i18n.users.phone}
+                                style={{ width: '28%', margin: '10px', marginBottom: '40px' }}
+                              />
+                              {countries && (
+                                <Field
+                                  name="country"
+                                  render={({ input, meta }) => (
+                                    <FormControl
+                                      style={{ width: '30%', margin: '10px', marginBottom: '40px' }}
+                                      error={meta.touched && meta.error ? true : false}
+                                    >
+                                      <InputLabel required>{i18n.users.country}</InputLabel>
+                                      <Select {...input}>
+                                        {countries.map(value => {
+                                          return (
+                                            <MenuItem key={value.name} value={value.name}>
+                                              {value.name}
+                                            </MenuItem>
+                                          );
+                                        })}
+                                      </Select>
+                                      {meta.touched &&
+                                        meta.error && (
+                                          <FormHelperText id="name-error-text">
+                                            {meta.error}
+                                          </FormHelperText>
+                                        )}
+                                    </FormControl>
+                                  )}
+                                />
+                              )}
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                              <Button
+                                size="medium"
+                                variant="raised"
+                                color="primary"
+                                className="card-button"
+                                onClick={this.onCancel}
+                              >
+                                {i18n.users.button.cancel}
+                              </Button>
+                              <Button
+                                size="medium"
+                                variant="raised"
+                                color="primary"
+                                className="card-button"
+                                type="submit"
+                                disabled={pristine || invalid}
+                              >
+                                {i18n.users.button.save}
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </form>
+                    )}
+                  />
+                )}
+              </Fragment>
             )}
-          </Fragment>
+          </I18nContext.Consumer>
         )}
         {serverError && (
           <ErrorDialog
-            title="Server Error"
-            text="There are some server problem"
+            title={i18n.general.serverErrorTitle}
+            text={i18n.general.serverErrorMessage}
             onDialogClose={this.onDialogClose}
           />
         )}

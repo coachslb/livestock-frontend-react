@@ -12,10 +12,12 @@ const StatisticsSection = (props) => {
             animals={props.agricolaEntity.animals}
             managements={props.agricolaEntity.managementNumber}
             users={props.agricolaEntity.users}
+            i18n={props.i18n.dashboard.entityGeneralStatistics}
         />
         <LastManagementsCard 
             agricolaEntity={props.entityId}
             data={props.management.managements}
+            i18n={props.i18n.dashboard}
         />
     </div>)
 }

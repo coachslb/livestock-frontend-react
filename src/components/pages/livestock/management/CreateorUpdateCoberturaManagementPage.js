@@ -21,6 +21,7 @@ import ManagementCoberturaService from '../../../../services/ManagementCobertura
 import ExplorationService from '../../../../services/ExplorationService';
 import FixedValuesService from '../../../../services/FixedValuesService';
 import AnimalService from '../../../../services/AnimalService';
+import { I18nContext } from '../../../App';
 
 class CreateorUpdateCoberturaManagementPage extends Component {
   constructor() {
@@ -156,15 +157,15 @@ class CreateorUpdateCoberturaManagementPage extends Component {
       .catch(err => this.setState({ serverError: true, isLoading: false }));
   };
 
-  validateArray = fields => {
+  validateArray = (fields, i18n) => {
     const errors = {};
     if (fields) {
       fields.forEach(element => {
         if (element !== undefined) {
-          if (!element.female) errors.female = 'Required';
-          if (!element.coberturaType) errors.coberturaType = 'Required';
+          if (!element.female) errors.female = i18n.management.errors.required;
+          if (!element.coberturaType) errors.coberturaType = i18n.management.errors.required;
         } else {
-          errors.female = 'Required';
+          errors.female = i18n.management.errors.required;
         }
       });
     }
@@ -172,21 +173,21 @@ class CreateorUpdateCoberturaManagementPage extends Component {
   };
 
   //TODO
-  validate = values => {
+  validate = (values, i18n) => {
     const errors = {};
     if (!values.date) {
-      errors.date = 'Required';
+      errors.date = i18n.management.errors.required;
     }
     if (new Date(values.date) > new Date()) {
-      errors.date = 'Data inválida';
+      errors.date = i18n.management.errors.invalidDate;
     }
 
     if (!this.state.exploration) {
-      errors.exploration = 'Required';
+      errors.exploration = i18n.management.errors.required;
     }
 
     if (!values.animalSexData || !values.animalSexData.length > 0) {
-      errors.data = 'Required';
+      errors.data = i18n.management.errors.required;
     }
 
     return errors;
@@ -214,128 +215,110 @@ class CreateorUpdateCoberturaManagementPage extends Component {
       cobertura,
     } = this.state;
     return (
-      <Fragment>
-        {!isLoading && (
+      <I18nContext.Consumer>
+        {({ i18n }) => (
           <Fragment>
-            <ManagementCreationCard step={2} entityId={entityId} title="Cobertura" />
-            <Form
-              onSubmit={this.onSubmit}
-              mutators={{
-                ...arrayMutators,
-              }}
-              initialValues={{ ...cobertura }}
-              validate={this.validate}
-              render={({
-                handleSubmit,
-                pristine,
-                invalid,
-                values,
-                form: {
-                  mutators: { push, pop },
-                },
-              }) => (
-                <form onSubmit={handleSubmit}>
-                  <Card style={{ marginTop: 20 }}>
-                    <CardContent>
-                      <div className="card-header">
-                        <Typography variant="headline" className="card-header_title">
-                          Dados gerais
-                        </Typography>
-                      </div>
-                      <div className="card-body">
-                        <InputForm
-                          name="date"
-                          required={true}
-                          type="date"
-                          label="Data"
-                          style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                        />
-                        {explorationList && (
-                          <FormControl
-                            style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                          >
-                            <InputLabel>Exploração</InputLabel>
-                            <Select
-                              name="exploration"
-                              value={exploration}
-                              onChange={this.handleExplorationChange.bind(this, values)}
+            {!isLoading && (
+              <Fragment>
+                <ManagementCreationCard
+                  step={2}
+                  entityId={entityId}
+                  title={i18n.management.managementType.servicing}
+                />
+                <Form
+                  onSubmit={this.onSubmit}
+                  mutators={{
+                    ...arrayMutators,
+                  }}
+                  initialValues={{ ...cobertura }}
+                  validate={fields => this.validate(fields, i18n)}
+                  render={({
+                    handleSubmit,
+                    pristine,
+                    invalid,
+                    values,
+                    form: {
+                      mutators: { push, pop },
+                    },
+                  }) => (
+                    <form onSubmit={handleSubmit}>
+                      <Card style={{ marginTop: 20 }}>
+                        <CardContent>
+                          <div className="card-header">
+                            <Typography variant="headline" className="card-header_title">
+                              {i18n.management.generalData}
+                            </Typography>
+                          </div>
+                          <div className="card-body">
+                            <InputForm
+                              name="date"
+                              required={true}
+                              type="date"
+                              label={i18n.management.date}
+                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
+                            />
+                            {explorationList && (
+                              <FormControl
+                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
+                              >
+                                <InputLabel>{i18n.management.exploration}</InputLabel>
+                                <Select
+                                  name="exploration"
+                                  value={exploration}
+                                  onChange={this.handleExplorationChange.bind(this, values)}
+                                >
+                                  {explorationList.map(ex => {
+                                    return (
+                                      <MenuItem key={ex.id} value={ex.id}>
+                                        {ex.name}
+                                      </MenuItem>
+                                    );
+                                  })}
+                                </Select>
+                              </FormControl>
+                            )}
+                            <InputForm
+                              name="observations"
+                              required={false}
+                              type="text"
+                              label={i18n.management.obs}
+                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
+                            />
+                          </div>
+                        </CardContent>
+                      </Card>
+                      {exploration &&
+                        femaleList.length > 0 && (
+                          <Fragment>
+                            <FieldArray
+                              name="animalSexData"
+                              validate={fields => this.validateArray(fields, i18n)}
                             >
-                              {explorationList.map(ex => {
-                                return (
-                                  <MenuItem key={ex.id} value={ex.id}>
-                                    {ex.name}
-                                  </MenuItem>
-                                );
-                              })}
-                            </Select>
-                          </FormControl>
-                        )}
-                        <InputForm
-                          name="observations"
-                          required={false}
-                          type="text"
-                          label="Observações"
-                          style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                        />
-                      </div>
-                    </CardContent>
-                  </Card>
-                  {exploration &&
-                    femaleList.length > 0 && (
-                      <Fragment>
-                        <FieldArray name="animalSexData" validate={this.validateArray}>
-                          {({ fields }) =>
-                            fields.map((name, index) => (
-                              <Card style={{ marginTop: 20 }} key={name}>
-                                <CardContent>
-                                  <div className="card-header">
-                                    <Typography variant="headline" className="card-header_title">
-                                      {index + 1}. Cobertura
-                                    </Typography>
-                                    <i
-                                      className="material-icons"
-                                      onClick={() => fields.remove(index)}
-                                    >
-                                      delete
-                                    </i>
-                                  </div>
-                                  <div className="card-body">
-                                    {coberturaTypes && (
-                                      <SelectForm
-                                        label="Tipo de cobertura"
-                                        name={`${name}.coberturaType`}
-                                        required={true}
-                                        list={coberturaTypes}
-                                        style={{
-                                          width: '45%',
-                                          margin: '10px',
-                                          marginBottom: '40px',
-                                        }}
-                                      />
-                                    )}
-
-                                    <Fragment>
-                                      {femaleList && (
-                                        <SelectForm
-                                          label="Fêmea"
-                                          name={`${name}.female`}
-                                          required={true}
-                                          list={femaleList}
-                                          style={{
-                                            width: '45%',
-                                            margin: '10px',
-                                            marginBottom: '40px',
-                                          }}
-                                        />
-                                      )}
-                                      {maleList &&
-                                        fields.value[index] &&
-                                        fields.value[index].coberturaType === 1 && (
+                              {({ fields }) =>
+                                fields.map((name, index) => (
+                                  <Card style={{ marginTop: 20 }} key={name}>
+                                    <CardContent>
+                                      <div className="card-header">
+                                        <Typography
+                                          variant="headline"
+                                          className="card-header_title"
+                                        >
+                                          {index + 1}. {i18n.management.managementType.servicing}
+                                        </Typography>
+                                        <i
+                                          className="material-icons"
+                                          onClick={() => fields.remove(index)}
+                                        >
+                                          delete
+                                        </i>
+                                      </div>
+                                      <div className="card-body">
+                                        {coberturaTypes && (
                                           <SelectForm
-                                            label="Macho"
-                                            name={`${name}.male`}
-                                            required={false}
-                                            list={maleList}
+                                            label={i18n.management.servicingType}
+                                            name={`${name}.coberturaType`}
+                                            required={true}
+                                            list={coberturaTypes}
                                             style={{
                                               width: '45%',
                                               margin: '10px',
@@ -343,92 +326,129 @@ class CreateorUpdateCoberturaManagementPage extends Component {
                                             }}
                                           />
                                         )}
-                                      {fields.value[index] &&
-                                        fields.value[index].coberturaType === 2 && (
-                                          <Fragment>
-                                            <InputForm
-                                              name={`${name}.dose`}
-                                              required={false}
-                                              type="number"
-                                              label="Dose"
-                                              inputAdornment="g"
+                                        <Fragment>
+                                          {femaleList && (
+                                            <SelectForm
+                                              label={i18n.management.female}
+                                              name={`${name}.female`}
+                                              required={true}
+                                              list={femaleList}
                                               style={{
                                                 width: '45%',
                                                 margin: '10px',
                                                 marginBottom: '40px',
                                               }}
                                             />
-                                            <InputForm
-                                              name={`${name}.vet`}
-                                              required={false}
-                                              type="text"
-                                              label="Inseminador"
-                                              style={{
-                                                width: '45%',
-                                                margin: '10px',
-                                                marginBottom: '40px',
-                                              }}
-                                            />
-                                          </Fragment>
-                                        )}
-                                    </Fragment>
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            ))
-                          }
-                        </FieldArray>
-                        <Card style={{ marginTop: 20 }}>
-                          <CardContent style={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography variant="headline" style={{ flexGrow: 1 }}>
-                              Adicionar uma cobertura
-                            </Typography>
-                            <i className="material-icons" onClick={() => push('animalSexData')}>
-                              add
-                            </i>
-                          </CardContent>
-                        </Card>
-                      </Fragment>
-                    )}
-                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button
-                      size="medium"
-                      variant="raised"
-                      color="primary"
-                      className="card-button"
-                      onClick={this.onCancel}
-                    >
-                      Cancelar
-                    </Button>
-                    <Button
-                      size="medium"
-                      variant="raised"
-                      color="primary"
-                      className="card-button"
-                      type="submit"
-                      disabled={invalid || pristine}
-                    >
-                      Guardar
-                    </Button>
-                  </div>
-                </form>
-              )}
-            />
+                                          )}
+                                          {maleList &&
+                                            fields.value[index] &&
+                                            fields.value[index].coberturaType === 1 && (
+                                              <SelectForm
+                                                label={i18n.management.male}
+                                                name={`${name}.male`}
+                                                required={false}
+                                                list={maleList}
+                                                style={{
+                                                  width: '45%',
+                                                  margin: '10px',
+                                                  marginBottom: '40px',
+                                                }}
+                                              />
+                                            )}
+                                          {fields.value[index] &&
+                                            fields.value[index].coberturaType === 2 && (
+                                              <Fragment>
+                                                <InputForm
+                                                  name={`${name}.dose`}
+                                                  required={false}
+                                                  type="number"
+                                                  label={i18n.management.dose}
+                                                  inputAdornment="g"
+                                                  style={{
+                                                    width: '45%',
+                                                    margin: '10px',
+                                                    marginBottom: '40px',
+                                                  }}
+                                                />
+                                                <InputForm
+                                                  name={`${name}.vet`}
+                                                  required={false}
+                                                  type="text"
+                                                  label={i18n.management.inseminator}
+                                                  style={{
+                                                    width: '45%',
+                                                    margin: '10px',
+                                                    marginBottom: '40px',
+                                                  }}
+                                                />
+                                              </Fragment>
+                                            )}
+                                        </Fragment>
+                                      </div>
+                                    </CardContent>
+                                  </Card>
+                                ))
+                              }
+                            </FieldArray>
+                            <Card style={{ marginTop: 20 }}>
+                              <CardContent style={{ display: 'flex', alignItems: 'center' }}>
+                                <Typography variant="headline" style={{ flexGrow: 1 }}>
+                                  {i18n.management.addMoreServicing}
+                                </Typography>
+                                <i className="material-icons" onClick={() => push('animalSexData')}>
+                                  add
+                                </i>
+                              </CardContent>
+                            </Card>
+                          </Fragment>
+                        )}
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button
+                          size="medium"
+                          variant="raised"
+                          color="primary"
+                          className="card-button"
+                          onClick={this.onCancel}
+                        >
+                          {i18n.management.button.cancel}
+                        </Button>
+                        <Button
+                          size="medium"
+                          variant="raised"
+                          color="primary"
+                          className="card-button"
+                          type="submit"
+                          disabled={invalid || pristine}
+                        >
+                          {i18n.management.button.save}
+                        </Button>
+                      </div>
+                    </form>
+                  )}
+                />
+              </Fragment>
+            )}
+            {serverError && (
+              <ErrorDialog
+                title={i18n.general.serverErrorTitle}
+                text={i18n.general.serverErrorMessage}
+                onDialogClose={this.onDialogClose}
+              />
+            )}
+            {isLoading && (
+              <CircularProgress
+                style={{
+                  height: '80px',
+                  width: '80px',
+                  top: '50%',
+                  left: '50%',
+                  position: 'fixed',
+                }}
+              />
+            )}
           </Fragment>
         )}
-        {serverError && (
-          <ErrorDialog
-            title="Server Error"
-            text="Existe um erro na comunicação com o servidor."
-            onDialogClose={this.onDialogClose}
-          />
-        )}
-        {isLoading && (
-          <CircularProgress
-            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'fixed' }}
-          />
-        )}
-      </Fragment>
+      </I18nContext.Consumer>
     );
   }
 }

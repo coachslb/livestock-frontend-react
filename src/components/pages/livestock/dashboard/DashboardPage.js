@@ -6,6 +6,7 @@ import StatisticsSection from '../../../livestock/dashboard/StatisticsSection';
 import ErrorDialog from '../../../UI/ErrorDialog/ErrorDialog';
 import { CircularProgress } from 'material-ui';
 import DashboardService from '../../../../services/DashboardService';
+import { I18nContext } from '../../../App';
 
 class DashboardPage extends Component {
   constructor() {
@@ -30,44 +31,80 @@ class DashboardPage extends Component {
     }
   }
 
+  onDialogClose = e => {
+    this.setState({ serverError: null });
+  };
+
   render() {
-    const { isLoading, serverError, freeTrial, license, firstUse, agricolaEntity, management, entityId } = this.state;
+    const {
+      isLoading,
+      serverError,
+      freeTrial,
+      license,
+      firstUse,
+      agricolaEntity,
+      management,
+      entityId,
+    } = this.state;
     const renderFirstUse = (
-      <Fragment>
-        <WelcomeCard />
-        <FirstUseSection 
-            hasExploration={agricolaEntity && agricolaEntity.explorations > 0}
-            entityId={entityId}
-        />
-      </Fragment>
+      <I18nContext.Consumer>
+        {({ i18n }) => (
+          <Fragment>
+            <WelcomeCard i18n={i18n}/>
+            <FirstUseSection
+              hasExploration={agricolaEntity && agricolaEntity.explorations > 0}
+              entityId={entityId}
+              i18n={i18n}
+            />
+          </Fragment>
+        )}
+      </I18nContext.Consumer>
     );
 
     const renderStatistics = (
-      <Fragment>
-        <StatisticsSection agricolaEntity={agricolaEntity} management={management} entityId={entityId}/>
-      </Fragment>
+      <I18nContext.Consumer>
+        {({ i18n }) => (
+          <StatisticsSection
+            agricolaEntity={agricolaEntity}
+            management={management}
+            entityId={entityId}
+            i18n={i18n}
+          />
+        )}
+      </I18nContext.Consumer>
     );
+
     return (
-      <Fragment>
-        {!isLoading && (
+      <I18nContext.Consumer>
+        {({ i18n }) => (
           <Fragment>
-            {freeTrial && license.free && <FreeTrialCard />}
-            {firstUse ? renderFirstUse : renderStatistics}
-            {serverError && (
-              <ErrorDialog
-                title="Server Error"
-                text="There are some server problem"
-                onDialogClose={this.onDialogClose}
+            {!isLoading && (
+              <Fragment>
+                {freeTrial && license.free && <FreeTrialCard />}
+                {firstUse ? renderFirstUse : renderStatistics}
+                {serverError && (
+                  <ErrorDialog
+                    title={i18n.general.serverErrorTitle}
+                    text={i18n.general.serverErrorMessage}
+                    onDialogClose={this.onDialogClose}
+                  />
+                )}
+              </Fragment>
+            )}
+            {isLoading && (
+              <CircularProgress
+                style={{
+                  height: '80px',
+                  width: '80px',
+                  top: '50%',
+                  left: '50%',
+                  position: 'absolute',
+                }}
               />
             )}
           </Fragment>
         )}
-        {isLoading && (
-          <CircularProgress
-            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'absolute' }}
-          />
-        )}
-      </Fragment>
+      </I18nContext.Consumer>
     );
   }
 }

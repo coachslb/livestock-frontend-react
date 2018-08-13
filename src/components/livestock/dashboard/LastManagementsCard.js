@@ -13,7 +13,7 @@ const LastManagementsCard = props => {
     <Card className="statistics-card">
       <CardContent style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
         <Typography variant="title" color="primary">
-          Últimos maneios
+          {props.i18n.lastManagements}
         </Typography>
         {props.data.map(management => (
           <Link key={management.id} to={`/livestock/management/${props.agricolaEntity}/edit/${getManagementType(management.managementType.id).name}/${management.id}`}>

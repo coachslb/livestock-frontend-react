@@ -7,6 +7,7 @@ import { Form } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import SelectForm from '../../../UI/Inputs/SelectForm';
+import { I18nContext } from '../../../App';
 import FixedValuesService from '../../../../services/FixedValuesService';
 import ExplorationService from '../../../../services/ExplorationService';
 import ManagementBirthRegistrationService from '../../../../services/ManagementBirthRegistrationService';
@@ -54,18 +55,17 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
           this.setState({ serverError: true, isLoading: false });
         });
     }
-    //window.alert(JSON.stringify(values, 0, 2));
   };
 
-  validateArray = fields => {
+  validateArray = (fields, i18n) => {
     const errors = {};
     if (fields) {
       fields.forEach(element => {
-        if(element !== undefined){
-          if (!element.number) errors.number = 'Required';
-          if (!element.sex) errors.sex = 'Required';
-        }else{
-          errors.number = 'Required';
+        if (element !== undefined) {
+          if (!element.number) errors.number = i18n.management.errors.required;
+          if (!element.sex) errors.sex = i18n.management.errors.required;
+        } else {
+          errors.number = i18n.management.errors.required;
         }
       });
     }
@@ -73,27 +73,27 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
   };
 
   //TODO
-  validate = values => {
+  validate = (values, i18n) => {
     const errors = {};
     if (!values.date) {
-      errors.data = 'Required';
+      errors.data = i18n.management.errors.required;
     }
-    if(new Date(values.date) > new Date()){
-      errors.date = 'Data inválida';
+    if (new Date(values.date) > new Date()) {
+      errors.date = i18n.management.errors.invalidDate;
     }
-    
+
     if (!values.exploration) {
-      errors.exploration = 'Required';
+      errors.exploration = i18n.management.errors.required;
     }
     if (!values.motherNumber) {
-      errors.motherNumber = 'Required';
+      errors.motherNumber = i18n.management.errors.required;
     }
     if (!values.animalType) {
-      errors.animalType = 'Required';
+      errors.animalType = i18n.management.errors.required;
     }
 
     if (!values.animalData) {
-      errors.animalData = 'Required';
+      errors.animalData = i18n.management.errors.required;
     }
 
     return errors;
@@ -159,222 +159,245 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
       birthRegistration,
     } = this.state;
     return (
-      <Fragment>
-        {!isLoading && (
+      <I18nContext.Consumer>
+        {({ i18n }) => (
           <Fragment>
-            <ManagementCreationCard step={2} entityId={entityId} title="Nascimento" />
-            <Form
-              onSubmit={this.onSubmit}
-              mutators={{
-                ...arrayMutators,
-              }}
-              initialValues={{ ...birthRegistration }}
-              validate={this.validate}
-              render={({
-                handleSubmit,
-                pristine,
-                invalid,
-                values,
-                form: {
-                  mutators: { push, pop },
-                },
-              }) => (
-                <form onSubmit={handleSubmit}>
-                  <Card style={{ marginTop: 20 }}>
-                    <CardContent>
-                      <div className="card-header">
-                        <Typography variant="headline" className="card-header_title">
-                          Dados gerais
-                        </Typography>
-                      </div>
-                      <div className="card-body">
-                        <InputForm name="id" type="hidden" />
-                        <InputForm
-                          name="date"
-                          required={true}
-                          type="date"
-                          label="Data"
-                          style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                        />
-                        {animalTypeList && (
-                          <SelectForm
-                            label="Exploração"
-                            name="exploration"
-                            required={true}
-                            style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                            list={explorationList}
-                          />
-                        )}
-                        <InputForm
-                          label="Número da mãe"
-                          name="motherNumber"
-                          required={true}
-                          type="number"
-                          style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                        />
-                        <InputForm
-                          label="Nome da mãe"
-                          name="motherName"
-                          required={false}
-                          type="text"
-                          style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                        />
-                        <InputForm
-                          label="Número do pai"
-                          name="fatherNumber"
-                          required={false}
-                          type="number"
-                          style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                        />
-                        <InputForm
-                          label="Nome do pai"
-                          name="fatherName"
-                          required={false}
-                          type="text"
-                          style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                        />
-                        {animalTypeList && (
-                          <SelectForm
-                            label="Tipo de animal"
-                            name="animalType"
-                            required={true}
-                            type="text"
-                            style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                            list={animalTypeList}
-                          />
-                        )}
-                        <InputForm
-                          label="Raça"
-                          name="breed"
-                          required={false}
-                          type="text"
-                          style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                        />
-                        <InputForm
-                          label="Observações"
-                          name="observations"
-                          required={false}
-                          type="text"
-                          style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                        />
-                      </div>
-                    </CardContent>
-                  </Card>
-                  <FieldArray name="animalData" validate={this.validateArray}>
-                    {({ fields }) =>
-                      fields.map((name, index) => (
-                        <Card style={{ marginTop: 20 }} key={name}>
-                          <CardContent>
-                            <div className="card-header">
-                              <Typography variant="headline" className="card-header_title">
-                                {index + 1}. Animal
-                              </Typography>
-                              <i className="material-icons" onClick={() => fields.remove(index)}>
-                                delete
-                              </i>
-                            </div>
-                            <div className="card-body">
-                              <InputForm name={`${name}.id`} required={false} type="hidden" />
-                              <InputForm
-                                label="Nome"
-                                name={`${name}.name`}
-                                required={false}
-                                type="text"
-                                style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
-                              />
-                              <InputForm
-                                label="Número"
-                                name={`${name}.number`}
+            {!isLoading && (
+              <Fragment>
+                <ManagementCreationCard
+                  step={2}
+                  entityId={entityId}
+                  title={i18n.management.managementType.birth}
+                />
+                <Form
+                  onSubmit={this.onSubmit}
+                  mutators={{
+                    ...arrayMutators,
+                  }}
+                  initialValues={{ ...birthRegistration }}
+                  validate={fields => this.validate(fields, i18n)}
+                  render={({
+                    handleSubmit,
+                    pristine,
+                    invalid,
+                    values,
+                    form: {
+                      mutators: { push, pop },
+                    },
+                  }) => (
+                    <form onSubmit={handleSubmit}>
+                      <Card style={{ marginTop: 20 }}>
+                        <CardContent>
+                          <div className="card-header">
+                            <Typography variant="headline" className="card-header_title">
+                              {i18n.management.generalData}
+                            </Typography>
+                          </div>
+                          <div className="card-body">
+                            <InputForm name="id" type="hidden" />
+                            <InputForm
+                              name="date"
+                              required={true}
+                              type="date"
+                              label={i18n.management.date}
+                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
+                            />
+                            {animalTypeList && (
+                              <SelectForm
+                                label={i18n.management.exploration}
+                                name="exploration"
                                 required={true}
-                                type="number"
-                                style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
+                                style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
+                                list={explorationList}
                               />
-                              <InputForm
-                                label="Número do chip"
-                                name={`${name}.chipNumber`}
-                                required={false}
-                                type="text"
-                                style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
+                            )}
+                            <InputForm
+                              label={i18n.management.motherNumber}
+                              name="motherNumber"
+                              required={true}
+                              type="number"
+                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
+                            />
+                            <InputForm
+                              label={i18n.management.motherName}
+                              name="motherName"
+                              required={false}
+                              type="text"
+                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
+                            />
+                            <InputForm
+                              label={i18n.management.fatherNumber}
+                              name="fatherNumber"
+                              required={false}
+                              type="number"
+                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
+                            />
+                            <InputForm
+                              label={i18n.management.fatherName}
+                              name="fatherName"
+                              required={false}
+                              type="text"
+                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
+                            />
+                            {animalTypeList && (
+                              <SelectForm
+                                label={i18n.management.animalType}
+                                name="animalType"
+                                required={true}
+                                style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
+                                list={animalTypeList}
                               />
-                              {sexTypes && (
-                                <SelectForm
-                                  label="Sexo"
-                                  name={`${name}.sex`}
-                                  required={true}
-                                  style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
-                                  list={sexTypes}
-                                />
-                              )}
-                              <InputForm
-                                label="Tipo de sangue"
-                                name={`${name}.bloodType`}
-                                required={false}
-                                type="text"
-                                style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
-                              />
-                              <InputForm
-                                label="Peso"
-                                name={`${name}.weight`}
-                                required={false}
-                                type="number"
-                                step="0.01"
-                                style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
-                              />
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))
-                    }
-                  </FieldArray>
-                  <Card style={{ marginTop: 20 }}>
-                    <CardContent style={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography variant="headline" style={{ flexGrow: 1 }}>
-                        Adicionar mais um nascimento
-                      </Typography>
-                      <i className="material-icons" onClick={() => push('animalData')}>
-                        add
-                      </i>
-                    </CardContent>
-                  </Card>
-                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button
-                      size="medium"
-                      variant="raised"
-                      color="primary"
-                      className="card-button"
-                      onClick={this.onCancel}
-                    >
-                      Cancelar
-                    </Button>
-                    <Button
-                      size="medium"
-                      variant="raised"
-                      color="primary"
-                      className="card-button"
-                      type="submit"
-                      disabled={pristine || invalid}
-                    >
-                      Guardar
-                    </Button>
-                  </div>
-                </form>
-              )}
-            />
+                            )}
+                            <InputForm
+                              label={i18n.management.breed}
+                              name="breed"
+                              required={false}
+                              type="text"
+                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
+                            />
+                            <InputForm
+                              label={i18n.management.obs}
+                              name="observations"
+                              required={false}
+                              type="text"
+                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
+                            />
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <FieldArray
+                        name="animalData"
+                        validate={fields => this.validateArray(fields, i18n)}
+                      >
+                        {({ fields }) =>
+                          fields.map((name, index) => (
+                            <Card style={{ marginTop: 20 }} key={name}>
+                              <CardContent>
+                                <div className="card-header">
+                                  <Typography variant="headline" className="card-header_title">
+                                    {index + 1}. Animal
+                                  </Typography>
+                                  <i
+                                    className="material-icons"
+                                    onClick={() => fields.remove(index)}
+                                  >
+                                    delete
+                                  </i>
+                                </div>
+                                <div className="card-body">
+                                  <InputForm name={`${name}.id`} required={false} type="hidden" />
+                                  <InputForm
+                                    label={i18n.management.name}
+                                    name={`${name}.name`}
+                                    required={false}
+                                    type="text"
+                                    style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
+                                  />
+                                  <InputForm
+                                    label={i18n.management.number}
+                                    name={`${name}.number`}
+                                    required={true}
+                                    type="number"
+                                    style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
+                                  />
+                                  <InputForm
+                                    label={i18n.management.chipNumber}
+                                    name={`${name}.chipNumber`}
+                                    required={false}
+                                    type="text"
+                                    style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
+                                  />
+                                  {sexTypes && (
+                                    <SelectForm
+                                      label={i18n.management.sex}
+                                      name={`${name}.sex`}
+                                      required={true}
+                                      style={{
+                                        width: '22.5%',
+                                        margin: '10px',
+                                        marginBottom: '40px',
+                                      }}
+                                      list={sexTypes}
+                                    />
+                                  )}
+                                  <InputForm
+                                    label={i18n.management.bloodType}
+                                    name={`${name}.bloodType`}
+                                    required={false}
+                                    type="text"
+                                    style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
+                                  />
+                                  <InputForm
+                                    label={i18n.management.weight}
+                                    name={`${name}.weight`}
+                                    required={false}
+                                    type="number"
+                                    step="0.01"
+                                    style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
+                                  />
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ))
+                        }
+                      </FieldArray>
+                      <Card style={{ marginTop: 20 }}>
+                        <CardContent style={{ display: 'flex', alignItems: 'center' }}>
+                          <Typography variant="headline" style={{ flexGrow: 1 }}>
+                            {i18n.management.addMoreBirth}
+                          </Typography>
+                          <i className="material-icons" onClick={() => push('animalData')}>
+                            add
+                          </i>
+                        </CardContent>
+                      </Card>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button
+                          size="medium"
+                          variant="raised"
+                          color="primary"
+                          className="card-button"
+                          onClick={this.onCancel}
+                        >
+                          {i18n.management.button.cancel}
+                        </Button>
+                        <Button
+                          size="medium"
+                          variant="raised"
+                          color="primary"
+                          className="card-button"
+                          type="submit"
+                          disabled={pristine || invalid}
+                        >
+                          {i18n.management.button.save}
+                        </Button>
+                      </div>
+                    </form>
+                  )}
+                />
+              </Fragment>
+            )}
+            {serverError && (
+              <ErrorDialog
+                title={i18n.general.serverErrorTitle}
+                text={i18n.general.serverErrorMessage}
+                onDialogClose={this.onDialogClose}
+              />
+            )}
+            {isLoading && (
+              <CircularProgress
+                style={{
+                  height: '80px',
+                  width: '80px',
+                  top: '50%',
+                  left: '50%',
+                  position: 'fixed',
+                }}
+              />
+            )}
           </Fragment>
         )}
-        {serverError && (
-          <ErrorDialog
-            title="Server Error"
-            text="There are some server problem"
-            onDialogClose={this.onDialogClose}
-          />
-        )}
-        {isLoading && (
-          <CircularProgress
-            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'fixed' }}
-          />
-        )}
-      </Fragment>
+      </I18nContext.Consumer>
     );
   }
 }

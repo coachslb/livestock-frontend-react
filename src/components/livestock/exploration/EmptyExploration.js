@@ -5,9 +5,10 @@ const EmptyExploration = props => {
   return (
     <EmptyListPlaceholder 
         img="exploration-img" 
-        section="Explorações"
-        description="Aqui pode adicionar novas explorações. Clique em Adicionar"
+        section={props.i18n.explorations}
+        description={props.i18n.explorationDescription}
         route={`/livestock/explorations/${props.id}/create`}
+        add={props.i18n.button.add}
     />);
 };
 

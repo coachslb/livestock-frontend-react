@@ -1,0 +1,11 @@
+{
+    "username": "E-mail",
+    "password": "Palavra-passe",
+    "submit": "Entrar",
+    "forgotPassword": "Esqueceste palavra-passe?",
+    "newAccount": "Não tens conta? <strong>Criar conta</strong>",
+    "errorTitle": "Erro no login",
+    "errorMessage": "Campos inválidos",
+    "requiredEmail": "Campo obrigatório"
+}
+

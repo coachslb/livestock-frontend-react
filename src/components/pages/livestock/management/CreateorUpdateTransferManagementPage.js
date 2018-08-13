@@ -22,6 +22,7 @@ import GroupService from '../../../../services/GroupService';
 import AnimalService from '../../../../services/AnimalService';
 import FixedValuesService from '../../../../services/FixedValuesService';
 import ManagementTransferService from '../../../../services/ManagementTransferService';
+import { I18nContext } from '../../../App';
 
 class CreateorUpdateTransferManagementPage extends Component {
   constructor() {
@@ -145,48 +146,48 @@ class CreateorUpdateTransferManagementPage extends Component {
     }
   };
 
-  validateArray = fields => {
+  validateArray = (fields, i18n) => {
     const errors = {};
     if (fields) {
       fields.forEach(element => {
         if (element !== undefined) {
-          if (!element.animal) errors.animal = 'Required';
+          if (!element.animal) errors.animal = i18n.management.errors.required;
         } else {
-          errors.animal = 'Required';
+          errors.animal = i18n.management.errors.required;
         }
       });
     }
     return errors;
   };
 
-  validate = values => {
+  validate = (values, i18n) => {
     const errors = {};
     if (!values.date) {
-      errors.date = 'Required';
+      errors.date = i18n.management.errors.required;
     }
 
     if (new Date(values.date) > new Date()) {
-      errors.date = 'Data inválida';
+      errors.date = i18n.management.errors.invalidDate;
     }
 
     if (!this.state.exploration) {
-      errors.exploration = 'Required';
+      errors.exploration = i18n.management.errors.required;
     }
 
     if (!values.transferType) {
-      errors.transferType = 'Required';
+      errors.transferType = i18n.management.errors.required;
     }
 
     if (!values.destination && values.transferType === 2) {
-      errors.destination = 'Exploração necessária';
+      errors.destination = i18n.management.errors.explorationRequired;
     }
 
     if (!values.destination && values.transferType === 1) {
-      errors.destination = 'Grupo necessário';
+      errors.destination = i18n.management.errors.groupRequired;
     }
 
     if (!values.animalData || !values.animalData.length > 0) {
-      errors.data = 'Required';
+      errors.data = i18n.management.errors.required;
     }
 
     return errors;
@@ -214,216 +215,236 @@ class CreateorUpdateTransferManagementPage extends Component {
       transfer,
     } = this.state;
     return (
-      <Fragment>
-        {!isLoading && (
+      <I18nContext.Consumer>
+        {({ i18n }) => (
           <Fragment>
-            <ManagementCreationCard step={2} entityId={entityId} title="Transferência" />
-            <Form
-              onSubmit={this.onSubmit}
-              mutators={{
-                ...arrayMutators,
-              }}
-              initialValues={{ ...transfer }}
-              validate={this.validate}
-              render={({
-                handleSubmit,
-                pristine,
-                invalid,
-                values,
-                form: {
-                  mutators: { push, pop },
-                },
-              }) => (
-                <form onSubmit={handleSubmit}>
-                  <Card style={{ marginTop: 20 }}>
-                    <CardContent>
-                      <div className="card-header">
-                        <Typography variant="headline" className="card-header_title">
-                          Dados gerais
-                        </Typography>
-                      </div>
-                      <div className="card-body">
-                        <InputForm
-                          name="date"
-                          required={true}
-                          type="date"
-                          label="Data"
-                          style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                        />
-                        {explorationList && (
-                          <FormControl
-                            style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                          >
-                            <InputLabel required>Exploração</InputLabel>
-                            <Select
-                              name="exploration"
-                              value={exploration}
-                              onChange={this.handleExplorationChange.bind(this, values)}
-                            >
-                              {explorationList.map(ex => {
-                                return (
-                                  <MenuItem key={ex.id} value={ex.id}>
-                                    {ex.name}
-                                  </MenuItem>
-                                );
-                              })}
-                            </Select>
-                          </FormControl>
-                        )}
-                        {transferTypeList && (
-                          <SelectForm
-                            label="Tipo de transferência"
-                            name="transferType"
-                            required={true}
-                            list={transferTypeList}
-                            style={{
-                              width: '45%',
-                              margin: '10px',
-                              marginBottom: '40px',
-                            }}
-                          />
-                        )}
-                        {values.transferType &&
-                          values.transferType === 3 && (
+            {!isLoading && (
+              <Fragment>
+                <ManagementCreationCard
+                  step={2}
+                  entityId={entityId}
+                  title={i18n.management.managementType.transfer}
+                />
+                <Form
+                  onSubmit={this.onSubmit}
+                  mutators={{
+                    ...arrayMutators,
+                  }}
+                  initialValues={{ ...transfer }}
+                  validate={fields => this.validate(fields, i18n)}
+                  render={({
+                    handleSubmit,
+                    pristine,
+                    invalid,
+                    values,
+                    form: {
+                      mutators: { push, pop },
+                    },
+                  }) => (
+                    <form onSubmit={handleSubmit}>
+                      <Card style={{ marginTop: 20 }}>
+                        <CardContent>
+                          <div className="card-header">
+                            <Typography variant="headline" className="card-header_title">
+                              {i18n.management.generalData}
+                            </Typography>
+                          </div>
+                          <div className="card-body">
                             <InputForm
-                              name="destinationAddress"
-                              required={false}
-                              type="text"
-                              label="Morada de destino"
+                              name="date"
+                              required={true}
+                              type="date"
+                              label={i18n.management.date}
                               style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
                             />
-                          )}
-                        {values.transferType &&
-                          values.transferType === 2 &&
-                          explorationList && (
-                            <SelectForm
-                              label="Exploração de destino"
-                              name="destination"
-                              required={true}
-                              list={explorationList}
-                              style={{
-                                width: '45%',
-                                margin: '10px',
-                                marginBottom: '40px',
-                              }}
+                            {explorationList && (
+                              <FormControl
+                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
+                              >
+                                <InputLabel required>{i18n.management.exploration}</InputLabel>
+                                <Select
+                                  name="exploration"
+                                  value={exploration}
+                                  onChange={this.handleExplorationChange.bind(this, values)}
+                                >
+                                  {explorationList.map(ex => {
+                                    return (
+                                      <MenuItem key={ex.id} value={ex.id}>
+                                        {ex.name}
+                                      </MenuItem>
+                                    );
+                                  })}
+                                </Select>
+                              </FormControl>
+                            )}
+                            {transferTypeList && (
+                              <SelectForm
+                                label={i18n.management.transferType}
+                                name="transferType"
+                                required={true}
+                                list={transferTypeList}
+                                style={{
+                                  width: '45%',
+                                  margin: '10px',
+                                  marginBottom: '40px',
+                                }}
+                              />
+                            )}
+                            {values.transferType &&
+                              values.transferType === 3 && (
+                                <InputForm
+                                  name="destinationAddress"
+                                  required={false}
+                                  type="text"
+                                  label={i18n.management.destinationAddress}
+                                  style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
+                                />
+                              )}
+                            {values.transferType &&
+                              values.transferType === 2 &&
+                              explorationList && (
+                                <SelectForm
+                                  label={i18n.management.destinationExploration}
+                                  name="destination"
+                                  required={true}
+                                  list={explorationList}
+                                  style={{
+                                    width: '45%',
+                                    margin: '10px',
+                                    marginBottom: '40px',
+                                  }}
+                                />
+                              )}
+                            {values.transferType &&
+                              values.transferType === 1 &&
+                              groupList && (
+                                <SelectForm
+                                  label={i18n.management.destinationGroup}
+                                  name="destination"
+                                  required={true}
+                                  list={groupList}
+                                  style={{
+                                    width: '45%',
+                                    margin: '10px',
+                                    marginBottom: '40px',
+                                  }}
+                                />
+                              )}
+                            <InputForm
+                              name="observations"
+                              required={false}
+                              type="text"
+                              label={i18n.management.obs}
+                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
                             />
-                          )}
-                        {values.transferType &&
-                          values.transferType === 1 &&
-                          groupList && (
-                            <SelectForm
-                              label="Grupo de destino"
-                              name="destination"
-                              required={true}
-                              list={groupList}
-                              style={{
-                                width: '45%',
-                                margin: '10px',
-                                marginBottom: '40px',
-                              }}
-                            />
-                          )}
-                        <InputForm
-                          name="observations"
-                          required={false}
-                          type="text"
-                          label="Observações"
-                          style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                        />
+                          </div>
+                        </CardContent>
+                      </Card>
+                      {exploration &&
+                        animalList &&
+                        animalList.length > 0 && (
+                          <Fragment>
+                            <FieldArray
+                              name="animalData"
+                              validate={fields => this.validateArray(fields, i18n)}
+                            >
+                              {({ fields }) =>
+                                fields.map((name, index) => (
+                                  <Card style={{ marginTop: 20 }} key={name}>
+                                    <CardContent>
+                                      <div className="card-header">
+                                        <Typography
+                                          variant="headline"
+                                          className="card-header_title"
+                                        >
+                                          {index + 1}. Animal
+                                        </Typography>
+                                        <i
+                                          className="material-icons"
+                                          onClick={() => fields.remove(index)}
+                                        >
+                                          delete
+                                        </i>
+                                      </div>
+                                      <div className="card-body">
+                                        {animalList && (
+                                          <SelectForm
+                                            label="Animal"
+                                            name={`${name}.animal`}
+                                            required={true}
+                                            list={animalList}
+                                            style={{
+                                              width: '45%',
+                                              margin: '10px',
+                                              marginBottom: '40px',
+                                            }}
+                                          />
+                                        )}
+                                      </div>
+                                    </CardContent>
+                                  </Card>
+                                ))
+                              }
+                            </FieldArray>
+                            <Card style={{ marginTop: 20 }}>
+                              <CardContent style={{ display: 'flex', alignItems: 'center' }}>
+                                <Typography variant="headline" style={{ flexGrow: 1 }}>
+                                  {i18n.management.addAnimal}
+                                </Typography>
+                                <i className="material-icons" onClick={() => push('animalData')}>
+                                  add
+                                </i>
+                              </CardContent>
+                            </Card>
+                          </Fragment>
+                        )}
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button
+                          size="medium"
+                          variant="raised"
+                          color="primary"
+                          className="card-button"
+                          onClick={this.onCancel}
+                        >
+                          {i18n.management.button.cancel}
+                        </Button>
+                        <Button
+                          size="medium"
+                          variant="raised"
+                          color="primary"
+                          className="card-button"
+                          type="submit"
+                          disabled={pristine || invalid}
+                        >
+                          {i18n.management.button.save}
+                        </Button>
                       </div>
-                    </CardContent>
-                  </Card>
-                  {exploration &&
-                    animalList &&
-                    animalList.length > 0 && (
-                      <Fragment>
-                        <FieldArray name="animalData" validate={this.validateArray}>
-                          {({ fields }) =>
-                            fields.map((name, index) => (
-                              <Card style={{ marginTop: 20 }} key={name}>
-                                <CardContent>
-                                  <div className="card-header">
-                                    <Typography variant="headline" className="card-header_title">
-                                      {index + 1}. Animal
-                                    </Typography>
-                                    <i
-                                      className="material-icons"
-                                      onClick={() => fields.remove(index)}
-                                    >
-                                      delete
-                                    </i>
-                                  </div>
-                                  <div className="card-body">
-                                    {animalList && (
-                                      <SelectForm
-                                        label="Animal"
-                                        name={`${name}.animal`}
-                                        required={true}
-                                        list={animalList}
-                                        style={{
-                                          width: '45%',
-                                          margin: '10px',
-                                          marginBottom: '40px',
-                                        }}
-                                      />
-                                    )}
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            ))
-                          }
-                        </FieldArray>
-                        <Card style={{ marginTop: 20 }}>
-                          <CardContent style={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography variant="headline" style={{ flexGrow: 1 }}>
-                              Adicionar mais um animal
-                            </Typography>
-                            <i className="material-icons" onClick={() => push('animalData')}>
-                              add
-                            </i>
-                          </CardContent>
-                        </Card>
-                      </Fragment>
-                    )}
-                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button
-                      size="medium"
-                      variant="raised"
-                      color="primary"
-                      className="card-button"
-                      onClick={this.onCancel}
-                    >
-                      Cancelar
-                    </Button>
-                    <Button
-                      size="medium"
-                      variant="raised"
-                      color="primary"
-                      className="card-button"
-                      type="submit"
-                      disabled={pristine || invalid}
-                    >
-                      Guardar
-                    </Button>
-                  </div>
-                </form>
-              )}
-            />
+                    </form>
+                  )}
+                />
+              </Fragment>
+            )}
+            {serverError && (
+              <ErrorDialog
+                title={i18n.general.serverErrorTitle}
+                text={i18n.general.serverErrorMessage}
+                onDialogClose={this.onDialogClose}
+              />
+            )}
+            {isLoading && (
+              <CircularProgress
+                style={{
+                  height: '80px',
+                  width: '80px',
+                  top: '50%',
+                  left: '50%',
+                  position: 'fixed',
+                }}
+              />
+            )}
           </Fragment>
         )}
-        {serverError && (
-          <ErrorDialog
-            title="Server Error"
-            text="There are some server problem"
-            onDialogClose={this.onDialogClose}
-          />
-        )}
-        {isLoading && (
-          <CircularProgress
-            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'fixed' }}
-          />
-        )}
-      </Fragment>
+      </I18nContext.Consumer>
     );
   }
 }

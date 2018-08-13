@@ -1,0 +1,31 @@
+{
+    "inputErrorTitle": "Invalid Inputs",
+    "genericErrorTitle": "Error",
+    "genericErrorMessage": "There are some errors",
+    "serverErrorTitle": "Server error",
+    "serverErrorMessage": "There was an error in the server communication.",
+    "emailInvalid": "E-mail invalid",
+    "explorations": "Explorations",
+    "managements": "Managements",
+    "results": "Results",
+    "tasks": "Tasks",
+    "weather": "Weather",
+    "users": "Users",
+    "support": "Client support",
+    "logout": "Logout",
+    "exploration":{
+        "profile": "Profile",
+        "places": "Places",
+        "animals": "Animals",
+        "groups": "Groups"
+    },
+    "profile": "Profile",
+    "changeEmail": "Change e-mail",
+    "changePassword": "Change password",
+    "changeLanguage": "Language",
+    "actions": "Actions",
+    "search": "Search",
+    "column": "Column",
+    "close": "Close",
+    "edit": "Edit"
+}

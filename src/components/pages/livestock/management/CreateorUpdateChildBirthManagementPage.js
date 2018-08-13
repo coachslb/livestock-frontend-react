@@ -18,6 +18,7 @@ import FixedValuesService from '../../../../services/FixedValuesService';
 import ExplorationService from '../../../../services/ExplorationService';
 import ManagementChildBirthService from '../../../../services/ManagementChildBirthService';
 import DateUtilsService from '../../../../services/DateUtilsService';
+import { I18nContext } from '../../../App';
 
 class CreateorUpdateChildBirthManagementPage extends Component {
   constructor() {
@@ -278,144 +279,158 @@ class CreateorUpdateChildBirthManagementPage extends Component {
       isLoading,
     } = this.state;
     return (
-      <Fragment>
-        {!isLoading && (
+      <I18nContext.Consumer>
+        {({ i18n }) => (
           <Fragment>
-            <ManagementCreationCard step={2} entityId={entityId} title="Parto" />
-            <Card style={{ marginTop: 20 }}>
-              <CardContent>
-                <div className="card-body">
-                  <FormControl style={{ width: '28%', margin: '10px', marginBottom: '40px' }}>
-                    <TextField
-                      type="date"
-                      label="Data"
-                      name="date"
-                      value={date}
-                      required
-                      onChange={this.handleChange}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  </FormControl>
-                  {animalTypeList && (
-                    <FormControl style={{ width: '30%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel required>Tipo de animal</InputLabel>
-                      <Select
-                        name="animalType"
-                        value={animalType}
-                        onChange={this.handleExplorationTypeChange}
-                      >
-                        {animalTypeList.map(animalType => {
-                          return (
-                            <MenuItem key={animalType.id} value={animalType.id}>
-                              {animalType.name}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                    </FormControl>
-                  )}
-                  {explorationList && (
-                    <FormControl style={{ width: '30%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel required>Exploração</InputLabel>
-                      <Select
-                        name="exploration"
-                        value={exploration}
-                        onChange={this.handleExplorationChange}
-                      >
-                        {explorationList.map(exploration => {
-                          return (
-                            <MenuItem key={exploration.id} value={exploration.id}>
-                              {exploration.name}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                    </FormControl>
-                  )}
-                  {currentAnimalFemaleList && (
-                    <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel required>Femea</InputLabel>
-                      <Select name="female" value={female} onChange={this.handleChange}>
-                        {currentAnimalFemaleList.map(animal => {
-                          return (
-                            <MenuItem key={animal.id} value={animal.id}>
-                              {`${animal.number} - ${animal.name ? animal.name : ''} (${
-                                animal.chipNumber
-                              })`}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                    </FormControl>
-                  )}
-                  {currentAnimalMaleList && (
-                    <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>Macho</InputLabel>
-                      <Select name="male" value={male} onChange={this.handleChange}>
-                        {currentAnimalMaleList.map(animal => {
-                          return (
-                            <MenuItem key={animal.id} value={animal.id}>
-                              {`${animal.number} - ${animal.name ? animal.name : ''} (${
-                                animal.chipNumber ? animal.chipNumber : ''
-                              })`}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                    </FormControl>
-                  )}
-                  <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                    <InputLabel required>Quantidade de crias</InputLabel>
-                    <Input
-                      name="childNumber"
-                      type="number"
-                      value={childNumber}
-                      onChange={this.handleChange}
-                    />
-                  </FormControl>
-                  <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                    <InputLabel>Observações</InputLabel>
-                    <Input name="obs" value={obs} onChange={this.handleChange} />
-                  </FormControl>
+            {!isLoading && (
+              <Fragment>
+                <ManagementCreationCard
+                  step={2}
+                  entityId={entityId}
+                  title={i18n.management.managementType.childBirth}
+                />
+                <Card style={{ marginTop: 20 }}>
+                  <CardContent>
+                    <div className="card-body">
+                      <FormControl style={{ width: '28%', margin: '10px', marginBottom: '40px' }}>
+                        <TextField
+                          type="date"
+                          label={i18n.management.date}
+                          name="date"
+                          value={date}
+                          required
+                          onChange={this.handleChange}
+                          InputLabelProps={{ shrink: true }}
+                        />
+                      </FormControl>
+                      {animalTypeList && (
+                        <FormControl style={{ width: '30%', margin: '10px', marginBottom: '40px' }}>
+                          <InputLabel required>{i18n.management.animalType}</InputLabel>
+                          <Select
+                            name="animalType"
+                            value={animalType}
+                            onChange={this.handleExplorationTypeChange}
+                          >
+                            {animalTypeList.map(animalType => {
+                              return (
+                                <MenuItem key={animalType.id} value={animalType.id}>
+                                  {animalType.name}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                      )}
+                      {explorationList && (
+                        <FormControl style={{ width: '30%', margin: '10px', marginBottom: '40px' }}>
+                          <InputLabel required>{i18n.management.exploration}</InputLabel>
+                          <Select
+                            name="exploration"
+                            value={exploration}
+                            onChange={this.handleExplorationChange}
+                          >
+                            {explorationList.map(exploration => {
+                              return (
+                                <MenuItem key={exploration.id} value={exploration.id}>
+                                  {exploration.name}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                      )}
+                      {currentAnimalFemaleList && (
+                        <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
+                          <InputLabel required>{i18n.management.female}</InputLabel>
+                          <Select name="female" value={female} onChange={this.handleChange}>
+                            {currentAnimalFemaleList.map(animal => {
+                              return (
+                                <MenuItem key={animal.id} value={animal.id}>
+                                  {`${animal.number} - ${animal.name ? animal.name : ''} (${
+                                    animal.chipNumber
+                                  })`}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                      )}
+                      {currentAnimalMaleList && (
+                        <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
+                          <InputLabel>{i18n.management.male}</InputLabel>
+                          <Select name="male" value={male} onChange={this.handleChange}>
+                            {currentAnimalMaleList.map(animal => {
+                              return (
+                                <MenuItem key={animal.id} value={animal.id}>
+                                  {`${animal.number} - ${animal.name ? animal.name : ''} (${
+                                    animal.chipNumber ? animal.chipNumber : ''
+                                  })`}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                      )}
+                      <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
+                        <InputLabel required>{i18n.management.numberOfChilds}</InputLabel>
+                        <Input
+                          name="childNumber"
+                          type="number"
+                          value={childNumber}
+                          onChange={this.handleChange}
+                        />
+                      </FormControl>
+                      <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
+                        <InputLabel>{i18n.management.obs}</InputLabel>
+                        <Input name="obs" value={obs} onChange={this.handleChange} />
+                      </FormControl>
+                    </div>
+                  </CardContent>
+                </Card>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button
+                    size="medium"
+                    variant="raised"
+                    color="primary"
+                    className="card-button"
+                    onClick={this.onCancel}
+                  >
+                    {i18n.management.button.cancel}
+                  </Button>
+                  <Button
+                    size="medium"
+                    variant="raised"
+                    color="primary"
+                    className="card-button"
+                    disabled={!female || !date || !animalType || !exploration || !childNumber}
+                    onClick={this.onCreate}
+                  >
+                    {i18n.management.button.save}
+                  </Button>
                 </div>
-              </CardContent>
-            </Card>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button
-                size="medium"
-                variant="raised"
-                color="primary"
-                className="card-button"
-                onClick={this.onCancel}
-              >
-                Cancelar
-              </Button>
-              <Button
-                size="medium"
-                variant="raised"
-                color="primary"
-                className="card-button"
-                disabled={!female || !date || !animalType || !exploration || !childNumber}
-                onClick={this.onCreate}
-              >
-                Guardar
-              </Button>
-            </div>
+              </Fragment>
+            )}
+            {serverError && (
+              <ErrorDialog
+                title={i18n.general.serverErrorTitle}
+                text={i18n.general.serverErrorMessage}
+                onDialogClose={this.onDialogClose}
+              />
+            )}
+            {isLoading && (
+              <CircularProgress
+                style={{
+                  height: '80px',
+                  width: '80px',
+                  top: '50%',
+                  left: '50%',
+                  position: 'fixed',
+                }}
+              />
+            )}
           </Fragment>
         )}
-        {serverError && (
-          <ErrorDialog
-            title="Server Error"
-            text="There are some server problem"
-            onDialogClose={this.onDialogClose}
-          />
-        )}
-        {isLoading && (
-          <CircularProgress
-            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'fixed' }}
-          />
-        )}
-      </Fragment>
+      </I18nContext.Consumer>
     );
   }
 }

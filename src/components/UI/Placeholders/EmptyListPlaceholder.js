@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from 'material-ui';
 import './placeholderList.css'
 
-const EmptyListPlaceholder = ({img, section, description, route }) => {
+const EmptyListPlaceholder = ({img, section, description, route, add }) => {
   return (
     <div className="empty-list-container">
       <div className={`placeholder-img ${img}`} />
@@ -18,7 +18,7 @@ const EmptyListPlaceholder = ({img, section, description, route }) => {
           style={{ width: '100%' }}
           color="primary"
         >
-          + Adicionar
+          + {add}
         </Button>
       </Link>
     </div>

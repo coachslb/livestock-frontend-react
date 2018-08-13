@@ -1,0 +1,65 @@
+{
+    "explorationTitle": "Exploração",
+    "explorations": "Explorações",
+    "explorationDescription": "Aqui pode adicionar novas explorações. Clique em Adicionar.",
+    "name": "Nome",
+    "explorationType": "Tipo(s) exploração",
+    "address": "Morada",
+    "district": "Distrito",
+    "postalCode": "Código postal",
+    "place":{
+        "placeTitle": "Local",
+        "number": "Número",
+        "placeType": "Tipo de local",
+        "area": "Área",
+        "totalArea":"Área total",
+        "delete": "Apagar",
+        "deleteAll": "Apagar todos",
+        "soilType": "Tipo de solo",
+        "places":"Locais",
+        "description": "Aqui pode adicionar novos locais à sua exploração. Clique em Adicionar."
+    },
+    "animals":{
+        "animalsTitle": "Animais",
+        "animal": "Animal",
+        "sex": "Sexo",
+        "breed": "Raça",
+        "gestationPeriod": "Periodo de gestação",
+        "reproductionAge": "Idade de reprodução",
+        "reproductionWeight": "Peso de reprodução",
+        "motherChipNumber": "Número do chip (mãe)",
+        "motherName": "Nome da mãe",
+        "fatherChipNumber": "Número do chip (pai)",
+        "fatherName": "Nome do pai",
+        "bloodType": "Tipo de sangue",
+        "number": "Número",
+        "chipNumber": "Número do chip",
+        "birthDate": "Data de nascimento",
+        "animalType": "Tipo"
+    },
+    "groups":{
+        "groupsTitle": "Grupos",
+        "description": "Aqui pode adicionar novos grupos de animais à sua exploração. Clique em Adicionar.",
+        "group": "Group",
+        "addAnimal": "Adicionar animal",
+        "noAnimals": "Não existem animais presentes neste grupo"
+    },
+    "button":{
+        "cancel": "Cancelar",
+        "create": "Criar",
+        "save": "Guardar",
+        "edit": "Editar",
+        "add": "Adicionar",
+        "remove": "Remover"
+    },
+    "errors":{
+        "invalidName": "Nome obrigatório",
+        "fieldRequired": "Campo obrigatório",
+        "invalidPlaceType": "Tipo de local inválido",
+        "invalidSoilType": "Tipo de solo inválido",
+        "invalidArea": "Área inválida",
+        "invalidAnimalType": "Tipo de animal inválido",
+        "invalidSexType": "Sexo inválido",
+        "invalidPlace": "Local inválido"
+    }
+}

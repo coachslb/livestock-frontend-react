@@ -1,0 +1,12 @@
+{
+    "changePasswordTitle": "Change password",
+    "changePasswordHelper": "Insert your new password",
+    "newPassword":"New password",
+    "repeatPassword": "Repeat password",
+    "confirm": "Confirm",
+    "sendSuccess": "Success",
+    "sendMessage": "Password changed successfully.",
+    "invalidPassword": "Invalid password",
+    "requiredPassword": "Password is required",
+    "passwordDidNotMatch": "The passwords did not match"
+}

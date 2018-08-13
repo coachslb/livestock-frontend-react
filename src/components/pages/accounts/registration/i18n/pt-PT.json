@@ -1,0 +1,19 @@
+{
+    "createUser": "Criar utilizador",
+    "name": "Nome",
+    "country": "País",
+    "phone": "Contacto",
+    "password": "Palavra-passe",
+    "repeatPassword": "Repetir palavra-passe",
+    "next": "Seguinte",
+    "errorTitle": "Erro no Registo",
+    "errorMessage": "Campos inválidos",
+    "errors":{
+        "invalidName": "Nome inválido",
+        "invalidCountry": "País inválido",
+        "invalidPhone": "Contacto obrigatório",
+        "passwordMinLenght": "A palavra-passe deve ter um tamanho mínimo de 6 caracteres",
+        "passwordDidNotMatch": "Palavras-passe não combinam",
+        "invalidEmail": "E-mail inválido"
+    }
+}

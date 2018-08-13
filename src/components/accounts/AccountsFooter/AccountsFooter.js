@@ -10,15 +10,14 @@ export default class AccountsFooter extends Component {
         super();
         this.state = {
             languages: [],
-            serverError: false,
-            lang:'pt-PT'
+            serverError: false
         }
 
         this.onDialogClose = this.onDialogClose.bind(this);
         this.onLanguageChange = this.onLanguageChange.bind(this);
     }
 
-    componentDidMount(){
+    componentWillMount(){
         //Get languages List
         let languagesPromise = FixedValuesService.getLanguages();
         languagesPromise.then(res => {
@@ -29,7 +28,7 @@ export default class AccountsFooter extends Component {
     }
 
     onLanguageChange(e) {
-        this.setState({ lang: e.target.value });
+        this.props.changeLanguage(e.target.value)
         e.preventDefault();
     }
 
@@ -39,16 +38,17 @@ export default class AccountsFooter extends Component {
 
     render(){
 
-        const { lang, serverError, languages } = this.state
+        const { serverError, languages } = this.state
+        const { accountsGeneral } = this.props.i18n;
         return(
             <div className="container-right--footer">
-                <a href="https://www.agroop.net/en/privacy">Privacidade</a>
-                <a href="https://www.agroop.net/en/privacy/terms/">Termos</a>
+                <a href="https://www.agroop.net/en/privacy">{accountsGeneral.privacy}</a>
+                <a href="https://www.agroop.net/en/privacy/terms/">{accountsGeneral.terms}</a>
                 <FormControl>
-                    <InputLabel>Língua</InputLabel>
+                    <InputLabel>{accountsGeneral.language}</InputLabel>
                     <Select
                         name="lang"
-                        value={lang !== '' ? lang : 'pt-PT'}
+                        value={this.props.language}
                         onChange={this.onLanguageChange}
                     >
                         {languages.map(lang => {

@@ -1,0 +1,31 @@
+{
+    "welcomeTitle":"<strong>Welcome to Agroop Livestock</strong>",
+    "welcomeMessage":"It's an application that will allow you to manage your exploration in a more intuitive, simple modern, efficient and cool way...",
+    "welcomeMessage2": "If you have any question, contact us in the support section!!!<br/>Good Livestock management ;)",
+    "firstUse":{
+        "card1":{
+            "step": "1. Complete your agricola entity data",
+            "buttonText": "Complete"
+        },
+        "card2":{
+            "stepSee":"2. See explorations",
+            "stepCreate":"2. Create an exploration",
+            "buttonTextSee":"Go to explorations",
+            "buttonTextCreate":"Create exploration"
+        },
+        "card3":{
+            "step":"3. Insert animals",
+            "buttonTextCreate":"Create animal",
+            "buttonTextCreateHasNoExploration":"First Create an exploration"
+        }
+    },
+    "entityGeneralStatistics":{
+        "entityData": "Agricola entity data",
+        "explorations": "Explorations",
+        "places": "Places",
+        "animals": "Animals",
+        "managements": "Managements",
+        "workers": "Workers"
+    },
+    "lastManagements": "Last managements"
+}

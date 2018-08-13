@@ -1,0 +1,21 @@
+{
+    "createAgricolaEntity": "Criar entidade agricola",
+    "name": "Nome",
+    "country": "País",
+    "conclude": "Concluir",
+    "agricolaEntity": "Entidade agrícola",
+    "phone": "Contacto",
+    "address": "Morada",
+    "postalCode": "Código postal",
+    "district": "Distrito",
+    "agricolaData": "Dados agrícolas",
+    "edit": "Editar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "errors": {
+        "invalidName": "Nome obrigatório",
+        "invalidCountry": "País obrigatório",
+        "entityIdIsNotPresent": "ID da entidade agricola não está presente"
+    }
+    
+}

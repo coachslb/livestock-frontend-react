@@ -1,0 +1,28 @@
+{
+  "currentPassword": "Palavra-passe atual",
+  "newPassword": "Nova palavra-passe",
+  "repeatNewPassword": "Repetir nova palavra-passe",
+  "button": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "add": "Adicionar",
+    "desassociate": "Desassociar"
+  },
+  "errors": {
+    "currentPasswordRequired": "Palavra-passe atual obrigatória",
+    "newPasswordRequired": "Palavra-passe nova obrigatória",
+    "oldPasswordEqualToNewPassword": "Escolha uma palavra-passe diferente da que possuia",
+    "passwordsDidNotMatch": "As palavras-passe não combinam"
+  },
+  "searchUser": "Pesquisar utilizador",
+  "email": "E-mail do utilizador",
+  "addUser": "Adicionar utilizador",
+  "newUser": "Novo utilizador",
+  "worker": "Trabalhador",
+  "name": "Nome",
+  "role": "Função",
+  "phone": "Contacto",
+  "country": "País",
+  "manager": "Gerente"
+}

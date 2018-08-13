@@ -1,0 +1,7 @@
+{
+    "recoverPassword": "Reset your password",
+    "send": "Send",
+    "sendSuccess": "Success",
+    "sendMessage": "We send an email to recover your password!!!",
+    "invalidEmail": "Invalid e-mail"
+}

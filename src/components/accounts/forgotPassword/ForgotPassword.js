@@ -26,7 +26,7 @@ export default class ForgotPassword extends Component {
 
   onSubmitForgotPassword(e) {
     this.setState({isLoading: true})
-    let errors = AccountsValidations.validateForgotPassword(this.state.email);
+    let errors = AccountsValidations.validateForgotPassword(this.state.email, this.props.i18n);
 
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
@@ -34,13 +34,12 @@ export default class ForgotPassword extends Component {
 
       let forgotPasswordResponse = ForgotPasswordService.forgotPassword({
         email,
-        //todo language prop from page
-        lang: 'pt-PT'
+        lang: this.props.language
       }, false);
 
       forgotPasswordResponse.then((res)=>{
         this.setState({successRequest: true});
-        setTimeout(() => { clearInterval(); this.setState({redirect: true, isLoading: false}); }, 3000);
+        setTimeout(() => { clearInterval(); this.setState({redirect: true, isLoading: false}); }, 2000);
         //setTimeout mostra mensagem de sucesso e redirect to login
       }).catch((err) => {
         this.setState({ serverError: true, isLoading: true })
@@ -64,11 +63,11 @@ export default class ForgotPassword extends Component {
 
   render() {
     const { errors, serverError, successRequest, redirect, isLoading } = this.state;
-
+    const { i18n } = this.props;
     return (
       <div className="forgotPasswordForm">
         <Typography variant="headline" className="form-title">
-          Repor palavra-passe
+          {i18n.forgotPassword.recoverPassword}
         </Typography>
         <form onSubmit={this.onSubmitForgotPassword.bind(this)}>
           <InputField
@@ -77,7 +76,7 @@ export default class ForgotPassword extends Component {
             type="email"
             onChange={this.handleEmailChange.bind(this)}
             required={true}
-            label="Email"
+            label="E-mail"
             errorMessage={
               errors != null &&
               errors.filter(error => {
@@ -91,7 +90,7 @@ export default class ForgotPassword extends Component {
             color="primary"
             variant="raised"
           >
-            Enviar
+            {i18n.forgotPassword.send}
           </SubmitButton>
           }
         </form>
@@ -99,25 +98,25 @@ export default class ForgotPassword extends Component {
         <SuccessCard 
             elevation={2}
             style={{marginTop: '20px', width: '90%', backgroundColor: '#39b5ab', padding:'10px'}} 
-            title="Success"
+            title={i18n.forgotPassword.sendSuccess}
             titleVariant="headline" 
             titleComponent="h3"
-            text="We send you an email for you to recover your password!!!"
+            text={i18n.forgotPassword.sendMessage}
             textComponent="p"
             textVariant="subheading"/>
         }
         {errors && (
           <ErrorDialog
-            title="Input Errors"
-            text="The email is invalid"
+            title={i18n.general.inputErrorTitle}
+            text={i18n.forgotPassword.invalidEmail}
             errors={errors}
             onDialogClose={this.onDialogClose}
           />
         )}
         {serverError && (
           <ErrorDialog
-            title="Server Error"
-            text="There are some server problem"
+            title={i18n.general.serverErrorTitle}
+            text={i18n.general.serverErrorMessage}
             onDialogClose={this.onDialogClose}
           />
         )}

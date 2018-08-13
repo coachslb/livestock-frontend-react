@@ -11,6 +11,7 @@ import {
 import EmptyAnimal from '../../../../livestock/animal/EmptyAnimal';
 import ListExplorationAnimals from '../../../../../components/livestock/animal/ListExplorationAnimals';
 import AnimalService from '../../../../../services/AnimalService';
+import { I18nContext } from '../../../../App';
 
 class ExplorationAnimalPage extends Component {
   constructor() {
@@ -80,94 +81,119 @@ class ExplorationAnimalPage extends Component {
   render() {
     const { explorationId, entityId } = this.props.match.params;
     const { hasData, isLoading, animals, query, columnToQuery } = this.state;
-    let render = <EmptyAnimal explorationId={explorationId} entityId={entityId} />;
+    let render = (
+      <I18nContext.Consumer>
+        {({ i18n }) => (
+          <EmptyAnimal explorationId={explorationId} entityId={entityId} i18n={i18n.exploration} />
+        )}
+      </I18nContext.Consumer>
+    );
     if (hasData && !isLoading)
       render = (
-        <Fragment>
-          <div style={{ width: '100%', margin: '20px 0' }}>
-            <FormControl style={{ width: '200px', marginRight: '20px' }}>
-              <InputLabel>Pesquisa</InputLabel>
-              <Input
-                name="query"
-                value={query}
-                onChange={e => this.setState({ query: e.target.value.toLowerCase() })}
+        <I18nContext.Consumer>
+          {({ i18n }) => (
+            <Fragment>
+              <div style={{ width: '100%', margin: '20px 0' }}>
+                <FormControl style={{ width: '200px', marginRight: '20px' }}>
+                  <InputLabel>{i18n.general.search}</InputLabel>
+                  <Input
+                    name="query"
+                    value={query}
+                    onChange={e => this.setState({ query: e.target.value.toLowerCase() })}
+                  />
+                </FormControl>
+                <FormControl style={{ width: '200px' }}>
+                  <InputLabel>{i18n.general.column}</InputLabel>
+                  <Select
+                    value={columnToQuery}
+                    onChange={event => {
+                      this.setState({ columnToQuery: event.target.value });
+                    }}
+                  >
+                    <MenuItem value="name">{i18n.exploration.name}</MenuItem>
+                    <MenuItem value="number">{i18n.exploration.animals.number}</MenuItem>
+                    <MenuItem value="chipNumber">{i18n.exploration.animals.chipNumber}</MenuItem>
+                    <MenuItem value="birthDate">{i18n.exploration.animals.birthDate}</MenuItem>
+                    <MenuItem value="explorationType">
+                      {i18n.exploration.animals.animalType}
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+              <ListExplorationAnimals
+                handleRemove={this.handleRemove}
+                onEdit={this.handleEdit}
+                data={
+                  query
+                    ? animals.filter(
+                        item =>
+                          columnToQuery !== 'explorationType'
+                            ? item[columnToQuery] &&
+                              item[columnToQuery].toLowerCase().includes(query)
+                            : item[columnToQuery].name &&
+                              item[columnToQuery].name.toLowerCase().includes(query),
+                      )
+                    : animals
+                }
+                i18n={i18n}
+                header={[
+                  {
+                    name: i18n.exploration.name,
+                    prop: 'name',
+                  },
+                  {
+                    name: i18n.exploration.animals.number,
+                    prop: 'number',
+                  },
+                  {
+                    name: i18n.exploration.animals.chipNumber,
+                    prop: 'chipNumber',
+                  },
+                  {
+                    name: i18n.exploration.animals.birthDate,
+                    prop: 'birthDate',
+                  },
+                  {
+                    name: i18n.exploration.animals.animalType,
+                    prop: 'explorationType',
+                  },
+                ]}
               />
-            </FormControl>
-            <FormControl style={{ width: '200px' }}>
-              <InputLabel>Coluna</InputLabel>
-              <Select
-                value={columnToQuery}
-                onChange={event => {
-                  this.setState({ columnToQuery: event.target.value });
-                }}
-              >
-                <MenuItem value="name">Nome</MenuItem>
-                <MenuItem value="number">Número</MenuItem>
-                <MenuItem value="chipNumber">número do chip</MenuItem>
-                <MenuItem value="birthDate">Data de nascimento</MenuItem>
-                <MenuItem value="explorationType">Tipo de animal</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <ListExplorationAnimals
-            handleRemove={this.handleRemove}
-            onEdit={this.handleEdit}
-            data={
-              query
-                ? animals.filter(
-                    item =>
-                      columnToQuery !== 'explorationType'
-                        ? item[columnToQuery] && item[columnToQuery].toLowerCase().includes(query)
-                        : item[columnToQuery].name && item[columnToQuery].name.toLowerCase().includes(query),
-                  )
-                : animals
-            }
-            header={[
-              {
-                name: 'Nome',
-                prop: 'name',
-              },
-              {
-                name: 'Número',
-                prop: 'number',
-              },
-              {
-                name: 'Número do chip',
-                prop: 'chipNumber',
-              },
-              {
-                name: 'Data de nascimento',
-                prop: 'birthDate',
-              },
-              {
-                name: 'Tipo',
-                prop: 'explorationType',
-              },
-            ]}
-          />
-        </Fragment>
+            </Fragment>
+          )}
+        </I18nContext.Consumer>
       );
     return (
-      <Fragment>
-        {hasData &&
-          !isLoading && (
-            <Button
-              className="placeholder-button-text"
-              variant="raised"
-              style={{ width: '100%', padding: '15px', marginBottom: '20px' }}
-              color="primary"
-              onClick={this.onCreateAnimal}
-            >
-              + Adicionar
-            </Button>
-          )}
-        {!isLoading && render}
-        {isLoading && (
-          <CircularProgress
-            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'absolute' }}
-          />
+      <I18nContext.Consumer>
+        {({ i18n }) => (
+          <Fragment>
+            {hasData &&
+              !isLoading && (
+                <Button
+                  className="placeholder-button-text"
+                  variant="raised"
+                  style={{ width: '100%', padding: '15px', marginBottom: '20px' }}
+                  color="primary"
+                  onClick={this.onCreateAnimal}
+                >
+                  + {i18n.exploration.button.add}
+                </Button>
+              )}
+            {!isLoading && render}
+            {isLoading && (
+              <CircularProgress
+                style={{
+                  height: '80px',
+                  width: '80px',
+                  top: '50%',
+                  left: '50%',
+                  position: 'absolute',
+                }}
+              />
+            )}
+          </Fragment>
         )}
-      </Fragment>
+      </I18nContext.Consumer>
     );
   }
 }

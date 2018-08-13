@@ -1,0 +1,20 @@
+{
+    "addNewTask": "Adicionar nova tarefa",
+    "task": "Tarefa",
+    "title": "Titulo",
+    "description": "Descrição",
+    "target": "Destinatário",
+    "beginDate": "Data de inicio",
+    "endDate": "Data de fim",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "calendar":{
+        "today": "Hoje",
+        "previous": "Anterior",
+        "next": "Próximo",
+        "month": "Mês",
+        "week": "Semana",
+        "day": "Dia",
+        "agenda": "Agenda"
+    }
+}

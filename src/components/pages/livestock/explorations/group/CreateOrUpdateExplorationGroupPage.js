@@ -17,6 +17,7 @@ import ExplorationValidations from '../../../../../validations/ExplorationValida
 import AnimalService from '../../../../../services/AnimalService';
 import GroupService from '../../../../../services/GroupService';
 import PlaceService from '../../../../../services/PlaceService';
+import { I18nContext } from '../../../../App';
 
 class CreateOrUpdateExplorationGroupPage extends Component {
   constructor() {
@@ -87,12 +88,12 @@ class CreateOrUpdateExplorationGroupPage extends Component {
     this.setState({ serverError: null });
   };
 
-  onCreate = e => {
+  onCreate = (e, i18n) => {
     e.preventDefault();
     const { explorationId } = this.props.match.params;
     this.setState({ isLoading: true });
     const { id, name, place, placeList } = this.state;
-    let errors = ExplorationValidations.validateCreateOrUpdateGroup(name, place, placeList);
+    let errors = ExplorationValidations.validateCreateOrUpdateGroup(name, place, placeList, i18n);
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
       if (!id) {
@@ -146,10 +147,8 @@ class CreateOrUpdateExplorationGroupPage extends Component {
   };
 
   handleRemove = i => {
-    const removeAnimalFromGroup = AnimalService.addOrRemoveOfGroup(
-      i, this.state.id, false, true
-    );
-    
+    const removeAnimalFromGroup = AnimalService.addOrRemoveOfGroup(i, this.state.id, false, true);
+
     removeAnimalFromGroup
       .then(res => {
         this.setState({
@@ -160,7 +159,7 @@ class CreateOrUpdateExplorationGroupPage extends Component {
           isLoading: false,
         });
       })
-      .catch(err => this.setState({ serverError: true, isLoading: false }));  
+      .catch(err => this.setState({ serverError: true, isLoading: false }));
   };
 
   handleEdit = i => {
@@ -190,7 +189,12 @@ class CreateOrUpdateExplorationGroupPage extends Component {
 
   onAddAnimalToGroup = e => {
     this.setState({ isLoading: true });
-    let addAnimalToGroupResponse = AnimalService.addOrRemoveOfGroup(this.state.animal, this.state.id, true, true);
+    let addAnimalToGroupResponse = AnimalService.addOrRemoveOfGroup(
+      this.state.animal,
+      this.state.id,
+      true,
+      true,
+    );
 
     addAnimalToGroupResponse
       .then(res => {
@@ -223,178 +227,195 @@ class CreateOrUpdateExplorationGroupPage extends Component {
       isLoading,
     } = this.state;
     let renderAnimalList = (
-      <ListExplorationAnimals
-        handleRemove={this.handleRemove}
-        onEdit={this.handleEdit}
-        data={
-          query
-            ? animalList.filter(
-                item =>
-                  columnToQuery !== 'explorationType'
-                    ? item[columnToQuery] && item[columnToQuery].toLowerCase().includes(query)
-                    : item[columnToQuery].name &&
-                      item[columnToQuery].name.toLowerCase().includes(query),
-              )
-            : animalList
-        }
-        header={[
-          {
-            name: 'Nome',
-            prop: 'name',
-          },
-          {
-            name: 'Número',
-            prop: 'number',
-          },
-          {
-            name: 'Número do chip',
-            prop: 'chipNumber',
-          },
-          {
-            name: 'Tipo',
-            prop: 'explorationType',
-          },
-        ]}
-      />
+      <I18nContext.Consumer>
+        {({ i18n }) => (
+          <ListExplorationAnimals
+            handleRemove={this.handleRemove}
+            onEdit={this.handleEdit}
+            data={
+              query
+                ? animalList.filter(
+                    item =>
+                      columnToQuery !== 'explorationType'
+                        ? item[columnToQuery] && item[columnToQuery].toLowerCase().includes(query)
+                        : item[columnToQuery].name &&
+                          item[columnToQuery].name.toLowerCase().includes(query),
+                  )
+                : animalList
+            }
+            i18n={i18n}
+            header={[
+              {
+                name: i18n.exploration.name,
+                prop: 'name',
+              },
+              {
+                name: i18n.exploration.animals.number,
+                prop: 'number',
+              },
+              {
+                name: i18n.exploration.animals.chipNumber,
+                prop: 'chipNumber',
+              },
+              {
+                name: i18n.exploration.animals.animalType,
+                prop: 'explorationType',
+              },
+            ]}
+          />
+        )}
+      </I18nContext.Consumer>
     );
     return (
-      <Fragment>
-        {!isLoading && (
+      <I18nContext.Consumer>
+        {({ i18n }) => (
           <Fragment>
-            <Card style={{ marginBottom: 20 }}>
-              <CardContent>
-                <div className="card-header">
-                  <Typography variant="headline" className="card-header_title">
-                    Grupo
-                  </Typography>
-                </div>
-                <div className="card-body">
-                  <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                    <InputLabel>Nome*</InputLabel>
-                    <Input name="name" value={name} onChange={this.handleChange} />
-                  </FormControl>
-                  {placeList && (
-                    <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>Local*</InputLabel>
-                      <Select name="place" value={place} onChange={this.handleChange}>
-                        {placeList.map(place => {
-                          return (
-                            <MenuItem key={place.id} value={place.id}>
-                              {place.name}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                    </FormControl>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent>
-                <div className="card-header">
-                  <Typography variant="headline" className="card-header_title">
-                    Animais
-                  </Typography>
-                </div>
-                <div className="card-body">
-                  {animalList && animalList.length > 0
-                    ? renderAnimalList
-                    : 'Não existem animais presentes neste grupo'}
-                  {!addAnimal &&
-                    explorationAnimalList && (
-                      <Button
-                        size="large"
-                        variant="raised"
-                        color="primary"
-                        style={{ width: '100%', marginTop: 25 }}
-                        onClick={this.addAnimalForm}
-                      >
-                        Adicionar Animal
-                      </Button>
-                    )}
-                  {addAnimal && (
-                    <div
-                      style={{
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        marginTop: 40,
-                        alignItems: 'center',
-                      }}
-                    >
-                      <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                        <InputLabel>Animal*</InputLabel>
-                        <Select name="animal" value={animal} onChange={this.handleAnimalChange}>
-                          {explorationAnimalList.map(a => {
-                            return (
-                              <MenuItem key={a.id} value={a.id}>
-                                {a.name}
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                      </FormControl>
-                      <div>
-                        <Button
-                          size="medium"
-                          variant="raised"
-                          color="primary"
-                          className="card-button"
-                          onClick={this.onCancelAddAnimal}
-                        >
-                          Cancelar
-                        </Button>
-                        <Button
-                          size="medium"
-                          variant="raised"
-                          color="primary"
-                          className="card-button"
-                          onClick={this.onAddAnimalToGroup}
-                        >
-                          Guardar
-                        </Button>
-                      </div>
+            {!isLoading && (
+              <Fragment>
+                <Card style={{ marginBottom: 20 }}>
+                  <CardContent>
+                    <div className="card-header">
+                      <Typography variant="headline" className="card-header_title">
+                        {i18n.exploration.groups.group}
+                      </Typography>
                     </div>
-                  )}
+                    <div className="card-body">
+                      <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
+                        <InputLabel>{i18n.exploration.name}*</InputLabel>
+                        <Input name="name" value={name} onChange={this.handleChange} />
+                      </FormControl>
+                      {placeList && (
+                        <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
+                          <InputLabel>{i18n.exploration.place.placeTitle}*</InputLabel>
+                          <Select name="place" value={place} onChange={this.handleChange}>
+                            {placeList.map(place => {
+                              return (
+                                <MenuItem key={place.id} value={place.id}>
+                                  {place.name}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent>
+                    <div className="card-header">
+                      <Typography variant="headline" className="card-header_title">
+                        {i18n.exploration.animals.animalsTitle}
+                      </Typography>
+                    </div>
+                    <div className="card-body">
+                      {animalList && animalList.length > 0
+                        ? renderAnimalList
+                        : i18n.exploration.groups.noAnimals}
+                      {!addAnimal &&
+                        explorationAnimalList && (
+                          <Button
+                            size="large"
+                            variant="raised"
+                            color="primary"
+                            style={{ width: '100%', marginTop: 25 }}
+                            onClick={this.addAnimalForm}
+                          >
+                            {i18n.exploration.groups.addAnimal}
+                          </Button>
+                        )}
+                      {addAnimal && (
+                        <div
+                          style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            marginTop: 40,
+                            alignItems: 'center',
+                          }}
+                        >
+                          <FormControl
+                            style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
+                          >
+                            <InputLabel>Animal*</InputLabel>
+                            <Select name="animal" value={animal} onChange={this.handleAnimalChange}>
+                              {explorationAnimalList.map(a => {
+                                return (
+                                  <MenuItem key={a.id} value={a.id}>
+                                    {a.name}
+                                  </MenuItem>
+                                );
+                              })}
+                            </Select>
+                          </FormControl>
+                          <div>
+                            <Button
+                              size="medium"
+                              variant="raised"
+                              color="primary"
+                              className="card-button"
+                              onClick={this.onCancelAddAnimal}
+                            >
+                              {i18n.exploration.button.cancel}
+                            </Button>
+                            <Button
+                              size="medium"
+                              variant="raised"
+                              color="primary"
+                              className="card-button"
+                              onClick={this.onAddAnimalToGroup}
+                            >
+                              {i18n.exploration.button.save}
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button
+                    size="medium"
+                    variant="raised"
+                    color="primary"
+                    className="card-button"
+                    onClick={this.onCancel}
+                  >
+                    {i18n.exploration.button.cancel}
+                  </Button>
+                  <Button
+                    size="medium"
+                    variant="raised"
+                    color="primary"
+                    className="card-button"
+                    onClick={e => this.onCreate(e, i18n)}
+                  >
+                    {i18n.exploration.button.save}
+                  </Button>
                 </div>
-              </CardContent>
-            </Card>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button
-                size="medium"
-                variant="raised"
-                color="primary"
-                className="card-button"
-                onClick={this.onCancel}
-              >
-                Cancelar
-              </Button>
-              <Button
-                size="medium"
-                variant="raised"
-                color="primary"
-                className="card-button"
-                onClick={this.onCreate}
-              >
-                Guardar
-              </Button>
-            </div>
+              </Fragment>
+            )}
+            {serverError && (
+              <ErrorDialog
+                title={i18n.general.serverErrorTitle}
+                text={i18n.general.serverErrorMessage}
+                onDialogClose={this.onDialogClose}
+              />
+            )}
+            {isLoading && (
+              <CircularProgress
+                style={{
+                  height: '80px',
+                  width: '80px',
+                  top: '50%',
+                  left: '50%',
+                  position: 'absolute',
+                }}
+              />
+            )}
           </Fragment>
         )}
-        {serverError && (
-          <ErrorDialog
-            title="Server Error"
-            text="There are some server problem"
-            onDialogClose={this.onDialogClose}
-          />
-        )}
-        {isLoading && (
-          <CircularProgress
-            style={{ height: '80px', width: '80px', top: '50%', left: '50%', position: 'absolute' }}
-          />
-        )}
-      </Fragment>
+      </I18nContext.Consumer>
     );
   }
 }
