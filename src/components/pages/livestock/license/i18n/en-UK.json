@@ -1,3 +1,61 @@
 {
-    
+  "currentLicense": "Current license",
+  "noLicense": "Expired license",
+  "button":{
+      "renew": "Renew"
+  },
+  "freePlan": "free plan",
+  "basePlan": "Base plan",
+  "premiumPlan": "Premium plan",
+  "free": {
+    "title": "Free (Beta tester)",
+    "description": "Agroop Livestock free plan",
+    "features": [
+      "Agricola entities",
+      "Preferences",
+      "Dashboard",
+      "Users",
+      "Explorations",
+      "Animal registration",
+      "Animal managements"
+    ],
+    "price": "0.00 €/month"
+  },
+  "intermediate": {
+    "title": "intermediate",
+    "description": "Agroop Livestock intermediate plan",
+    "features": [
+      "Agricola entities",
+      "Preferences",
+      "Dashboard",
+      "Users",
+      "Explorations",
+      "Animal registration",
+      "Animal managements",
+      "Task registration",
+      "Analytical data",
+      "Weather"
+    ],
+    "price": "9.99 €/month"
+  },
+  "premium": {
+    "title": "Premium",
+    "description": "Agroop Livestock premium plan",
+    "features": [
+      "Agricola entities",
+      "Preferences",
+      "Dashboard",
+      "Users",
+      "Explorations",
+      "Animal registration",
+      "Animal managements",
+      "Task registration",
+      "Analytical data",
+      "Weather",
+      "Expenses control",
+      "Technical support (future)",
+      "RED export (future)"
+    ],
+    "price": "19.99 €/month"
+  }
 }

@@ -1,0 +1,33 @@
+.license-plans-container{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.current-license-card{
+    display: flex;
+    min-height: 200px;
+}
+
+.current-license-info{
+
+}
+
+.plan-list-feature{
+    flex-grow: 1;
+}
+
+.current-license-buttons{
+    display: flex;
+    justify-content: center;
+}
+
+.plan-card-container{
+    flex-basis: 35%;
+    margin: 0 5px;
+    display: flex;
+}
+
+.plan-price-container{
+    align-self: center;
+}

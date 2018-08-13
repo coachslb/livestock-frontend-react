@@ -68,6 +68,9 @@ export const SELL = "/sell";
 /** Task */
 export const TASK = "/task";
 
+/** License */
+export const LICENSE = "/license";
+
 /** Workers */
 export const WORKER = "/worker";
 export const FIND_USER_EMAIL = "/userEmail";

@@ -1,3 +1,61 @@
 {
-    
+  "currentLicense": "Licença atual",
+  "noLicense": "Licença expirada",
+  "button":{
+      "renew": "Renovar"
+  },
+  "freePlan": "Plano grátis",
+  "basePlan": "Plano base",
+  "premiumPlan": "Plano premium",
+  "free": {
+    "title": "Grátis (Beta Tester)",
+    "description": "Plano grátis da aplicação Agroop Livestock",
+    "features": [
+      "+ Entidades",
+      "+ Preferências",
+      "+ Dashboard",
+      "+ Utilizadores",
+      "+ Explorações",
+      "+ Registo animal",
+      "+ Maneios"
+    ],
+    "price": "0.00 €/mês"
+  },
+  "base": {
+    "title": "Base",
+    "description": "Plano base da aplicação Agroop Livestock",
+    "features": [
+      "+ Entidades",
+      "+ Preferências",
+      "+ Dashboard",
+      "+ Utilizadores",
+      "+ Explorações",
+      "+ Registo animal",
+      "+ Maneios",
+      "+ Registo de tarefas",
+      "+ Dados analiticos",
+      "+ Previsão meteorológica"
+    ],
+    "price": "9.99 €/mês"
+  },
+  "premium": {
+    "title": "Premium",
+    "description": "Plano premium da aplicação Agroop Livestock",
+    "features": [
+      "+ Entidades",
+      "+ Preferências",
+      "+ Dashboard",
+      "+ Utilizadores",
+      "+ Explorações",
+      "+ Registo animal",
+      "+ Maneios",
+      "+ Registo de tarefas",
+      "+ Dados analiticos",
+      "+ Previsão meteorológica",
+      "+ Controlo de despesas",
+      "+ Assistência técnica (futuro)",
+      "+ Exportação de RED (futuro)"
+    ],
+    "price": "19.99 €/mês"
+  }
 }

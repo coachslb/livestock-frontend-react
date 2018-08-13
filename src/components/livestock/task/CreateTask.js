@@ -18,8 +18,8 @@ class CreateTask extends Component {
       serverError: null,
       workerList: [],
       task: {
-        beginDate: new Date().toJSON().slice(0, 10),
-        endDate: new Date().toJSON().slice(0, 10),
+        start: new Date().toJSON().slice(0, 10),
+        end: new Date().toJSON().slice(0, 10),
       },
     };
   }
@@ -127,14 +127,14 @@ class CreateTask extends Component {
                       />
                     )}
                     <InputForm
-                      name="beginDate"
+                      name="start"
                       required={true}
                       type="date"
                       label={this.props.i18n.task.beginDate}
                       style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
                     />
                     <InputForm
-                      name="endDate"
+                      name="end"
                       required={true}
                       type="date"
                       label={this.props.i18n.task.endDate}
