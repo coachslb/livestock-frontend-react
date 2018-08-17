@@ -45,6 +45,42 @@
   align-items: center;
   text-align: center;
   padding: 10px;
+  background-repeat: no-repeat;
+  background-size: 180px 180px;
+  background-position: center;
+  background-position-y: 0px;
+}
+
+.management-type-container--weighing{
+  background-image: url('../../../../assets/imgs/managements/weighing.svg');
+}
+
+.management-type-container--feeding{
+  background-image: url('../../../../assets/imgs/managements/feed.svg');
+}
+.management-type-container--sanitary{
+  background-image: url('../../../../assets/imgs/managements/sanitary.svg');
+}
+.management-type-container--servicing{
+  background-image: url('../../../../assets/imgs/managements/servicing.svg');
+}
+.management-type-container--birth{
+  background-image: url('../../../../assets/imgs/managements/birth.svg');
+}
+.management-type-container--childBirth{
+  background-image: url('../../../../assets/imgs/managements/childBirth.svg');
+}
+.management-type-container--chiping{
+  background-image: url('../../../../assets/imgs/managements/chiping.svg');
+}
+.management-type-container--death{
+  background-image: url('../../../../assets/imgs/managements/death.svg');
+}
+.management-type-container--transfer{
+  background-image: url('../../../../assets/imgs/managements/transfer.svg');
+}
+.management-type-container--sellOrPurchase{
+  background-image: url('../../../../assets/imgs/managements/sellOrPurchase.svg');
 }
 
 @media(max-width: 1248px){

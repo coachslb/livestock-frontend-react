@@ -16,52 +16,52 @@ class SelectManagementTypePage extends Component {
             <Card className="select-management-card">
               <CardContent className="select-management-card-container">
                 <ManagementTypePlaceholder
-                  img="child-birth"
+                  imgUrl="management-type-container--childBirth"
                   title={i18n.management.managementType.childBirth}
                   route={`/livestock/management/${entityId}/create/childBirth`}
                 />
                 <ManagementTypePlaceholder
-                  img="birth-registration"
+                  imgUrl="management-type-container--birth"
                   title={i18n.management.managementType.birth}
                   route={`/livestock/management/${entityId}/create/birthRegistration`}
                 />
                 <ManagementTypePlaceholder
-                  img="weighing"
+                  imgUrl={"management-type-container--weighing"}
                   title={i18n.management.managementType.weighing}
                   route={`/livestock/management/${entityId}/create/weighing`}
                 />
                 <ManagementTypePlaceholder
-                  img="feed"
+                  imgUrl="management-type-container--feeding"
                   title={i18n.management.managementType.feeding}
                   route={`/livestock/management/${entityId}/create/feed`}
                 />
                 <ManagementTypePlaceholder
-                  img="sanitary"
+                  imgUrl="management-type-container--sanitary"
                   title={i18n.management.managementType.sanitary}
                   route={`/livestock/management/${entityId}/create/sanitary`}
                 />
                 <ManagementTypePlaceholder
-                  img="coberturas"
+                  imgUrl="management-type-container--servicing"
                   title={i18n.management.managementType.servicing}
                   route={`/livestock/management/${entityId}/create/sex`}
                 />
                 <ManagementTypePlaceholder
-                  img="death"
+                  imgUrl="management-type-container--death"
                   title={i18n.management.managementType.death}
                   route={`/livestock/management/${entityId}/create/death`}
                 />
                 <ManagementTypePlaceholder
-                  img="transfer"
+                  imgUrl="management-type-container--transfer"
                   title={i18n.management.managementType.transfer}
                   route={`/livestock/management/${entityId}/create/transfer`}
                 />
                 <ManagementTypePlaceholder
-                  img="purchase-sales"
+                  imgUrl="management-type-container--sellOrPurchase"
                   title={i18n.management.managementType.sellAndPurchase}
                   route={`/livestock/management/${entityId}/create/sellorPurchase`}
                 />
                 <ManagementTypePlaceholder
-                  img="chiping"
+                  imgUrl="management-type-container--chiping"
                   title={i18n.management.managementType.chiping}
                   route={`/livestock/management/${entityId}/create/chip`}
                 />

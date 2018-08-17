@@ -4,7 +4,7 @@ import EmptyListPlaceholder from '../../UI/Placeholders/EmptyListPlaceholder';
 const EmptyManagement = props => {
   return (
     <EmptyListPlaceholder 
-        img="management-img" 
+        img="exploration-img"  
         section={props.i18n.managements}
         description={props.i18n.description}
         route={`/livestock/management/${props.entityId}/create`} 

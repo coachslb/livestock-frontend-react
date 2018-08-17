@@ -2,6 +2,11 @@ import React from 'react';
 import { Card, CardContent, Typography, List, ListItem, ListItemText, Button } from 'material-ui';
 
 const LicensePlanCard = props => {
+
+  function OnBuyLicense(e) {
+    props.buyLicense(e, props.licenseType, props.basePrice);
+  }
+
   return (
     <Card className="plan-card-container">
       <CardContent style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
@@ -23,7 +28,7 @@ const LicensePlanCard = props => {
           </List>
         </div>
         <div className="plan-price-container">
-          <Button variant="raised" color="primary">
+          <Button variant="raised" color="primary" onClick={OnBuyLicense}>
             {props.i18n.price}
           </Button>
         </div>

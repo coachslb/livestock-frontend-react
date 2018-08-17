@@ -1,33 +1,41 @@
-.license-plans-container{
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
+.license-plans-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
-.current-license-card{
-    display: flex;
-    min-height: 200px;
+.current-license-card {
+  display: flex;
+  min-height: 200px;
 }
 
-.current-license-info{
-
+.current-license-info {
 }
 
-.plan-list-feature{
-    flex-grow: 1;
+.plan-list-feature {
+  flex-grow: 1;
 }
 
-.current-license-buttons{
-    display: flex;
-    justify-content: center;
+.current-license-buttons {
+  display: flex;
+  justify-content: center;
 }
 
-.plan-card-container{
-    flex-basis: 35%;
-    margin: 0 5px;
-    display: flex;
+.plan-card-container {
+  flex-basis: 30%;
+  margin: 0 5px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.plan-price-container{
-    align-self: center;
+@media (max-width: 950px) {
+  .plan-card-container {
+    flex-basis: 100%;
+    margin: 5px 0;
+  }
+}
+
+.plan-price-container {
+  align-self: center;
 }

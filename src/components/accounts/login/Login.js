@@ -6,6 +6,7 @@ import AuthenticationService from '../../../services/AuthenticationService';
 import ErrorDialog from '../../UI/ErrorDialog/ErrorDialog';
 import { withRouter } from 'react-router-dom';
 import AccountsValidations from '../../../validations/AccountsValidations';
+import { errorHandler } from '../../utils/ErrorHandler';
 
 class Login extends Component {
   constructor() {
@@ -15,6 +16,8 @@ class Login extends Component {
       password: '',
       errors: null,
       serverError: null,
+      serverErrorTitle: null,
+      serverErrorMessage: null,
       isLoading: false,
     };
     this.onChange = this.onChange.bind(this);
@@ -58,7 +61,15 @@ class Login extends Component {
           }
         })
         .catch(err => {
-          this.setState({ serverError: true, isLoading: false });
+          if(err.code === 400){
+            const serverErrorTitle = err.data.title;
+            const serverErrorMessage = err.data.message;
+            const errors = errorHandler(err.data.invalidParams);
+            this.setState({ serverError: true, isLoading: false, errors, serverErrorTitle, serverErrorMessage });
+          }else{
+            this.setState({ serverError: true, isLoading: false });
+          }
+          
         });
     }
   }
@@ -69,12 +80,14 @@ class Login extends Component {
   }
 
   onDialogClose(e) {
-    this.setState({ errors: null, serverError: null });
+    this.setState({ errors: null, serverError: null, serverErrorMessage: null, serverErrorTitle: null });
   }
 
   render() {
-    const { errors, serverError, isLoading } = this.state;
+    const { errors, serverError, isLoading, serverErrorTitle, serverErrorMessage } = this.state;
     const { i18n } = this.props;
+
+    console.log(errors)
     return (
       <div className="loginForm">
         <form onSubmit={this.onSubmitLogin.bind(this)}>
@@ -123,8 +136,8 @@ class Login extends Component {
         )}
         {serverError && (
           <ErrorDialog
-            title={i18n.general.serverErrorTitle}
-            text={i18n.general.serverErrorMessage}
+            title={serverErrorTitle  || i18n.general.serverErrorTitle}
+            text={serverErrorMessage || i18n.general.serverErrorMessage}
             onDialogClose={this.onDialogClose}
           />
         )}

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, Typography } from 'material-ui';
 import { managementTypes } from '../../pages/livestock/management/ManagementPage';
+import { formatDate } from '../../utils/dateUtils';
 
 const LastManagementsCard = props => {
   
@@ -34,7 +35,7 @@ const LastManagementsCard = props => {
                   />
                   <p>
                     {management.date
-                      ? new Date(management.date).toLocaleDateString().slice(0, 10)
+                      ? formatDate(management.date)
                       : '00/00/00'}
                   </p>
                 </div>

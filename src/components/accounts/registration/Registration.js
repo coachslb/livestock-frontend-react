@@ -7,6 +7,7 @@ import ErrorDialog from '../../UI/ErrorDialog/ErrorDialog';
 import InputField from '../../UI/Inputs/InputField';
 import SubmitButton from '../../UI/Buttons/SubmitButton';
 import {withRouter} from 'react-router-dom';
+import { errorHandler } from '../../utils/ErrorHandler';
 import '../../pages/accounts/accounts.css';
 
 class Registration extends Component {
@@ -23,6 +24,8 @@ class Registration extends Component {
       newsletter: false,
       errors: null,
       serverError: null,
+      serverErrorTitle: null,
+      serverErrorMessage: null,
       countries: [],
       isLoading: false,
     };
@@ -51,7 +54,6 @@ class Registration extends Component {
       let registrationResponse = RegistrationService.registration({
         email,
         password,
-        //todo language prop from page
         lang: this.props.language,
         username: name,
         phoneNumber: phone,
@@ -70,7 +72,14 @@ class Registration extends Component {
         //create entity page
         this.props.history.push('/create-entity')
       }).catch((err) => {
-        this.setState({ serverError: true, isLoading: false })
+        if(err.code === 400){
+          const serverErrorTitle = err.data.title;
+          const serverErrorMessage = err.data.message;
+          const errors = errorHandler(err.data.invalidParams);
+          this.setState({ isLoading: false, errors, serverErrorTitle, serverErrorMessage });
+        }else{
+          this.setState({ serverError: true, isLoading: false });
+        }
       });
       
     }

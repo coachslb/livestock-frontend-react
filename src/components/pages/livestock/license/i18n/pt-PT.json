@@ -1,12 +1,16 @@
 {
   "currentLicense": "Licença atual",
   "noLicense": "Licença expirada",
+  "trialPeriod": "Esta conta encontra-se no periodo trial e ainda tem 30 dias para usar. Atualize já o seu plano.",
   "button":{
       "renew": "Renovar"
   },
   "freePlan": "Plano grátis",
   "basePlan": "Plano base",
   "premiumPlan": "Plano premium",
+  "name": "Name",
+  "numberOfMonths": "Número de meses",
+  "price": "Preço",
   "free": {
     "title": "Grátis (Beta Tester)",
     "description": "Plano grátis da aplicação Agroop Livestock",

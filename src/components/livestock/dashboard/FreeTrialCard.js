@@ -8,8 +8,7 @@ const FreeTrialCard = props => {
       <CardContent>
         <Typography variant="body2" className="free-trial-message">
         <i className="material-icons" style={{marginRight:"10px"}}>assignment_late</i>
-          <strong>Esta conta encontra-se no periodo trial e
-          ainda tem 30 dias para usar. Atualize já o seu plano.</strong>
+          <strong>{props.i18n.license.trialPeriod}</strong>
         </Typography>
       </CardContent>
     </Card>

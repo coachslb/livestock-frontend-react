@@ -7,7 +7,8 @@ import ErrorDialog from '../../UI/ErrorDialog/ErrorDialog';
 import AccountsValidations from '../../../validations/AccountsValidations';
 import ForgotPasswordService from '../../../services/ForgotPasswordService';
 import SuccessCard from '../../UI/Cards/SuccessCard';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from 'material-ui';
+import { errorHandler } from '../../utils/ErrorHandler';
 
 export default class ForgotPassword extends Component {
   constructor() {
@@ -16,6 +17,8 @@ export default class ForgotPassword extends Component {
       email: '',
       errors: null,
       serverError: null,
+      serverErrorTitle: null,
+      serverErrorMessage: null,
       successRequest: null,
       redirect: null,
       isLoading: null,
@@ -42,7 +45,14 @@ export default class ForgotPassword extends Component {
         setTimeout(() => { clearInterval(); this.setState({redirect: true, isLoading: false}); }, 2000);
         //setTimeout mostra mensagem de sucesso e redirect to login
       }).catch((err) => {
-        this.setState({ serverError: true, isLoading: true })
+        if(err.code === 400){
+          const serverErrorTitle = err.data.title;
+          const serverErrorMessage = err.data.message;
+          const errors = errorHandler(err.data.invalidParams);
+          this.setState({ isLoading: false, errors, serverErrorTitle, serverErrorMessage });
+        }else{
+          this.setState({ serverError: true, isLoading: false });
+        }
       });
       
     }
@@ -58,11 +68,11 @@ export default class ForgotPassword extends Component {
   }
 
   onDialogClose(e) {
-    this.setState({ errors: null, serverError: null });
+    this.setState({ errors: null, serverError: null, serverErrorTitle: null, serverErrorMessage: null });
   }
 
   render() {
-    const { errors, serverError, successRequest, redirect, isLoading } = this.state;
+    const { errors, serverError, successRequest, redirect, isLoading, serverErrorMessage, serverErrorTitle } = this.state;
     const { i18n } = this.props;
     return (
       <div className="forgotPasswordForm">
@@ -107,16 +117,16 @@ export default class ForgotPassword extends Component {
         }
         {errors && (
           <ErrorDialog
-            title={i18n.general.inputErrorTitle}
-            text={i18n.forgotPassword.invalidEmail}
+            title={serverErrorTitle || i18n.general.inputErrorTitle}
+            text={serverErrorMessage || i18n.forgotPassword.invalidEmail}
             errors={errors}
             onDialogClose={this.onDialogClose}
           />
         )}
         {serverError && (
           <ErrorDialog
-            title={i18n.general.serverErrorTitle}
-            text={i18n.general.serverErrorMessage}
+            title={serverErrorTitle || i18n.general.serverErrorTitle}
+            text={serverErrorTitle || i18n.general.serverErrorMessage}
             onDialogClose={this.onDialogClose}
           />
         )}

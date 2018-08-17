@@ -79,8 +79,8 @@ class TaskPage extends Component {
     this.setState({ openTask: false });
   };
 
-  handleEditClose = e => {
-    this.setState({ editingTask: false });
+  handleEditOrCreateClose = e => {
+    this.setState({ editingTask: false, createNewTask: false });
   };
 
   handleEdit = e => {
@@ -144,7 +144,9 @@ class TaskPage extends Component {
                     showTaskDetail={(task) =>
                       this.setState({ task: task, openTask: true })
                     }
-                    addNewTask={(event) => this.setState({createNewTask: true, task: {start: event.start, end: event.end }})}
+                    addNewTask={(event) => {
+                      this.setState({createNewTask: true, task: {start: event.start, end: event.end }})
+                    }}
                   />
                   <CreateTask i18n={i18n} addTask={tasks => this.setState({ tasks })} />
                 </Fragment>
@@ -214,13 +216,13 @@ class TaskPage extends Component {
                   </DialogActions>
                 </Dialog>
               )}
-            {(task &&
-              editingTask) || createNewTask && (
+            {((task &&
+              editingTask) || createNewTask) && (
                 <Dialog
-                  open={editingTask}
+                  open={editingTask || createNewTask}
                   TransitionComponent={Transition}
                   keepMounted
-                  onClose={this.handleEditClose}
+                  onClose={this.handleEditOrCreateClose}
                   aria-labelledby="alert-dialog-slide-title"
                   aria-describedby="alert-dialog-slide-description"
                 >
@@ -297,7 +299,7 @@ class TaskPage extends Component {
                                 variant="raised"
                                 color="primary"
                                 className="card-button"
-                                onClick={this.handleEditClose}
+                                onClick={this.handleEditOrCreateClose}
                               >
                                 {i18n.task.cancel}
                               </Button>

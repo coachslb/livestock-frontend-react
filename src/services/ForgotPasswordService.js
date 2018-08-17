@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import * as end from '../constants/EndPoints';
-import { handleResponse } from './HandleResponseService';
+import { handleResponse, handleResponseError } from './HandleResponseService';
 import AuthenticationService from './AuthenticationService';
 
 let ForgotPasswordService = {
@@ -18,7 +18,7 @@ let ForgotPasswordService = {
         {},
         config,
       )
-      .then(handleResponse);
+      .then(handleResponse).catch(handleResponseError);
   },
   forgotPasswordConfirm: async function(token, newPassword, lang, isAuthenticated) {
     let config = null;

@@ -1,10 +1,10 @@
 import axios from 'axios';
 import * as end from '../constants/EndPoints';
-import { handleResponse } from './HandleResponseService';
+import { handleResponse, handleResponseError } from './HandleResponseService';
 
 let AuthenticationService = {
   login: function(data) {
-    return axios.post(end.URL + end.VERSION + end.LOGIN, data).then(handleResponse);
+    return axios.post(end.URL + end.VERSION + end.LOGIN, data).then(handleResponse).catch(handleResponseError)
   },
   logout: function(data) {
     return axios.delete(end.URL + end.VERSION + end.LOGIN + end.LOGOUT + `?token=${data.token}`).then(handleResponse);

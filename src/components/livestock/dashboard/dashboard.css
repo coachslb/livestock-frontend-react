@@ -53,6 +53,7 @@
   flex-direction: column;
   min-width: 400px;
   min-height: 300px;
+  flex-basis: 33%;
   margin: 10px 0;
   justify-content: center;
   text-align: center;

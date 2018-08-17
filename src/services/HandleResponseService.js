@@ -12,6 +12,9 @@ export const handleResponse = (res) => {
     if(code >= OK && code <=300) 
         return res.data
     else
-        /* return {...res, error: true} */
         return Promise.reject(res);
+}
+
+export const handleResponseError = (error) => {
+    return Promise.reject(error.response.data)
 }

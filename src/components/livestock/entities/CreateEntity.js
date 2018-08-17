@@ -7,6 +7,7 @@ import SubmitButton from '../../UI/Buttons/SubmitButton';
 import FixedValuesService from '../../../services/FixedValuesService';
 import EntityService from '../../../services/EntityService';
 import EntityValidations from '../../../validations/EntityValidations';
+import { errorHandler } from '../../utils/ErrorHandler';
 import '../../pages/livestock/entities/entity.css';
 
 class CreateEntity extends Component {
@@ -19,6 +20,8 @@ class CreateEntity extends Component {
       countries: [],
       errors: null,
       serverError: null,
+      serverErrorMessage: null,
+      serverErrorTitle: null,
       isLoading: null,
     };
 
@@ -51,10 +54,18 @@ class CreateEntity extends Component {
 
       createEntityResponse.then((res)=>{
         localStorage.setItem('entityId', res.data.id);
+        localStorage.setItem('workerId', res.data.workers[0].id);
         this.setState({isLoading: false})
-        this.props.history.replace('/livestock');
+        this.props.history.replace('/');
       }).catch((err) => {
-        this.setState({ serverError: true, isLoading: false })
+        if(err.code === 400){
+          const serverErrorTitle = err.data.title;
+          const serverErrorMessage = err.data.message;
+          const errors = errorHandler(err.data.invalidParams);
+          this.setState({ isLoading: false, errors, serverErrorTitle, serverErrorMessage });
+        }else{
+          this.setState({ serverError: true, isLoading: false });
+        }
       });
       
     }
@@ -70,9 +81,9 @@ class CreateEntity extends Component {
   }
 
   render() {
-    const { countries, country, errors, serverError, isLoading } = this.state;
+    const { countries, country, name, email, errors, serverError, isLoading, serverErrorMessage, serverErrorTitle } = this.state;
     const { i18n } = this.props;
-
+    console.log(this.state)
     return (
       <Fragment>
       {!isLoading && (
@@ -87,6 +98,7 @@ class CreateEntity extends Component {
             onChange={this.onChange}
             required={true}
             label={i18n.entity.name}
+            value={name}
             errorMessage={
               errors != null &&
               errors.filter(error => {
@@ -100,6 +112,7 @@ class CreateEntity extends Component {
             onChange={this.onChange}
             required={false}
             label="E-mail"
+            value={email}
             errorMessage={
               errors != null &&
               errors.filter(error => {
@@ -133,8 +146,8 @@ class CreateEntity extends Component {
       </form> </div>)}
         {errors && (
           <ErrorDialog
-            title={i18n.general.inputErrorTitle}
-            text={i18n.general.genericErrorMessage}
+            title={serverErrorTitle || i18n.general.inputErrorTitle}
+            text={serverErrorMessage || i18n.general.genericErrorMessage}
             errors={errors}
             onDialogClose={this.onDialogClose}
           />
@@ -146,7 +159,7 @@ class CreateEntity extends Component {
             onDialogClose={this.onDialogClose}
           />
         )}
-         {isLoading && <CircularProgress style={{height:'80px', width:'80px', top:"50%", left:"50%", position: 'absolute'}}/>}
+         {isLoading && <CircularProgress style={{height:'80px', width:'80px', top:"50%", left:"50%", position: 'fixed'}}/>}
         </Fragment>
       
     );

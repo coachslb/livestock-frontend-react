@@ -12,7 +12,9 @@ const row = (x, i, header, handleRemove, onEdit) => {
             ? y.prop !== 'explorationType'
               ? x[y.prop]
               : x[y.prop].name
-            : x[y.prop] ? x[y.prop].slice(0, 10) : ''}
+            : x[y.prop]
+              ? x[y.prop].slice(0, 10)
+              : ''}
         </TableCell>
       ))}
       <TableCell>
@@ -30,7 +32,9 @@ class ListExplorationAnimals extends Component {
       <Table>
         <TableHead>
           <TableRow>
-            {header.map((x, i) => <TableCell key={`thc-${i}`}>{x.name}</TableCell>)}
+            {header.map((x, i) => (
+              <TableCell key={`thc-${i}`}>{x.name}</TableCell>
+            ))}
             <TableCell>{i18n.general.actions}</TableCell>
           </TableRow>
         </TableHead>

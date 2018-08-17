@@ -245,7 +245,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
                       <MapDraw
                       //TODO
                         language="pt-PT"
-                        style={{ width: '100%', height: '300px' }}
+                        style={{ width: '100%', height: '450px' }}
                         polygons={polygons}
                         onChangePolygons={this.handlePolygons}
                         i18n={{

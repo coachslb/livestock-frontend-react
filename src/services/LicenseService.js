@@ -4,10 +4,19 @@ import { handleResponse } from './HandleResponseService';
 import AuthenticationService from './AuthenticationService';
 
 const LicenseService = {
-    getActiveLicense: async function(entityId, isAuthenticated) {
+  getActiveLicense: async function(entityId, isAuthenticated) {
     let config = null;
     if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
-    return axios.get(end.URL + end.VERSION + end.LICENSE + `?agricolaEntityId=${entityId}`, config).then(handleResponse);
+    return axios
+      .get(end.URL + end.VERSION + end.LICENSE + `?agricolaEntityId=${entityId}`, config)
+      .then(handleResponse);
+  },
+  createLicense: async function(data, isAuthenticated) {
+    let config = null;
+    if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios
+      .post(end.URL + end.VERSION + end.LICENSE, data, config)
+      .then(handleResponse);
   },
 };
 

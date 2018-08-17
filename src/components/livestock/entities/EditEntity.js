@@ -57,7 +57,7 @@ class EditEntity extends Component {
       addressId: entity.address.id,
       country: entity.country.name,
       drapName: entity.region.name,
-      drap: entity.region.id,
+      drap: entity.region.id || '',
       nifap: entity.nifap,
       manager: entity.workers[0].id,
       isLoading: true,

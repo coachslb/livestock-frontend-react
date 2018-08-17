@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import WelcomeCard from '../../../livestock/dashboard/WelcomeCard';
 import FreeTrialCard from '../../../livestock/dashboard/FreeTrialCard';
 import FirstUseSection from '../../../livestock/dashboard/FirstUseSection';
@@ -50,7 +51,7 @@ class DashboardPage extends Component {
       <I18nContext.Consumer>
         {({ i18n }) => (
           <Fragment>
-            <WelcomeCard i18n={i18n}/>
+            <WelcomeCard i18n={i18n} />
             <FirstUseSection
               hasExploration={agricolaEntity && agricolaEntity.explorations > 0}
               entityId={entityId}
@@ -80,7 +81,16 @@ class DashboardPage extends Component {
           <Fragment>
             {!isLoading && (
               <Fragment>
-                {freeTrial && license.free && <FreeTrialCard />}
+                {freeTrial &&
+                  license.free && (
+                    <Link
+                      to={`/livestock/users/${localStorage.getItem(
+                        'entityId',
+                      )}/license/${localStorage.getItem('workerId')}`}
+                    >
+                      <FreeTrialCard i18n={i18n} />
+                    </Link>
+                  )}
                 {firstUse ? renderFirstUse : renderStatistics}
                 {serverError && (
                   <ErrorDialog

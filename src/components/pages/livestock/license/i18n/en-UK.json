@@ -1,40 +1,44 @@
 {
   "currentLicense": "Current license",
   "noLicense": "Expired license",
+  "trialPeriod": "This account is in a trial period. You have 30 dias to use it. Update your license plan.",
   "button":{
       "renew": "Renew"
   },
   "freePlan": "free plan",
   "basePlan": "Base plan",
   "premiumPlan": "Premium plan",
+  "name": "Name",
+  "numberOfMonths": "Number of months",
+  "price": "Price",
   "free": {
     "title": "Free (Beta tester)",
     "description": "Agroop Livestock free plan",
     "features": [
-      "Agricola entities",
-      "Preferences",
-      "Dashboard",
-      "Users",
-      "Explorations",
-      "Animal registration",
-      "Animal managements"
+      "+ Agricola entities",
+      "+ Preferences",
+      "+ Dashboard",
+      "+ Users",
+      "+ Explorations",
+      "+ Animal registration",
+      "+ Animal managements"
     ],
     "price": "0.00 €/month"
   },
-  "intermediate": {
-    "title": "intermediate",
-    "description": "Agroop Livestock intermediate plan",
+  "base": {
+    "title": "Base",
+    "description": "Agroop Livestock base plan",
     "features": [
-      "Agricola entities",
-      "Preferences",
-      "Dashboard",
-      "Users",
-      "Explorations",
-      "Animal registration",
-      "Animal managements",
-      "Task registration",
-      "Analytical data",
-      "Weather"
+      "+ Agricola entities",
+      "+ Preferences",
+      "+ Dashboard",
+      "+ Users",
+      "+ Explorations",
+      "+ Animal registration",
+      "+ Animal managements",
+      "+ Task registration",
+      "+ Analytical data",
+      "+ Weather"
     ],
     "price": "9.99 €/month"
   },
@@ -42,19 +46,19 @@
     "title": "Premium",
     "description": "Agroop Livestock premium plan",
     "features": [
-      "Agricola entities",
-      "Preferences",
-      "Dashboard",
-      "Users",
-      "Explorations",
-      "Animal registration",
-      "Animal managements",
-      "Task registration",
-      "Analytical data",
-      "Weather",
-      "Expenses control",
-      "Technical support (future)",
-      "RED export (future)"
+      "+ Agricola entities",
+      "+ Preferences",
+      "+ Dashboard",
+      "+ Users",
+      "+ Explorations",
+      "+ Animal registration",
+      "+ Animal managements",
+      "+ Task registration",
+      "+ Analytical data",
+      "+ Weather",
+      "+ Expenses control",
+      "+ Technical support (future)",
+      "+ RED export (future)"
     ],
     "price": "19.99 €/month"
   }
