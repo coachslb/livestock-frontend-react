@@ -37,6 +37,8 @@ import UserChangeEmailPage from '../components/pages/livestock/users/preferences
 import UserChangePasswordPage from '../components/pages/livestock/users/preferences/UserChangePasswordPage';
 import UserChangeLanguagePage from '../components/pages/livestock/users/preferences/UserChangeLanguagePage';
 import LicensePage from '../components/pages/livestock/license/LicensePage';
+import WeatherResumePage from '../components/pages/livestock/weather/WeatherResumePage';
+import WeatherDetailPage from '../components/pages/livestock/weather/WeatherDetailPage';
 
 class LivestockPage extends Component {
   render() {
@@ -181,6 +183,11 @@ class LivestockPage extends Component {
           <Route path="/livestock/management" component={ManagementPage} />
           <Route path="/livestock/inventory" component={InventoryPage} />
           <Route path="/livestock/results" component={ResultsPage} />
+          <Route
+            path="/livestock/weather/:entityId/detail/:placeId"
+            component={WeatherDetailPage}
+          />
+          <Route path="/livestock/weather" component={WeatherResumePage} />
           <Route path="/livestock/users/:entityId/detail/:id" component={UserDetailPage} />
           <Route
             path="/livestock/users/:entityId/changeEmail/:id"

@@ -1,0 +1,7 @@
+{
+    "temperature": "Temperature",
+    "humidity": "Humidity",
+    "windSpeed": "Wind",
+    "date": "Date",
+    "weather": "Weather"
+}

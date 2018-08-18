@@ -1,0 +1,7 @@
+{
+    "temperature": "Temperatura",
+    "humidity": "Humidade",
+    "windSpeed": "Vento",
+    "date": "Data",
+    "weather": "Meteorologia"
+}

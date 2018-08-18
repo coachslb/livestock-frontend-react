@@ -71,6 +71,10 @@ export const TASK = "/task";
 /** License */
 export const LICENSE = "/license";
 
+/** Weather */
+export const WEATHER = "/weather";
+export const WEATHER_RESUME = "/weather/resume";
+
 /** Workers */
 export const WORKER = "/worker";
 export const FIND_USER_EMAIL = "/userEmail";

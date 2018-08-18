@@ -1,0 +1,108 @@
+.weather-exploration-header {
+  display: flex;
+  border-bottom: 3px solid #000;
+  padding-bottom: 10px;
+}
+
+.weather-exploration-header--name {
+  flex-grow: 1;
+}
+
+.weather-exploration-card {
+  display: flex;
+  width: 100%;
+}
+
+.weather-exploration-location {
+  width: 50%;
+}
+
+.weather-exploration-conditions {
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.card-weather-today {
+  min-height: 300px;
+  display: flex;
+}
+
+.card-weather-nexDays-container {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 200px;
+  justify-content: space-between;
+}
+
+.card-weather-nextDay {
+  width: 48%;
+  min-height: 200px;
+  margin-top: 10px;
+  display: flex;
+}
+
+.card-weather-today-detail-temp {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-weather-today-icon {
+  flex-grow: 1;
+  background-repeat: no-repeat;
+  background-size: 120px 120px;
+}
+
+.card-weather-next-days-icon {
+  flex-grow: 1;
+  background-repeat: no-repeat;
+  background-size: 80px 80px;
+}
+
+.weather-exploration-icon {
+  background-repeat: no-repeat;
+  background-size: 60px 60px;
+  height: 60px;
+  width: 60px;
+  align-content: flex-end;
+  margin-right: 20px;
+}
+
+.icon--clear-day {
+  background-image: url('../../../assets/imgs/weather/clear-day.svg');
+}
+
+.icon--clear-night {
+  background-image: url('../../../assets/imgs/weather/clear-day.svg');
+}
+
+.icon--partly-cloudy-day {
+  background-image: url('../../../assets/imgs/weather/partly-cloudy-day.svg');
+}
+
+.icon--partly-cloudy-night {
+  background-image: url('../../../assets/imgs/weather/partly-cloudy-day.svg');
+}
+
+.icon--cloudy {
+  background-image: url('../../../assets/imgs/weather/cloudy.svg');
+}
+
+.icon--rain {
+  background-image: url('../../../assets/imgs/weather/rain.svg');
+}
+
+.icon--sleet {
+  background-image: url('../../../assets/imgs/weather/sleet.svg');
+}
+.icon--snow {
+  background-image: url('../../../assets/imgs/weather/snow.svg');
+}
+.icon--wind {
+  background-image: url('../../../assets/imgs/weather/wind.svg');
+}
+.icon--fog {
+  background-image: url('../../../assets/imgs/weather/fog.svg');
+}
