@@ -8,6 +8,7 @@
     "address": "Morada",
     "postalCode": "Código postal",
     "district": "Distrito",
+    "brand": "Marca",
     "agricolaData": "Dados agrícolas",
     "edit": "Editar",
     "cancel": "Cancelar",

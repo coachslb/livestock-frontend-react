@@ -82,6 +82,9 @@
 .management-type-container--sellOrPurchase{
   background-image: url('../../../../assets/imgs/managements/sellOrPurchase.svg');
 }
+.management-type-container--production{
+  background-image: url('../../../../assets/imgs/managements/production.svg');
+}
 
 @media(max-width: 1248px){
   .management-type-container{

@@ -2,11 +2,11 @@ import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem, FormHelperText } from 'material-ui';
 import { Field } from 'react-final-form';
 
-const SelectForm = ({ name, style, required, label, list, isLanguage }) => (
+const SelectForm = ({ name, style, required, label, list, isLanguage, fullWidth }) => (
   <Field
     name={name}
     render={({ input, meta }) => (
-      <FormControl style={style} error={meta.touched && meta.error ? true : false}>
+      <FormControl style={style} error={meta.touched && meta.error ? true : false} fullWidth={fullWidth}>
         <InputLabel required={required}>{label}</InputLabel>
         <Select {...input}>
           {list.map(value => {

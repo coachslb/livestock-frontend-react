@@ -15,11 +15,11 @@ class SelectManagementTypePage extends Component {
             <ManagementCreationCard step={1} entityId={entityId} title={i18n.management.management} />
             <Card className="select-management-card">
               <CardContent className="select-management-card-container">
-                <ManagementTypePlaceholder
+                {/* <ManagementTypePlaceholder
                   imgUrl="management-type-container--childBirth"
                   title={i18n.management.managementType.childBirth}
                   route={`/livestock/management/${entityId}/create/childBirth`}
-                />
+                /> */}
                 <ManagementTypePlaceholder
                   imgUrl="management-type-container--birth"
                   title={i18n.management.managementType.birth}
@@ -64,6 +64,11 @@ class SelectManagementTypePage extends Component {
                   imgUrl="management-type-container--chiping"
                   title={i18n.management.managementType.chiping}
                   route={`/livestock/management/${entityId}/create/chip`}
+                />
+                <ManagementTypePlaceholder
+                  imgUrl="management-type-container--production"
+                  title={i18n.management.managementType.production}
+                  route={`/livestock/management/${entityId}/create/production`}
                 />
               </CardContent>
             </Card>

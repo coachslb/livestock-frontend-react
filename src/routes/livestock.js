@@ -32,6 +32,7 @@ import CreateorUpdateTransferManagementPage from '../components/pages/livestock/
 import CreateorUpdateDeathManagementPage from '../components/pages/livestock/management/CreateorUpdateDeathManagementPage';
 import CreateorUpdateSellorPurchaseManagementPage from '../components/pages/livestock/management/CreateorUpdateSellorPurchaseManagementPage';
 import CreateorUpdateChipManagementPage from '../components/pages/livestock/management/CreateorUpdateChipManagementPage';
+import CreateorUpdateProductionManagementPage from '../components/pages/livestock/management/CreateorUpdateProductionManagementPage';
 import TaskPage from '../components/pages/livestock/task/TaskPage';
 import UserChangeEmailPage from '../components/pages/livestock/users/preferences/UserChangeEmailPage';
 import UserChangePasswordPage from '../components/pages/livestock/users/preferences/UserChangePasswordPage';
@@ -39,6 +40,7 @@ import UserChangeLanguagePage from '../components/pages/livestock/users/preferen
 import LicensePage from '../components/pages/livestock/license/LicensePage';
 import WeatherResumePage from '../components/pages/livestock/weather/WeatherResumePage';
 import WeatherDetailPage from '../components/pages/livestock/weather/WeatherDetailPage';
+import REDPage from '../components/pages/livestock/red/REDPage';
 
 class LivestockPage extends Component {
   render() {
@@ -176,6 +178,14 @@ class LivestockPage extends Component {
             component={CreateorUpdateChipManagementPage}
           />
           <Route
+            path="/livestock/management/:entityId/edit/production/:id"
+            component={CreateorUpdateProductionManagementPage}
+          />
+          <Route
+            path="/livestock/management/:entityId/create/production"
+            component={CreateorUpdateProductionManagementPage}
+          />
+          <Route
             path="/livestock/management/:entityId/create"
             component={SelectManagementTypePage}
           />
@@ -188,6 +198,7 @@ class LivestockPage extends Component {
             component={WeatherDetailPage}
           />
           <Route path="/livestock/weather" component={WeatherResumePage} />
+          <Route path="/livestock/red-oc" component={REDPage} />
           <Route path="/livestock/users/:entityId/detail/:id" component={UserDetailPage} />
           <Route
             path="/livestock/users/:entityId/changeEmail/:id"

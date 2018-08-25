@@ -3,7 +3,10 @@
     "explorations": "Explorations",
     "explorationDescription": "Here you can add new explorations. Click Add.",
     "name": "Name",
+    "number": "Number",
     "explorationType": "Exploration type(s)",
+    "productionType": "Production type(s)",
+    "explorationSystem": "Exploration System",
     "address": "Address",
     "district": "District",
     "postalCode": "Postal code",
@@ -16,6 +19,7 @@
         "delete": "Delete",
         "deleteAll": "Delete all",
         "soilType": "Soil type",
+        "cropType": "Crop type",
         "places":"Places",
         "description": "Here you can add new places to the exploration. Click Add."
     },
@@ -32,10 +36,13 @@
         "fatherChipNumber": "Chip number (father)",
         "fatherName": "Father name",
         "bloodType": "Blood type",
-        "number": "Number",
+        "number": "Earing number",
+        "fatherNumber": "Father earing number",
+        "motherNumber": "Mother earing number",
         "chipNumber": "Chip number",
         "birthDate": "Birth date",
-        "animalType": "Type"
+        "animalType": "Type",
+        "description": "Here you can add new animals to the exploration. Click Add."
     },
     "groups":{
         "groupsTitle": "Groups",

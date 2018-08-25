@@ -81,10 +81,16 @@ const ViewEntity = props => {
                 <label className="field-label">DRAP</label>
               </div>
             )}
-          {entity.nifap && (
+          {entity.np && (
             <div className="card-field col-6">
-              <p className="field-info">{entity.nifap}</p>
-              <label className="field-label">NIFAP</label>
+              <p className="field-info">{entity.np}</p>
+              <label className="field-label">NP</label>
+            </div>
+          )}
+          {entity.brand && (
+            <div className="card-field col-6">
+              <p className="field-info">{entity.brand}</p>
+              <label className="field-label">{i18n.entity.brand}</label>
             </div>
           )}
         </div>

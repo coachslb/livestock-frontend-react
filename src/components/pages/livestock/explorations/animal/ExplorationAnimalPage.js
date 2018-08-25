@@ -81,6 +81,7 @@ class ExplorationAnimalPage extends Component {
   render() {
     const { explorationId, entityId } = this.props.match.params;
     const { hasData, isLoading, animals, query, columnToQuery } = this.state;
+
     let render = (
       <I18nContext.Consumer>
         {({ i18n }) => (
@@ -110,12 +111,14 @@ class ExplorationAnimalPage extends Component {
                       this.setState({ columnToQuery: event.target.value });
                     }}
                   >
-                    <MenuItem value="name">{i18n.exploration.name}</MenuItem>
                     <MenuItem value="number">{i18n.exploration.animals.number}</MenuItem>
                     <MenuItem value="chipNumber">{i18n.exploration.animals.chipNumber}</MenuItem>
                     <MenuItem value="birthDate">{i18n.exploration.animals.birthDate}</MenuItem>
                     <MenuItem value="explorationType">
                       {i18n.exploration.animals.animalType}
+                    </MenuItem>
+                    <MenuItem value="sex">
+                      {i18n.exploration.animals.sex}
                     </MenuItem>
                   </Select>
                 </FormControl>
@@ -127,7 +130,7 @@ class ExplorationAnimalPage extends Component {
                   query
                     ? animals.filter(
                         item =>
-                          columnToQuery !== 'explorationType'
+                          columnToQuery !== 'explorationType' && columnToQuery !== 'sex'
                             ? item[columnToQuery] &&
                               item[columnToQuery].toLowerCase().includes(query)
                             : item[columnToQuery].name &&
@@ -138,16 +141,16 @@ class ExplorationAnimalPage extends Component {
                 i18n={i18n}
                 header={[
                   {
-                    name: i18n.exploration.name,
-                    prop: 'name',
-                  },
-                  {
                     name: i18n.exploration.animals.number,
                     prop: 'number',
                   },
                   {
                     name: i18n.exploration.animals.chipNumber,
                     prop: 'chipNumber',
+                  },
+                  {
+                    name: i18n.exploration.animals.sex,
+                    prop: 'sex',
                   },
                   {
                     name: i18n.exploration.animals.birthDate,

@@ -12,6 +12,7 @@ import {
   CircularProgress,
   Checkbox,
   ListItemText,
+  Grid,
 } from 'material-ui';
 import ErrorDialog from '../../../UI/ErrorDialog/ErrorDialog';
 import ExplorationService from '../../../../services/ExplorationService';
@@ -37,27 +38,47 @@ class EditExplorationPage extends Component {
       id: 0,
       agricolaEntityId: 0,
       name: '',
+      number: '',
       addressId: '',
       address: '',
       postalCode: '',
       district: '',
       explorationTypes: [],
+      productionTypes: [],
+      explorationSystems: [],
       isLoading: false,
       serverError: false,
       errors: null,
       types: [],
+      productions: [],
+      explorationSystem: '',
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.setState({ isLoading: true });
 
     let getOneExplorationPromise = ExplorationService.get(this.props.match.params.id, null, true);
 
     let explorationTypePromise = FixedValuesService.getExplorationTypes(true);
+    let explorationSystemPromise = FixedValuesService.getExplorationSystem(true);
+    let productionTypePromise = FixedValuesService.getProductionTypes(true);
+
     explorationTypePromise
       .then(res => {
         this.setState({ explorationTypes: res.data });
+      })
+      .catch(err => this.setState({ serverError: true }));
+
+    explorationSystemPromise
+      .then(res => {
+        this.setState({ explorationSystems: res.data });
+      })
+      .catch(err => this.setState({ serverError: true }));
+
+    productionTypePromise
+      .then(res => {
+        this.setState({ productionTypes: res.data });
       })
       .catch(err => this.setState({ serverError: true }));
 
@@ -72,7 +93,12 @@ class EditExplorationPage extends Component {
           postalCode:
             res.data.address && res.data.address.postalCode ? res.data.address.postalCode : '',
           name: res.data.name ? res.data.name : '',
+          number: res.data.number ? res.data.number : '',
           types: res.data.explorationTypes ? res.data.explorationTypes.map(elem => elem.name) : '',
+          productions: res.data.productionTypes
+            ? res.data.productionTypes.map(elem => elem.name)
+            : '',
+          explorationSystem: res.data.explorationSystem && res.data.explorationSystem.id ? res.data.explorationSystem.id : '',
           isLoading: false,
         });
       })
@@ -101,12 +127,15 @@ class EditExplorationPage extends Component {
     const {
       id,
       name,
+      number,
       agricolaEntityId,
       addressId,
       address,
       postalCode,
       district,
+      explorationSystem,
       types,
+      productions,
     } = this.state;
 
     let errors = ExplorationValidations.validateCreateOrUpdateExploration(name, types);
@@ -116,18 +145,24 @@ class EditExplorationPage extends Component {
       let explorationTypeIds = types.map(
         elem => this.state.explorationTypes.find(exp => exp.name === elem).id,
       );
+      let productionTypeIds = productions.map(
+        elem => this.state.productionTypes.find(exp => exp.name === elem).id,
+      );
       let updateExplorationResponse = ExplorationService.updateExploration(
         {
           id,
           agricolaEntityId,
           name,
+          number,
           address: {
             id: addressId,
             detail: address,
             district,
             postalCode,
           },
+          explorationSystem,
           explorationTypes: explorationTypeIds,
+          productionTypes: productionTypeIds,
         },
         true,
       );
@@ -146,7 +181,8 @@ class EditExplorationPage extends Component {
   };
 
   render() {
-    const { isLoading, explorationTypes, errors, serverError } = this.state;
+    const { isLoading, explorationTypes, explorationSystems, explorationSystem, productionTypes, errors, serverError } = this.state;
+    console.log(this.state)
     return (
       <I18nContext.Consumer>
         {({ i18n }) => (
@@ -156,63 +192,129 @@ class EditExplorationPage extends Component {
                 <CardContent>
                   <div className="card-header">
                     <Typography variant="headline" className="card-header_title">
-                    {i18n.exploration.explorationTitle}
+                      {i18n.exploration.explorationTitle}
                     </Typography>
                   </div>
-                  <div className="card-body">
-                    <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>{i18n.exploration.name}</InputLabel>
-                      <Input name="name" value={this.state.name} onChange={this.handleChange} />
-                    </FormControl>
-                    <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel htmlFor="select-multiple-checkbox">
-                        {i18n.exploration.explorationType}*
-                      </InputLabel>
-                      <Select
-                        multiple
-                        name="types"
-                        value={this.state.types}
-                        onChange={this.handleChange}
-                        input={<Input id="select-multiple-checkbox" />}
-                        renderValue={selected => selected.join(', ')}
-                        MenuProps={MenuProps}
-                      >
-                        {explorationTypes.map(explorationType => (
-                          <MenuItem key={explorationType.id} value={explorationType.name}>
-                            <Checkbox
-                              color="primary"
-                              checked={this.state.types.indexOf(explorationType.name) > -1}
-                            />
-                            <ListItemText primary={explorationType.name} />
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>{i18n.exploration.address}</InputLabel>
-                      <Input
-                        name="address"
-                        value={this.state.address}
-                        onChange={this.handleChange}
-                      />
-                    </FormControl>
-                    <FormControl style={{ width: '30%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>{i18n.exploration.district}</InputLabel>
-                      <Input
-                        name="district"
-                        value={this.state.district}
-                        onChange={this.handleChange}
-                      />
-                    </FormControl>
-                    <FormControl style={{ width: '15%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>{i18n.exploration.postalCode}</InputLabel>
-                      <Input
-                        name="postalCode"
-                        value={this.state.postalCode}
-                        onChange={this.handleChange}
-                      />
-                    </FormControl>
-                  </div>
+                  <Grid container spacing={16} style={{ marginBottom: 20 }}>
+                    <Grid item xs={4}>
+                      <FormControl fullWidth>
+                        <InputLabel>{i18n.exploration.name}</InputLabel>
+                        <Input name="name" value={this.state.name} onChange={this.handleChange} />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <FormControl fullWidth>
+                        <InputLabel>{i18n.exploration.number}</InputLabel>
+                        <Input
+                          name="number"
+                          value={this.state.number}
+                          onChange={this.handleChange}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <FormControl fullWidth>
+                        <InputLabel htmlFor="select-multiple-checkbox">
+                          {i18n.exploration.explorationType}*
+                        </InputLabel>
+                        <Select
+                          multiple
+                          name="types"
+                          value={this.state.types}
+                          onChange={this.handleChange}
+                          input={<Input id="select-multiple-checkbox" />}
+                          renderValue={selected => selected.join(', ')}
+                          MenuProps={MenuProps}
+                        >
+                          {explorationTypes.map(explorationType => (
+                            <MenuItem key={explorationType.id} value={explorationType.name}>
+                              <Checkbox
+                                color="primary"
+                                checked={this.state.types.indexOf(explorationType.name) > -1}
+                              />
+                              <ListItemText primary={explorationType.name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <FormControl fullWidth>
+                        <InputLabel>{i18n.exploration.address}</InputLabel>
+                        <Input
+                          name="address"
+                          value={this.state.address}
+                          onChange={this.handleChange}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <FormControl fullWidth>
+                        <InputLabel>{i18n.exploration.district}</InputLabel>
+                        <Input
+                          name="district"
+                          value={this.state.district}
+                          onChange={this.handleChange}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <FormControl fullWidth>
+                        <InputLabel>{i18n.exploration.postalCode}</InputLabel>
+                        <Input
+                          name="postalCode"
+                          value={this.state.postalCode}
+                          onChange={this.handleChange}
+                        />
+                      </FormControl>
+                    </Grid>
+                    {explorationSystems && (
+                      <Grid item xs={6}>
+                        <FormControl fullWidth={true}>
+                          <InputLabel>{i18n.exploration.explorationSystem}</InputLabel>
+                          <Select
+                            name="explorationSystem"
+                            value={explorationSystem}
+                            onChange={this.handleChange}
+                          >
+                            {explorationSystems.map(explorationSystem => {
+                              return (
+                                <MenuItem key={explorationSystem.id} value={explorationSystem.id}>
+                                  {explorationSystem.name}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    )}
+                    <Grid item xs={6}>
+                      <FormControl fullWidth={true}>
+                        <InputLabel htmlFor="select-multiple-checkbox">
+                          {i18n.exploration.productionType}*
+                        </InputLabel>
+                        <Select
+                          multiple
+                          name="productions"
+                          value={this.state.productions}
+                          onChange={this.handleChange}
+                          input={<Input id="select-multiple-checkbox" />}
+                          renderValue={selected => selected.join(', ')}
+                          MenuProps={MenuProps}
+                        >
+                          {productionTypes.map(productionType => (
+                            <MenuItem key={productionType.id} value={productionType.name}>
+                              <Checkbox
+                                color="primary"
+                                checked={this.state.productions.indexOf(productionType.name) > -1}
+                              />
+                              <ListItemText primary={productionType.name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  </Grid>
                 </CardContent>
                 <div className="card-actions">
                   <Button

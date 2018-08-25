@@ -12,6 +12,7 @@ import {
   CircularProgress,
   Checkbox,
   ListItemText,
+  Grid,
 } from 'material-ui';
 import ErrorDialog from '../../../UI/ErrorDialog/ErrorDialog';
 import ExplorationService from '../../../../services/ExplorationService';
@@ -35,15 +36,21 @@ class CreateExplorationPage extends Component {
     super();
     this.state = {
       name: '',
+      number: '',
       address: '',
       postalCode: '',
       district: '',
       explorationTypes: [],
       explorationTypeIds: [],
+      types: [],
       isLoading: false,
       serverError: false,
       errors: null,
-      types: [],
+      productionTypes: [],
+      productionTypeIds: [],
+      productions: [],
+      explorationSystem: '',
+      explorationSystems: [],
     };
 
     this.onDialogClose = this.onDialogClose.bind(this);
@@ -52,9 +59,21 @@ class CreateExplorationPage extends Component {
   componentDidMount() {
     this.setState({ isLoading: true });
     let explorationTypePromise = FixedValuesService.getExplorationTypes(true);
+    let productionTypePromise = FixedValuesService.getProductionTypes(true);
+    let explorationSystemPromise = FixedValuesService.getExplorationSystem(true);
     explorationTypePromise
       .then(res => {
         this.setState({ explorationTypes: res.data, isLoading: false });
+      })
+      .catch(err => this.setState({ serverError: true, isLoading: false }));
+    productionTypePromise
+      .then(res => {
+        this.setState({ productionTypes: res.data, isLoading: false });
+      })
+      .catch(err => this.setState({ serverError: true, isLoading: false }));
+    explorationSystemPromise
+      .then(res => {
+        this.setState({ explorationSystems: res.data, isLoading: false });
       })
       .catch(err => this.setState({ serverError: true, isLoading: false }));
   }
@@ -71,7 +90,16 @@ class CreateExplorationPage extends Component {
   onCreate = (e, i18n) => {
     e.preventDefault();
     this.setState({ isLoading: true });
-    const { name, address, postalCode, district, types } = this.state;
+    const {
+      name,
+      number,
+      address,
+      postalCode,
+      district,
+      types,
+      productions,
+      explorationSystem,
+    } = this.state;
     let errors = ExplorationValidations.validateCreateOrUpdateExploration(name, types, i18n);
 
     if (errors.length > 0) this.setState({ errors, isLoading: false });
@@ -79,16 +107,22 @@ class CreateExplorationPage extends Component {
       let explorationTypeIds = types.map(
         elem => this.state.explorationTypes.find(exp => exp.name === elem).id,
       );
+      let productionTypeIds = productions.map(
+        elem => this.state.productionTypes.find(prod => prod.name === elem).id,
+      );
       let createExplorationResponse = ExplorationService.createExploration(
         {
           agricolaEntityId: this.props.match.params.id,
           name,
+          number,
           address: {
             detail: address,
             district,
             postalCode,
           },
           explorationTypes: explorationTypeIds,
+          productionTypes: productionTypeIds,
+          explorationSystem: explorationSystem,
         },
         true,
       );
@@ -112,7 +146,15 @@ class CreateExplorationPage extends Component {
   };
 
   render() {
-    const { isLoading, explorationTypes, errors, serverError } = this.state;
+    const {
+      isLoading,
+      explorationTypes,
+      productionTypes,
+      explorationSystems,
+      explorationSystem,
+      errors,
+      serverError,
+    } = this.state;
     return (
       <I18nContext.Consumer>
         {({ i18n }) => (
@@ -125,60 +167,126 @@ class CreateExplorationPage extends Component {
                       {i18n.exploration.explorationTitle}
                     </Typography>
                   </div>
-                  <div className="card-body">
-                    <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>{i18n.exploration.name}</InputLabel>
-                      <Input name="name" value={this.state.name} onChange={this.handleChange} />
-                    </FormControl>
-                    <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel htmlFor="select-multiple-checkbox">
-                        {i18n.exploration.explorationType}*
-                      </InputLabel>
-                      <Select
-                        multiple
-                        name="types"
-                        value={this.state.types}
-                        onChange={this.handleChange}
-                        input={<Input id="select-multiple-checkbox" />}
-                        renderValue={selected => selected.join(', ')}
-                        MenuProps={MenuProps}
-                      >
-                        {explorationTypes.map(explorationType => (
-                          <MenuItem key={explorationType.id} value={explorationType.name}>
-                            <Checkbox
-                              color="primary"
-                              checked={this.state.types.indexOf(explorationType.name) > -1}
-                            />
-                            <ListItemText primary={explorationType.name} />
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>{i18n.exploration.address}</InputLabel>
-                      <Input
-                        name="address"
-                        value={this.state.address}
-                        onChange={this.handleChange}
-                      />
-                    </FormControl>
-                    <FormControl style={{ width: '30%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>{i18n.exploration.district}</InputLabel>
-                      <Input
-                        name="district"
-                        value={this.state.district}
-                        onChange={this.handleChange}
-                      />
-                    </FormControl>
-                    <FormControl style={{ width: '15%', margin: '10px', marginBottom: '40px' }}>
-                      <InputLabel>{i18n.exploration.postalCode}</InputLabel>
-                      <Input
-                        name="postalCode"
-                        value={this.state.postalCode}
-                        onChange={this.handleChange}
-                      />
-                    </FormControl>
-                  </div>
+                  <Grid container spacing={16} style={{ marginBottom: 20 }}>
+                    <Grid item xs={4}>
+                      <FormControl fullWidth={true}>
+                        <InputLabel>{i18n.exploration.name}</InputLabel>
+                        <Input name="name" value={this.state.name} onChange={this.handleChange} />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <FormControl fullWidth={true}>
+                        <InputLabel>{i18n.exploration.number}</InputLabel>
+                        <Input
+                          name="number"
+                          value={this.state.number}
+                          onChange={this.handleChange}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <FormControl fullWidth={true}>
+                        <InputLabel htmlFor="select-multiple-checkbox">
+                          {i18n.exploration.explorationType}*
+                        </InputLabel>
+                        <Select
+                          multiple
+                          name="types"
+                          value={this.state.types}
+                          onChange={this.handleChange}
+                          input={<Input id="select-multiple-checkbox" />}
+                          renderValue={selected => selected.join(', ')}
+                          MenuProps={MenuProps}
+                        >
+                          {explorationTypes.map(explorationType => (
+                            <MenuItem key={explorationType.id} value={explorationType.name}>
+                              <Checkbox
+                                color="primary"
+                                checked={this.state.types.indexOf(explorationType.name) > -1}
+                              />
+                              <ListItemText primary={explorationType.name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <FormControl fullWidth={true}>
+                        <InputLabel>{i18n.exploration.address}</InputLabel>
+                        <Input
+                          name="address"
+                          value={this.state.address}
+                          onChange={this.handleChange}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <FormControl fullWidth={true}>
+                        <InputLabel>{i18n.exploration.district}</InputLabel>
+                        <Input
+                          name="district"
+                          value={this.state.district}
+                          onChange={this.handleChange}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <FormControl fullWidth={true}>
+                        <InputLabel>{i18n.exploration.postalCode}</InputLabel>
+                        <Input
+                          name="postalCode"
+                          value={this.state.postalCode}
+                          onChange={this.handleChange}
+                        />
+                      </FormControl>
+                    </Grid>
+                    {explorationSystems && (
+                      <Grid item xs={6}>
+                        <FormControl fullWidth={true}>
+                          <InputLabel>{i18n.exploration.explorationSystem}</InputLabel>
+                          <Select
+                            name="explorationSystem"
+                            value={explorationSystem}
+                            onChange={this.handleChange}
+                          >
+                            {explorationSystems.map(explorationSystem => {
+                              return (
+                                <MenuItem key={explorationSystem.id} value={explorationSystem.id}>
+                                  {explorationSystem.name}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    )}
+                    <Grid item xs={6}>
+                      <FormControl fullWidth={true}>
+                        <InputLabel htmlFor="select-multiple-checkbox">
+                          {i18n.exploration.productionType}*
+                        </InputLabel>
+                        <Select
+                          multiple
+                          name="productions"
+                          value={this.state.productions}
+                          onChange={this.handleChange}
+                          input={<Input id="select-multiple-checkbox" />}
+                          renderValue={selected => selected.join(', ')}
+                          MenuProps={MenuProps}
+                        >
+                          {productionTypes.map(productionType => (
+                            <MenuItem key={productionType.id} value={productionType.name}>
+                              <Checkbox
+                                color="primary"
+                                checked={this.state.productions.indexOf(productionType.name) > -1}
+                              />
+                              <ListItemText primary={productionType.name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  </Grid>
                 </CardContent>
                 <div className="card-actions">
                   <Button

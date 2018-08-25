@@ -3,7 +3,10 @@
     "explorations": "Explorações",
     "explorationDescription": "Aqui pode adicionar novas explorações. Clique em Adicionar.",
     "name": "Nome",
+    "number": "Número",
     "explorationType": "Tipo(s) exploração",
+    "productionType": "Tipo(s) produção",
+    "explorationSystem": "Sistema da exploração",
     "address": "Morada",
     "district": "Distrito",
     "postalCode": "Código postal",
@@ -16,6 +19,7 @@
         "delete": "Apagar",
         "deleteAll": "Apagar todos",
         "soilType": "Tipo de solo",
+        "cropType": "Tipo de cultura",
         "places":"Locais",
         "description": "Aqui pode adicionar novos locais à sua exploração. Clique em Adicionar."
     },
@@ -32,10 +36,13 @@
         "fatherChipNumber": "Número do chip (pai)",
         "fatherName": "Nome do pai",
         "bloodType": "Tipo de sangue",
-        "number": "Número",
+        "number": "Número do brinco",
+        "fatherNumber": "Número do brinco (Pai)",
+        "motherNumber": "Número do brinco (Mãe)",
         "chipNumber": "Número do chip",
         "birthDate": "Data de nascimento",
-        "animalType": "Tipo"
+        "animalType": "Tipo",
+        "description": "Aqui pode adicionar novos animais à sua exploração. Clique em Adicionar."
     },
     "groups":{
         "groupsTitle": "Grupos",

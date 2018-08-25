@@ -410,6 +410,18 @@ class Layout extends Component {
               </MenuItem>
               <MenuItem
                 className={
+                  pathname.startsWith('/livestock/red-oc') ? 'menu-item-selected' : 'menu-item'
+                }
+                component={Link}
+                to={`/livestock/red-oc/${entityId}`}
+                style={{ padding: '20px' }}
+                selected={pathname.startsWith('/livestock/red-oc')}
+              >
+                <i className="material-icons material-icons-menu">library_books</i>
+                RED
+              </MenuItem>
+              <MenuItem
+                className={
                   pathname.startsWith('/livestock/users') ? 'menu-item-selected' : 'menu-item'
                 }
                 component={Link}

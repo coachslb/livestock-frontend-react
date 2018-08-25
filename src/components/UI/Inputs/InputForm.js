@@ -2,7 +2,7 @@ import React from 'react';
 import { FormControl, InputLabel, Input, FormHelperText, InputAdornment } from 'material-ui';
 import { Field } from 'react-final-form';
 
-const InputForm = ({ name, style, required, label, type, step, inputAdornment, disabled, value }) => (
+const InputForm = ({ name, style, required, label, type, step, inputAdornment, disabled, value, fullWidth }) => (
   <Field
     name={name}
     render={({ input, meta }) => {
@@ -10,7 +10,7 @@ const InputForm = ({ name, style, required, label, type, step, inputAdornment, d
         input.value = new Date(input.value).toJSON().slice(0, 10);
       }
         return (
-          <FormControl style={style} error={meta.touched && meta.error ? true : false}>
+          <FormControl style={style} error={meta.touched && meta.error ? true : false} fullWidth={fullWidth}>
             <InputLabel required={required}>{label}</InputLabel>
             <Input {...input} type={type} value={value ? value : input.value} disabled={disabled} step={step} endAdornment={inputAdornment ? <InputAdornment position="end">{inputAdornment}</InputAdornment> : undefined}  />
             {meta.touched &&

@@ -11,6 +11,7 @@ import task from '../pages/livestock/task/i18n'
 import users from '../pages/livestock/users/i18n'
 import license from '../pages/livestock/license/i18n'
 import weather from '../pages/livestock/weather/i18n'
+import red from '../pages/livestock/red/i18n'
 import general from '../pages/i18n'
 
 export default {
@@ -28,6 +29,7 @@ export default {
         users: users.pt,
         license: license.pt,
         weather: weather.pt,
+        red: red.pt,
         general: general.pt,
     },
     'en-UK': {
@@ -44,6 +46,7 @@ export default {
         users: users.en,
         license: license.en,
         weather: weather.en,
+        red: red.en,
         general:general.en,
     }
 }

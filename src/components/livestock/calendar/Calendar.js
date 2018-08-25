@@ -43,7 +43,7 @@ const Calendar = props => (
         style: newStyle,
       };
     }}
-    onSelectSlot={event => { props.addNewTask(event)}}
+    onSelectSlot={event => { console.log(event); props.addNewTask(event)}}
     /* slotInfo =>alert(
         `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
           `\nend: ${slotInfo.end.toLocaleString()}` +

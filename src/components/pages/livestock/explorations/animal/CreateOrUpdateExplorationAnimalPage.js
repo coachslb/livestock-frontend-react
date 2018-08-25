@@ -13,6 +13,7 @@ import {
   Checkbox,
   ListItemText,
   CircularProgress,
+  Grid
 } from 'material-ui';
 import ErrorDialog from '../../../../UI/ErrorDialog/ErrorDialog';
 import FixedValuesService from '../../../../../services/FixedValuesService';
@@ -54,18 +55,20 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
       reproductionAge: '',
       reproductionWeight: '',
       motherNumber: '',
-      motherName: '',
+      motherChipNumber: '',
       fatherNumber: '',
-      fatherName: '',
+      fatherChipNumber: '',
       bloodType: '',
       groupList: null,
+      breedList: null,
+      currentBreedList: null,
       group: [],
     };
   }
   formatDate(date) {
     return date.slice(0, 10);
   }
-  componentDidMount() {
+  componentWillMount() {
     this.setState({ isLoading: true });
     const { explorationId, id } = this.props.match.params;
 
@@ -80,14 +83,14 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
             animalType: res.data.explorationType ? res.data.explorationType.id : '',
             sex: res.data.sex ? res.data.sex.id : '',
             birthDate: res.data.birthDate ? this.formatDate(res.data.birthDate) : '',
-            breed: res.data.breed ? res.data.breed : '',
+            breed: res.data.breed ? res.data.breed.id : '',
             gestationPeriod: res.data.gestationPeriod ? res.data.gestationPeriod : '',
             reproductionAge: res.data.reproductionAge ? res.data.reproductionAge : '',
             reproductionWeight: res.data.reproductionWeight ? res.data.reproductionWeight : '',
             motherNumber: res.data.motherNumber ? res.data.motherNumber : '',
-            motherName: res.data.motherName ? res.data.motherName : '',
+            motherChipNumber: res.data.motherChipNumber ? res.data.motherChipNumber : '',
             fatherNumber: res.data.fatherNumber ? res.data.fatherNumber : '',
-            fatherName: res.data.fatherName ? res.data.fatherName : '',
+            fatherChipNumber: res.data.fatherChipNumber ? res.data.fatherChipNumber : '',
             bloodType: res.data.bloodType ? res.data.bloodType : '',
             group: res.data.groups ? res.data.groups.map(elem => elem.name) : [],
           });
@@ -98,11 +101,20 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
     }
     const animalTypesResponse = FixedValuesService.getAnimalTypes(explorationId, true);
     const animalSexResponse = FixedValuesService.getSexTypes(true);
+    const breedResponse = FixedValuesService.getBreeds(true);
     const groupResponse = GroupService.get(null, explorationId, true);
 
     animalTypesResponse
       .then(res => {
         this.setState({ animalTypes: res.data });
+      })
+      .catch(err => {
+        this.setState({ serverError: true });
+      });
+
+    breedResponse
+      .then(res => {
+        this.setState({ breedList: res.data, currentBreedList: res.data });
       })
       .catch(err => {
         this.setState({ serverError: true });
@@ -125,6 +137,16 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
       });
   }
 
+  handleChangeAnimalType = e => {
+    console.log(e.target.value, this.state.breedList, this.state.currentBreedList)
+    this.setState({
+      animalType: e.target.value,
+      currentBreedList:
+        this.state.breedList &&
+        this.state.breedList.filter(value => value.animalType === e.target.value),
+    });
+  };
+
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -138,7 +160,6 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
     const { explorationId, id } = this.props.match.params;
     this.setState({ isLoading: true });
     const {
-      name,
       number,
       chipNumber,
       animalType,
@@ -148,22 +169,21 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
       birthDate,
       breed,
       motherNumber,
-      motherName,
+      motherChipNumber,
       fatherNumber,
-      fatherName,
+      fatherChipNumber,
       bloodType,
       group,
       groupList,
     } = this.state;
     let errors = ExplorationValidations.validateCreateOrUpdateAnimal(
-      name,
       chipNumber,
       animalType,
       animalTypes,
       sex,
       sexList,
       birthDate,
-      i18n
+      i18n,
     );
     if (errors.length > 0) this.setState({ errors, isLoading: false });
     else {
@@ -172,7 +192,6 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
         let createAnimalResponse = AnimalService.createAnimal(
           {
             id,
-            name,
             number,
             chipNumber,
             explorationType: animalType,
@@ -180,9 +199,9 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
             birthDate,
             breed,
             motherNumber,
-            motherName,
+            motherChipNumber,
             fatherNumber,
-            fatherName,
+            fatherChipNumber,
             bloodType,
             exploration: explorationId,
             groups: groupIds,
@@ -207,7 +226,6 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
         let updateAnimalResponse = AnimalService.updateAnimal(
           {
             id,
-            name,
             number,
             chipNumber,
             explorationType: animalType,
@@ -215,9 +233,9 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
             birthDate,
             breed,
             motherNumber,
-            motherName,
+            motherChipNumber,
             fatherNumber,
-            fatherName,
+            fatherChipNumber,
             bloodType,
             exploration: explorationId,
             groups: groupIds,
@@ -251,7 +269,6 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
       isLoading,
       serverError,
       errors,
-      name,
       number,
       chipNumber,
       animalType,
@@ -260,12 +277,13 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
       sexList,
       birthDate,
       breed,
+      currentBreedList,
       gestationPeriod,
       reproductionAge,
       reproductionWeight,
-      motherName,
+      motherChipNumber,
       motherNumber,
-      fatherName,
+      fatherChipNumber,
       fatherNumber,
       bloodType,
       groupList,
@@ -284,149 +302,201 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
                         {i18n.exploration.animals.animal}
                       </Typography>
                     </div>
-                    <div className="card-body">
-                      <FormControl style={{ width: '35%', margin: '10px', marginBottom: '40px' }}>
-                        <InputLabel>{i18n.exploration.name}</InputLabel>
-                        <Input name="name" value={name} onChange={this.handleChange} />
-                      </FormControl>
-                      <FormControl style={{ width: '10%', margin: '10px', marginBottom: '40px' }}>
-                        <InputLabel>{i18n.exploration.animals.number}*</InputLabel>
-                        <Input name="number" value={number} onChange={this.handleChange} />
-                      </FormControl>
-                      <FormControl style={{ width: '15%', margin: '10px', marginBottom: '40px' }}>
-                        <InputLabel>{i18n.exploration.animals.chipNumber}</InputLabel>
-                        <Input name="chipNumber" value={chipNumber} onChange={this.handleChange} />
-                      </FormControl>
-                      {animalTypes && (
-                        <FormControl style={{ width: '30%', margin: '10px', marginBottom: '40px' }}>
-                          <InputLabel>{i18n.exploration.animals.animalType}*</InputLabel>
-                          <Select name="animalType" value={animalType} onChange={this.handleChange}>
-                            {animalTypes.map(type => {
-                              return (
-                                <MenuItem key={type.id} value={type.id}>
-                                  {type.name}
-                                </MenuItem>
-                              );
-                            })}
-                          </Select>
+                    <Grid container spacing={16}>
+                      <Grid item xs={4}>
+                        <FormControl fullWidth>
+                          <InputLabel>{i18n.exploration.animals.number}*</InputLabel>
+                          <Input name="number" value={number} onChange={this.handleChange} />
                         </FormControl>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <FormControl fullWidth>
+                          <InputLabel>{i18n.exploration.animals.chipNumber}</InputLabel>
+                          <Input
+                            name="chipNumber"
+                            value={chipNumber}
+                            onChange={this.handleChange}
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={4}>
+                        {animalTypes && (
+                          <FormControl fullWidth>
+                            <InputLabel>{i18n.exploration.animals.animalType}*</InputLabel>
+                            <Select
+                              name="animalType"
+                              value={animalType}
+                              onChange={this.handleChangeAnimalType}
+                            >
+                              {animalTypes.map(type => {
+                                return (
+                                  <MenuItem key={type.id} value={type.id}>
+                                    {type.name}
+                                  </MenuItem>
+                                );
+                              })}
+                            </Select>
+                          </FormControl>
+                        )}
+                      </Grid>
+                      {currentBreedList && (
+                        <Grid item xs={6}>
+                        <FormControl fullWidth>
+                          <InputLabel>{i18n.exploration.animals.breed}</InputLabel>
+                          <Select name="breed" value={breed} onChange={this.handleChange}>
+                              {currentBreedList.map(breed => {
+                                return (
+                                  <MenuItem key={breed.id} value={breed.id}>
+                                    {breed.name}
+                                  </MenuItem>
+                                );
+                              })}
+                            </Select>
+                        </FormControl>
+                      </Grid>
                       )}
+                      <Grid item xs={4}>
+                        <FormControl fullWidth>
+                          <TextField
+                            type="date"
+                            label={i18n.exploration.animals.birthDate}
+                            name="birthDate"
+                            value={birthDate ? birthDate : new Date().toJSON().slice(0, 10)}
+                            onChange={this.handleChange}
+                            InputLabelProps={{ shrink: true }}
+                          />
+                        </FormControl>
+                      </Grid>
                       {sexList && (
-                        <FormControl style={{ width: '23%', margin: '10px', marginBottom: '40px' }}>
-                          <InputLabel>{i18n.exploration.animals.sex}*</InputLabel>
-                          <Select name="sex" value={sex} onChange={this.handleChange}>
-                            {sexList.map(sex => {
-                              return (
-                                <MenuItem key={sex.id} value={sex.id}>
-                                  {sex.name}
-                                </MenuItem>
-                              );
-                            })}
-                          </Select>
-                        </FormControl>
+                        <Grid item xs={2}>
+                          <FormControl fullWidth>
+                            <InputLabel>{i18n.exploration.animals.sex}*</InputLabel>
+                            <Select name="sex" value={sex} onChange={this.handleChange}>
+                              {sexList.map(sex => {
+                                return (
+                                  <MenuItem key={sex.id} value={sex.id}>
+                                    {sex.name}
+                                  </MenuItem>
+                                );
+                              })}
+                            </Select>
+                          </FormControl>
+                        </Grid>
                       )}
-                      <FormControl style={{ width: '22%', margin: '10px', marginBottom: '40px' }}>
-                        <TextField
-                          type="date"
-                          label={i18n.exploration.animals.birthDate}
-                          name="birthDate"
-                          value={birthDate ? birthDate : new Date().toJSON().slice(0, 10)}
-                          onChange={this.handleChange}
-                          InputLabelProps={{ shrink: true }}
-                        />
-                      </FormControl>
-                      <FormControl style={{ width: '23%', margin: '10px', marginBottom: '40px' }}>
-                        <InputLabel>{i18n.exploration.animals.breed}</InputLabel>
-                        <Input name="breed" value={breed} onChange={this.handleChange} />
-                      </FormControl>
+
                       {sex !== '' &&
                         sex === 2 && (
                           <Fragment>
-                            <FormControl
-                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                            >
-                              <InputLabel>{i18n.exploration.animals.gestationPeriod}</InputLabel>
-                              <Input
-                                name="gestationPeriod"
-                                value={gestationPeriod}
-                                onChange={this.handleChange}
-                              />
-                            </FormControl>
-                            <FormControl
-                              style={{ width: '23%', margin: '10px', marginBottom: '40px' }}
-                            >
-                              <InputLabel>{i18n.exploration.animals.reproductionAge}</InputLabel>
-                              <Input
-                                name="reproductionAge"
-                                value={reproductionAge}
-                                onChange={this.handleChange}
-                              />
-                            </FormControl>
-                            <FormControl
-                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                            >
-                              <InputLabel>{i18n.exploration.animals.reproductionWeight}</InputLabel>
-                              <Input
-                                name="reproductionWeight"
-                                value={reproductionWeight}
-                                onChange={this.handleChange}
-                              />
-                            </FormControl>
+                            <Grid item xs={4}>
+                              <FormControl fullWidth>
+                                <InputLabel>{i18n.exploration.animals.gestationPeriod}</InputLabel>
+                                <Input
+                                  name="gestationPeriod"
+                                  value={gestationPeriod}
+                                  onChange={this.handleChange}
+                                />
+                              </FormControl>
+                            </Grid>
+                            <Grid item xs={4}>
+                              <FormControl fullWidth>
+                                <InputLabel>{i18n.exploration.animals.reproductionAge}</InputLabel>
+                                <Input
+                                  name="reproductionAge"
+                                  value={reproductionAge}
+                                  onChange={this.handleChange}
+                                />
+                              </FormControl>
+                            </Grid>
+                            <Grid item xs={4}>
+                              <FormControl fullWidth>
+                                <InputLabel>
+                                  {i18n.exploration.animals.reproductionWeight}
+                                </InputLabel>
+                                <Input
+                                  name="reproductionWeight"
+                                  value={reproductionWeight}
+                                  onChange={this.handleChange}
+                                />
+                              </FormControl>
+                            </Grid>
                           </Fragment>
                         )}
-                      <FormControl style={{ width: '22%', margin: '10px', marginBottom: '40px' }}>
-                        <InputLabel>{i18n.exploration.animals.motherChipNumber}</InputLabel>
-                        <Input
-                          name="motherNumber"
-                          value={motherNumber}
-                          onChange={this.handleChange}
-                        />
-                      </FormControl>
-                      <FormControl style={{ width: '23%', margin: '10px', marginBottom: '40px' }}>
-                        <InputLabel>{i18n.exploration.animals.motherName}</InputLabel>
-                        <Input name="motherName" value={motherName} onChange={this.handleChange} />
-                      </FormControl>
-                      <FormControl style={{ width: '23%', margin: '10px', marginBottom: '40px' }}>
-                        <InputLabel>{i18n.exploration.animals.fatherChipNumber}</InputLabel>
-                        <Input
-                          name="fatherNumber"
-                          value={fatherNumber}
-                          onChange={this.handleChange}
-                        />
-                      </FormControl>
-                      <FormControl style={{ width: '22%', margin: '10px', marginBottom: '40px' }}>
-                        <InputLabel>{i18n.exploration.animals.fatherName}</InputLabel>
-                        <Input name="fatherName" value={fatherName} onChange={this.handleChange} />
-                      </FormControl>
-                      <FormControl style={{ width: '22%', margin: '10px', marginBottom: '40px' }}>
-                        <InputLabel>{i18n.exploration.animals.bloodType}</InputLabel>
-                        <Input name="bloodType" value={bloodType} onChange={this.handleChange} />
-                      </FormControl>
-                      {groupList && (
-                        <FormControl style={{ width: '23%', margin: '10px', marginBottom: '40px' }}>
-                          <InputLabel>{i18n.exploration.groups.group}(s)</InputLabel>
-                          <Select
-                            multiple
-                            name="group"
-                            value={group}
+                      <Grid item xs={3}>
+                        <FormControl fullWidth>
+                          <InputLabel>{i18n.exploration.animals.motherNumber}</InputLabel>
+                          <Input
+                            name="motherNumber"
+                            value={motherNumber}
                             onChange={this.handleChange}
-                            input={<Input id="select-multiple-checkbox" />}
-                            renderValue={selected => selected.join(', ')}
-                            MenuProps={MenuProps}
-                          >
-                            {groupList.map(group => (
-                              <MenuItem key={group.id} value={group.name}>
-                                <Checkbox
-                                  color="primary"
-                                  checked={this.state.group.indexOf(group.name) > -1}
-                                />
-                                <ListItemText primary={group.name} />
-                              </MenuItem>
-                            ))}
-                          </Select>
+                          />
                         </FormControl>
+                      </Grid>
+                      <Grid item xs={3}>
+                        <FormControl fullWidth>
+                          <InputLabel>{i18n.exploration.animals.motherChipNumber}</InputLabel>
+                          <Input
+                            name="motherChipNumber"
+                            value={motherChipNumber}
+                            onChange={this.handleChange}
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={3}>
+                        <FormControl fullWidth>
+                          <InputLabel>{i18n.exploration.animals.fatherNumber}</InputLabel>
+                          <Input
+                            name="fatherNumber"
+                            value={fatherNumber}
+                            onChange={this.handleChange}
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={3}>
+                        <FormControl fullWidth>
+                          <InputLabel>{i18n.exploration.animals.fatherChipNumber}</InputLabel>
+                          <Input
+                            name="fatherChipNumber"
+                            value={fatherChipNumber}
+                            onChange={this.handleChange}
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormControl fullWidth>
+                          <InputLabel>{i18n.exploration.animals.bloodType}</InputLabel>
+                          <Input name="bloodType" value={bloodType} onChange={this.handleChange} />
+                        </FormControl>
+                      </Grid>
+                      {groupList && (
+                        <Grid item xs={6}>
+                          <FormControl fullWidth>
+                            <InputLabel>
+                              {i18n.exploration.groups.group}
+                              (s)
+                            </InputLabel>
+                            <Select
+                              multiple
+                              name="group"
+                              value={group}
+                              onChange={this.handleChange}
+                              input={<Input id="select-multiple-checkbox" />}
+                              renderValue={selected => selected.join(', ')}
+                              MenuProps={MenuProps}
+                            >
+                              {groupList.map(group => (
+                                <MenuItem key={group.id} value={group.name}>
+                                  <Checkbox
+                                    color="primary"
+                                    checked={this.state.group.indexOf(group.name) > -1}
+                                  />
+                                  <ListItemText primary={group.name} />
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Grid>
                       )}
-                    </div>
+                    </Grid>
                   </CardContent>
                   <CardActions style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <Button

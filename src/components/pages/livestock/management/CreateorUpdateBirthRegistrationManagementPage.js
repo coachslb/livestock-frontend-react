@@ -1,5 +1,16 @@
 import React, { Component, Fragment } from 'react';
-import { Card, CardContent, Button, CircularProgress, Typography } from 'material-ui';
+import {
+  Card,
+  CardContent,
+  Button,
+  CircularProgress,
+  Typography,
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from 'material-ui';
 import ErrorDialog from '../../../UI/ErrorDialog/ErrorDialog';
 import ManagementCreationCard from '../../../livestock/management/ManagementCreationCard';
 import InputForm from '../../../UI/Inputs/InputForm';
@@ -20,7 +31,10 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
       serverError: null,
       explorationList: null,
       animalTypeList: null,
+      animalType: '',
       sexTypes: null,
+      breedList: null,
+      currentBreedList: null,
       birthRegistration: {
         date: new Date().toJSON().slice(0, 10),
       },
@@ -29,9 +43,11 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
 
   onSubmit = async values => {
     const { entityId } = this.props.match.params;
+    const { animalType } = this.state;
     this.setState({ isLoading: true });
     values.managementType = 2;
     values.agricolaEntity = entityId;
+    values.animalType = animalType;
     if (values.id) {
       let updateBirthRegistrationResponse = ManagementBirthRegistrationService.update(values, true);
 
@@ -88,7 +104,7 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
     if (!values.motherNumber) {
       errors.motherNumber = i18n.management.errors.required;
     }
-    if (!values.animalType) {
+    if (!this.state.animalType) {
       errors.animalType = i18n.management.errors.required;
     }
 
@@ -112,9 +128,10 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
     const { entityId, id } = this.props.match.params;
     this.setState({ isLoading: true });
 
-    let explorationsPromise = ExplorationService.get(null, entityId, true);
-    let animalTypesPromise = FixedValuesService.getExplorationTypes(true);
-    let sexTypesPromise = FixedValuesService.getSexTypes(true);
+    const explorationsPromise = ExplorationService.get(null, entityId, true);
+    const animalTypesPromise = FixedValuesService.getExplorationTypes(true);
+    const sexTypesPromise = FixedValuesService.getSexTypes(true);
+    const breedResponse = FixedValuesService.getBreeds(true);
 
     if (id) {
       this.setState({ id });
@@ -126,7 +143,7 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
 
       getBirthRegistrationResponse
         .then(res => {
-          this.setState({ birthRegistration: res.data });
+          this.setState({ birthRegistration: res.data, animalType: res.data.animalType });
         })
         .catch(err => {
           this.setState({ isLoading: false, serverError: true });
@@ -136,6 +153,14 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
     sexTypesPromise
       .then(res => this.setState({ sexTypes: res.data }))
       .catch(err => this.setState({ serverError: true }));
+
+    breedResponse
+      .then(res => {
+        this.setState({ breedList: res.data, currentBreedList: res.data });
+      })
+      .catch(err => {
+        this.setState({ serverError: true });
+      });
 
     animalTypesPromise
       .then(res => {
@@ -148,6 +173,15 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
       .catch(err => this.setState({ serverError: true, isLoading: false }));
   }
 
+  handleChangeAnimalType = e => {
+    this.setState({
+      animalType: e.target.value,
+      currentBreedList:
+        this.state.breedList &&
+        this.state.breedList.filter(value => value.animalType === e.target.value),
+    });
+  };
+
   render() {
     const { entityId } = this.props.match.params;
     const {
@@ -155,8 +189,10 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
       serverError,
       explorationList,
       animalTypeList,
+      animalType,
       sexTypes,
       birthRegistration,
+      currentBreedList,
     } = this.state;
     return (
       <I18nContext.Consumer>
@@ -193,76 +229,105 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
                               {i18n.management.generalData}
                             </Typography>
                           </div>
-                          <div className="card-body">
+                          <Grid container spacing={16} className="card-body">
                             <InputForm name="id" type="hidden" />
-                            <InputForm
-                              name="date"
-                              required={true}
-                              type="date"
-                              label={i18n.management.date}
-                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                            />
-                            {animalTypeList && (
-                              <SelectForm
-                                label={i18n.management.exploration}
-                                name="exploration"
+                            <Grid item xs={3}>
+                              <InputForm
+                                name="date"
                                 required={true}
-                                style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                                list={explorationList}
+                                type="date"
+                                label={i18n.management.date}
+                                fullWidth
                               />
-                            )}
-                            <InputForm
-                              label={i18n.management.motherNumber}
-                              name="motherNumber"
-                              required={true}
-                              type="number"
-                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                            />
-                            <InputForm
-                              label={i18n.management.motherName}
-                              name="motherName"
-                              required={false}
-                              type="text"
-                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                            />
-                            <InputForm
-                              label={i18n.management.fatherNumber}
-                              name="fatherNumber"
-                              required={false}
-                              type="number"
-                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                            />
-                            <InputForm
-                              label={i18n.management.fatherName}
-                              name="fatherName"
-                              required={false}
-                              type="text"
-                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                            />
-                            {animalTypeList && (
-                              <SelectForm
-                                label={i18n.management.animalType}
-                                name="animalType"
+                            </Grid>
+                            <Grid item xs={3}>
+                              {animalTypeList && (
+                                <SelectForm
+                                  label={i18n.management.exploration}
+                                  name="exploration"
+                                  required
+                                  list={explorationList}
+                                  fullWidth
+                                />
+                              )}
+                            </Grid>
+                            <Grid item xs={3}>
+                              {animalTypeList && (
+                                <FormControl fullWidth>
+                                  <InputLabel>{i18n.exploration.animals.animalType}*</InputLabel>
+                                  <Select
+                                    name="animalType"
+                                    value={animalType}
+                                    onChange={this.handleChangeAnimalType}
+                                  >
+                                    {animalTypeList.map(type => {
+                                      return (
+                                        <MenuItem key={type.id} value={type.id}>
+                                          {type.name}
+                                        </MenuItem>
+                                      );
+                                    })}
+                                  </Select>
+                                </FormControl>
+                              )}
+                            </Grid>
+                            <Grid item xs={3}>
+                              {currentBreedList && (
+                                <SelectForm
+                                  label={i18n.management.breed}
+                                  name="breed"
+                                  required
+                                  fullWidth
+                                  list={currentBreedList}
+                                />
+                              )}
+                            </Grid>
+                            <Grid item xs={3}>
+                              <InputForm
+                                label={i18n.management.motherNumber}
+                                name="motherNumber"
                                 required={true}
-                                style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                                list={animalTypeList}
+                                type="text"
+                                fullWidth
                               />
-                            )}
-                            <InputForm
-                              label={i18n.management.breed}
-                              name="breed"
-                              required={false}
-                              type="text"
-                              style={{ width: '22%', margin: '10px', marginBottom: '40px' }}
-                            />
-                            <InputForm
-                              label={i18n.management.obs}
-                              name="observations"
-                              required={false}
-                              type="text"
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
-                          </div>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <InputForm
+                                label={i18n.management.motherChipNumber}
+                                name="motherChipNumber"
+                                required={false}
+                                type="text"
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={3}>
+                              <InputForm
+                                label={i18n.management.fatherNumber}
+                                name="fatherNumber"
+                                required={false}
+                                type="text"
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={3}>
+                              <InputForm
+                                label={i18n.management.fatherChipNumber}
+                                name="fatherChipNumber"
+                                required={false}
+                                type="text"
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={6}>
+                              <InputForm
+                                label={i18n.management.obs}
+                                name="observations"
+                                required={false}
+                                type="text"
+                                fullWidth
+                              />
+                            </Grid>
+                          </Grid>
                         </CardContent>
                       </Card>
                       <FieldArray
@@ -284,58 +349,58 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
                                     delete
                                   </i>
                                 </div>
-                                <div className="card-body">
+                                <Grid container spacing={16} className="card-body">
                                   <InputForm name={`${name}.id`} required={false} type="hidden" />
-                                  <InputForm
-                                    label={i18n.management.name}
-                                    name={`${name}.name`}
-                                    required={false}
-                                    type="text"
-                                    style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
-                                  />
-                                  <InputForm
-                                    label={i18n.management.number}
-                                    name={`${name}.number`}
-                                    required={true}
-                                    type="number"
-                                    style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
-                                  />
-                                  <InputForm
-                                    label={i18n.management.chipNumber}
-                                    name={`${name}.chipNumber`}
-                                    required={false}
-                                    type="text"
-                                    style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
-                                  />
-                                  {sexTypes && (
-                                    <SelectForm
-                                      label={i18n.management.sex}
-                                      name={`${name}.sex`}
+                                  <Grid item xs={4}>
+                                    <InputForm
+                                      label={i18n.management.earingNumber}
+                                      name={`${name}.number`}
                                       required={true}
-                                      style={{
-                                        width: '22.5%',
-                                        margin: '10px',
-                                        marginBottom: '40px',
-                                      }}
-                                      list={sexTypes}
+                                      type="text"
+                                      fullWidth
                                     />
-                                  )}
-                                  <InputForm
-                                    label={i18n.management.bloodType}
-                                    name={`${name}.bloodType`}
-                                    required={false}
-                                    type="text"
-                                    style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
-                                  />
-                                  <InputForm
-                                    label={i18n.management.weight}
-                                    name={`${name}.weight`}
-                                    required={false}
-                                    type="number"
-                                    step="0.01"
-                                    style={{ width: '22.5%', margin: '10px', marginBottom: '40px' }}
-                                  />
-                                </div>
+                                  </Grid>
+                                  <Grid item xs={4}>
+                                    <InputForm
+                                      label={i18n.management.chipNumber}
+                                      name={`${name}.chipNumber`}
+                                      required={false}
+                                      type="text"
+                                      fullWidth
+                                    />
+                                  </Grid>
+                                  <Grid item xs={4}>
+                                    {sexTypes && (
+                                      <SelectForm
+                                        label={i18n.management.sex}
+                                        name={`${name}.sex`}
+                                        required={true}
+                                        fullWidth
+                                        list={sexTypes}
+                                      />
+                                    )}
+                                  </Grid>
+                                  <Grid item xs={4}>
+                                    <InputForm
+                                      label={i18n.management.bloodType}
+                                      name={`${name}.bloodType`}
+                                      required={false}
+                                      type="text"
+                                      fullWidth
+                                    />
+                                  </Grid>
+                                  <Grid item xs={4}>
+                                    <InputForm
+                                      label={i18n.management.weight}
+                                      name={`${name}.weight`}
+                                      required={false}
+                                      type="number"
+                                      step="0.01"
+                                      fullWidth
+                                      inputAdornment="kg"
+                                    />
+                                  </Grid>
+                                </Grid>
                               </CardContent>
                             </Card>
                           ))

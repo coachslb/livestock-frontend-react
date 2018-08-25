@@ -1,0 +1,23 @@
+{
+    "title": "Exportar RED",
+    "exploration": "Exploração",
+    "year": "Ano",
+    "np": "Número de produtor",
+    "name": "Nome",
+    "number": "Número",
+    "address": "Morada",
+    "brand": "Marca",
+    "phone": "Contacto",
+    "explorationInfo": "Informação da exploração",
+    "parcelNumber": "Parcelário (referência)",
+    "postalCode": "Código postal",
+    "county": "Concelho",
+    "parish": "Freguesia",
+    "explorationSystem": "Sistema da exploração",
+    "explorationProduction": "Tipo de produção",
+    "addAnimals": "Adicionar todos os animais registados na Agroop Livestock",
+    "addTransfers": "Adicionar todas as transferências registadas na Agroop Livestock (ano correspondente)",
+    "button":{
+        "export": "Exportar"
+    }
+}

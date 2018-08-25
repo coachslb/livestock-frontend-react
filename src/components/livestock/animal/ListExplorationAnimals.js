@@ -9,7 +9,7 @@ const row = (x, i, header, handleRemove, onEdit) => {
       {header.map((y, k) => (
         <TableCell key={`trc-${k}`}>
           {y.prop !== 'birthDate'
-            ? y.prop !== 'explorationType'
+            ? y.prop !== 'explorationType' && y.prop !== 'sex'
               ? x[y.prop]
               : x[y.prop].name
             : x[y.prop]

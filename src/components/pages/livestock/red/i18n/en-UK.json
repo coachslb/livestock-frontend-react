@@ -1,0 +1,24 @@
+{
+    "title": "Export RED",
+    "exploration": "Exploration",
+    "year": "Year",
+    "np": "Farmer number",
+    "name": "Name",
+    "number": "Number",
+    "address": "Address",
+    "brand": "Brand",
+    "phone": "Phone",
+    "explorationInfo": "Exploration information",
+    "parcelNumber": "Parcel (reference)",
+    "postalCode": "Postal code",
+    "county": "County",
+    "parish": "Parish",
+    "explorationSystem": "Exploration system",
+    "explorationProduction": "Exploration production",
+    "addAnimals": "Add all animals registered in Agroop Livestock",
+    "addTransfers": "Add all transfer managements registered in Agroop Livestock (corresponding year)",
+    "button":{
+        "export": "Export"
+    }
+
+}

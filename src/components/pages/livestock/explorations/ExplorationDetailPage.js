@@ -15,6 +15,17 @@ function getExplorationTypesFromId(explorationTypes) {
   });
 }
 
+function getProductionTypesFromId(productionTypes) {
+  productionTypes.sort();
+  let first = true;
+  return productionTypes.map(type => {
+    if (first) {
+      first = false;
+      return type;
+    } else return ', ' + type;
+  });
+}
+
 class ExplorationDetailPage extends Component {
   constructor() {
     super();
@@ -22,15 +33,19 @@ class ExplorationDetailPage extends Component {
       id: 0,
       agricolaEntityId: 0,
       name: '',
+      number: '',
       addressId: '',
       address: '',
       postalCode: '',
       district: '',
       explorationTypes: [],
+      productionTypes: [],
+      explorationSystem: '',
       isLoading: false,
       serverError: false,
       errors: null,
       types: [],
+      productions: [],
     };
   }
 
@@ -40,9 +55,15 @@ class ExplorationDetailPage extends Component {
     let getOneExplorationPromise = ExplorationService.get(this.props.match.params.id, null, true);
 
     let explorationTypePromise = FixedValuesService.getExplorationTypes(true);
+    let productionTypePromise = FixedValuesService.getProductionTypes(true);
     explorationTypePromise
       .then(res => {
         this.setState({ explorationTypes: res.data });
+      })
+      .catch(err => this.setState({ serverError: true }));
+    productionTypePromise
+      .then(res => {
+        this.setState({ productionTypes: res.data });
       })
       .catch(err => this.setState({ serverError: true }));
 
@@ -57,7 +78,10 @@ class ExplorationDetailPage extends Component {
           postalCode:
             res.data.address && res.data.address.postalCode ? res.data.address.postalCode : '',
           name: res.data.name ? res.data.name : '',
+          number: res.data.number ? res.data.number : '',
+          explorationSystem: res.data.explorationSystem && res.data.explorationSystem.name ? res.data.explorationSystem.name : '',
           types: res.data.explorationTypes ? res.data.explorationTypes.map(elem => elem.name) : '',
+          productions: res.data.productionTypes ? res.data.productionTypes.map(elem => elem.name) : '',
           isLoading: false,
         });
       })
@@ -71,7 +95,7 @@ class ExplorationDetailPage extends Component {
   };
 
   render() {
-    const { name, types, address, district, postalCode } = this.state;
+    const { name, number, types, productions, explorationSystem, address, district, postalCode } = this.state;
     return (
       <I18nContext.Consumer>
         {({ i18n }) => (
@@ -84,9 +108,15 @@ class ExplorationDetailPage extends Component {
               </div>
               <div className="card-body">
                 {name && (
-                  <div className="card-field col-6">
+                  <div className="card-field col-3">
                     <p className="field-info">{name}</p>
                     <label className="field-label">{i18n.exploration.name}</label>
+                  </div>
+                )}
+                {number && (
+                  <div className="card-field col-2">
+                    <p className="field-info">{number}</p>
+                    <label className="field-label">{i18n.exploration.number}</label>
                   </div>
                 )}
                 {types && (
@@ -111,6 +141,18 @@ class ExplorationDetailPage extends Component {
                   <div className="card-field col-2">
                     <p className="field-info">{postalCode}</p>
                     <label className="field-label">{i18n.exploration.postalCode}</label>
+                  </div>
+                )}
+                {explorationSystem && (
+                  <div className="card-field col-6">
+                    <p className="field-info">{explorationSystem}</p>
+                    <label className="field-label">{i18n.exploration.explorationSystem}</label>
+                  </div>
+                )}
+                {productions && productions.length > 0 && (
+                  <div className="card-field col-6">
+                    <p className="field-info">{getProductionTypesFromId(productions)}</p>
+                    <label className="field-label">{i18n.exploration.productionType}</label>
                   </div>
                 )}
               </div>

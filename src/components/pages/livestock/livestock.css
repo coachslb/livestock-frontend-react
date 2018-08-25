@@ -6,6 +6,7 @@
     padding: 8px;
     line-height: inherit;
     margin: 8px;
+    align-items: baseline;
 }
 
 .card-header_title{

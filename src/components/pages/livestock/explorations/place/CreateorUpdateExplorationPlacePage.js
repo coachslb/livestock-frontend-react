@@ -17,6 +17,7 @@ import ExplorationValidations from '../../../../../validations/ExplorationValida
 import PlaceService from '../../../../../services/PlaceService';
 import MapDraw from '../../../../UI/MapDraw';
 import { I18nContext } from '../../../../App';
+import { Grid } from '@material-ui/core';
 
 class CreateorUpdateExplorationPlacePage extends Component {
   constructor() {
@@ -29,8 +30,8 @@ class CreateorUpdateExplorationPlacePage extends Component {
       number: '',
       placeType: '',
       placeTypes: null,
-      soilType: '',
-      soilTypes: null,
+      cropType: '',
+      cropTypes: null,
       area: 0,
       polygons: [],
     };
@@ -41,7 +42,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
     const { id } = this.props.match.params;
 
     const getPlaceTypes = FixedValuesService.getPlaceTypes(true);
-    const getSoilTypes = FixedValuesService.getSoilTypes(true);
+    const getCropTypes = FixedValuesService.getCropTypes(true);
 
     if (id) {
       this.setState({ id });
@@ -54,7 +55,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
             name: res.data.name ? res.data.name : '',
             number: res.data.number ? res.data.number : '',
             placeType: res.data.placeType ? res.data.placeType.id : '',
-            soilType: res.data.soilType ? res.data.soilType.id : '',
+            cropType: res.data.crop ? res.data.crop.id : '',
             area: res.data.area ? res.data.area : 0,
             polygons: res.data.polygons ? res.data.polygons : [],
             isLoading: false,
@@ -75,9 +76,9 @@ class CreateorUpdateExplorationPlacePage extends Component {
         this.setState({ isLoading: false, serverError: true });
       });
 
-    getSoilTypes
+    getCropTypes
       .then(res => {
-        this.setState({ soilTypes: res.data, isLoading: false });
+        this.setState({ cropTypes: res.data, isLoading: false });
       })
       .catch(err => {
         console.log(err);
@@ -103,9 +104,9 @@ class CreateorUpdateExplorationPlacePage extends Component {
       name,
       number,
       placeType,
-      soilType,
+      cropType,
       placeTypes,
-      soilTypes,
+      cropTypes,
       area,
       polygons,
     } = this.state;
@@ -114,8 +115,8 @@ class CreateorUpdateExplorationPlacePage extends Component {
       number,
       placeType,
       placeTypes,
-      soilType,
-      soilTypes,
+      cropType,
+      cropTypes,
       area,
       polygons,
       i18n,
@@ -129,7 +130,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
             name,
             number,
             placeType,
-            soilType,
+            crop: cropType,
             area,
             polygons,
             areaUnit: 'ha',
@@ -157,7 +158,7 @@ class CreateorUpdateExplorationPlacePage extends Component {
             name,
             number,
             placeType,
-            soilType,
+            crop: cropType,
             area,
             polygons,
             areaUnit: 'ha',
@@ -201,12 +202,12 @@ class CreateorUpdateExplorationPlacePage extends Component {
       isLoading,
       area,
       polygons,
-      soilType,
-      soilTypes,
+      cropType,
+      cropTypes,
     } = this.state;
     return (
       <I18nContext.Consumer>
-        {({ i18n }) => (
+        {({ i18n, language }) => (
           <Fragment>
             {!isLoading && (
               <Fragment>
@@ -217,63 +218,82 @@ class CreateorUpdateExplorationPlacePage extends Component {
                         {i18n.exploration.place.placeTitle}
                       </Typography>
                     </div>
-                    <div className="card-body">
-                      <FormControl style={{ width: '40%', margin: '10px', marginBottom: '40px' }}>
-                        <InputLabel>{i18n.exploration.name}*</InputLabel>
-                        <Input name="name" value={name} onChange={this.handleChange} />
-                      </FormControl>
-                      <FormControl style={{ width: '10%', margin: '10px', marginBottom: '40px' }}>
-                        <InputLabel>{i18n.exploration.place.number}*</InputLabel>
-                        <Input name="number" value={number} onChange={this.handleChange} />
-                      </FormControl>
-                      {placeTypes && (
-                        <FormControl style={{ width: '40%', margin: '10px', marginBottom: '40px' }}>
-                          <InputLabel htmlFor="select-multiple-checkbox">
-                            {i18n.exploration.place.placeType}*
-                          </InputLabel>
-                          <Select name="placeType" value={placeType} onChange={this.handleChange}>
-                            {placeTypes.map(place => {
-                              return (
-                                <MenuItem key={place.id} value={place.id}>
-                                  {place.name}
-                                </MenuItem>
-                              );
-                            })}
-                          </Select>
+                    <Grid container spacing={16}>
+                      <Grid item xs={6}>
+                        <FormControl fullWidth>
+                          <InputLabel>{i18n.exploration.name}*</InputLabel>
+                          <Input name="name" value={name} onChange={this.handleChange} />
                         </FormControl>
-                      )}
-                      <MapDraw
-                      //TODO
-                        language="pt-PT"
-                        style={{ width: '100%', height: '450px' }}
-                        polygons={polygons}
-                        onChangePolygons={this.handlePolygons}
-                        i18n={{
-                          area: i18n.exploration.place.area,
-                          totalArea: i18n.exploration.place.totalArea,
-                          delete: i18n.exploration.place.delete,
-                          deleteAll: i18n.exploration.place.deleteAll,
-                        }}
-                      />
-                      <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                        <InputLabel>{i18n.exploration.place.area} (ha)</InputLabel>
-                        <Input name="area" value={area} onChange={this.handleChange} />
-                      </FormControl>
-                      {soilTypes && (
-                        <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                          <InputLabel>{i18n.exploration.place.soilType}</InputLabel>
-                          <Select name="soilType" value={soilType} onChange={this.handleChange}>
-                            {soilTypes.map(soilType => {
-                              return (
-                                <MenuItem key={soilType.id} value={soilType.id}>
-                                  {soilType.name}
-                                </MenuItem>
-                              );
-                            })}
-                          </Select>
+                      </Grid>
+                      <Grid item xs={2}>
+                        <FormControl fullWidth>
+                          <InputLabel>{i18n.exploration.place.number}*</InputLabel>
+                          <Input name="number" value={number} onChange={this.handleChange} />
                         </FormControl>
-                      )}
-                    </div>
+                      </Grid>
+                      <Grid item xs={4}>
+                        {placeTypes && (
+                          <FormControl fullWidth>
+                            <InputLabel htmlFor="select-multiple-checkbox">
+                              {i18n.exploration.place.placeType}*
+                            </InputLabel>
+                            <Select name="placeType" value={placeType} onChange={this.handleChange}>
+                              {placeTypes.map(place => {
+                                return (
+                                  <MenuItem key={place.id} value={place.id}>
+                                    {place.name}
+                                  </MenuItem>
+                                );
+                              })}
+                            </Select>
+                          </FormControl>
+                        )}
+                      </Grid>
+                      <Grid item xs={12}>
+                        <MapDraw
+                          //TODO
+                          language={language}
+                          style={{ height: '450px' }}
+                          polygons={polygons}
+                          onChangePolygons={this.handlePolygons}
+                          i18n={{
+                            area: i18n.exploration.place.area,
+                            totalArea: i18n.exploration.place.totalArea,
+                            delete: i18n.exploration.place.delete,
+                            deleteAll: i18n.exploration.place.deleteAll,
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <FormControl fullWidth>
+                          <InputLabel>{i18n.exploration.place.area} (ha)</InputLabel>
+                          <Input name="area" value={area} onChange={this.handleChange} />
+                        </FormControl>
+                      </Grid>
+                      {placeType === '' ||
+                        (placeType === 1 && (
+                          <Grid item xs={6}>
+                            {cropTypes && (
+                              <FormControl fullWidth>
+                                <InputLabel>{i18n.exploration.place.cropType}</InputLabel>
+                                <Select
+                                  name="cropType"
+                                  value={cropType}
+                                  onChange={this.handleChange}
+                                >
+                                  {cropTypes.map(cropType => {
+                                    return (
+                                      <MenuItem key={cropType.id} value={cropType.id}>
+                                        {cropType.name}
+                                      </MenuItem>
+                                    );
+                                  })}
+                                </Select>
+                              </FormControl>
+                            )}
+                          </Grid>
+                        ))}
+                    </Grid>
                   </CardContent>
                 </Card>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>

@@ -34,19 +34,18 @@ let ExplorationValidations = {
     )
       errors.push(['placeType', i18n.exploration.errors.invalidPlaceType]);
 
-    if (
+    /* if (
       soilType === null ||
       soilType === '' ||
       soilTypes.find(type => soilType === type.id) === null
     )
-      errors.push(['soilType', i18n.exploration.errors.invalidSoilType]);
+      errors.push(['soilType', i18n.exploration.errors.invalidSoilType]); */
 
     if (isNaN(area) || area < 0) errors.push(['area', i18n.exploration.errors.invalidArea]);
 
     return errors;
   },
   validateCreateOrUpdateAnimal: function(
-    name,
     chipNumber,
     animalType,
     animalTypes,
@@ -56,8 +55,6 @@ let ExplorationValidations = {
     i18n
   ) {
     let errors = [];
-
-    if (name === null || name === '') errors.push(['name', i18n.exploration.errors.invalidName]);
 
     if (chipNumber === null || chipNumber === '' || isNaN(chipNumber))
       errors.push(['chipNumber', i18n.exploration.errors.fieldRequired]);

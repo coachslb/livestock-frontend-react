@@ -19,10 +19,25 @@ let FixedValuesService = {
     if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
     return axios.get(end.URL + end.VERSION + end.EXPLORATION_TYPES, config).then(handleResponse);
   },
+  getProductionTypes: async function(isAuthenticated){
+    let config = null;
+    if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.PRODUCTION_TYPES, config).then(handleResponse);
+  },
+  getExplorationSystem: async function(isAuthenticated){
+    let config = null;
+    if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.EXPLORATION_SYSTEM, config).then(handleResponse);
+  },
   getPlaceTypes: async function(isAuthenticated){
     let config = null;
     if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
     return axios.get(end.URL + end.VERSION + end.PLACE_TYPES, config).then(handleResponse);
+  },
+  getCropTypes: async function(isAuthenticated){
+    let config = null;
+    if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.CROP_TYPES, config).then(handleResponse);
   },
   getSoilTypes: async function(isAuthenticated){
     let config = null;
@@ -38,6 +53,11 @@ let FixedValuesService = {
     let config = null;
     if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
     return axios.get(end.URL + end.VERSION + end.SEX, config).then(handleResponse);
+  },
+  getBreeds: async function(isAuthenticated){
+    let config = null;
+    if (isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.BREEDS, config).then(handleResponse);
   },
   getDeathCauses: async function(isAuthenticated){
     let config = null;

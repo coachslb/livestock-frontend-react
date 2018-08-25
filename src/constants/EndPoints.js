@@ -1,5 +1,5 @@
 //export const URL = "https://livestock.netlify.com/api/";
-export const URL = "http://localhost:9000/api/";
+export const URL = "http://localhost:9010/api/";
 export const VERSION = "v1";
 
 /** Fixed Values */
@@ -7,9 +7,13 @@ export const COUNTRIES = "/fixedvalues/countries";
 export const LANGUAGES = "/fixedvalues/languages";
 export const REGIONS = "/fixedvalues/regions";
 export const EXPLORATION_TYPES = "/fixedvalues/explorationTypes";
+export const EXPLORATION_SYSTEM = "/fixedvalues/explorationSystem";
+export const PRODUCTION_TYPES = "/fixedvalues/productionTypes";
 export const PLACE_TYPES = "/fixedvalues/placeTypes";
 export const SOIL_TYPES = "/fixedvalues/soilTypes";
+export const CROP_TYPES = "/fixedvalues/cropTypes";
 export const SEX = "/fixedvalues/sexTypes";
+export const BREEDS = "/fixedvalues/breeds";
 export const DEATH_CAUSES = "/fixedvalues/deathCauses";
 export const SANITARY_EVENT_TYPES = "/fixedvalues/eventTypes";
 export const COBERTURA_TYPES = "/fixedvalues/coberturaTypes";

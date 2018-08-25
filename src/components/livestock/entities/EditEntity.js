@@ -33,7 +33,8 @@ class EditEntity extends Component {
       country: 'Portugal',
       drap: '',
       drapName: '',
-      nifap: '',
+      np: '',
+      brand: '',
       countries: [],
       regions: [],
       manager: null,
@@ -58,7 +59,8 @@ class EditEntity extends Component {
       country: entity.country.name,
       drapName: entity.region.name,
       drap: entity.region.id || '',
-      nifap: entity.nifap,
+      np: entity.np,
+      brand: entity.brand,
       manager: entity.workers[0].id,
       isLoading: true,
     });
@@ -118,7 +120,8 @@ class EditEntity extends Component {
       addressId,
       country,
       drap,
-      nifap,
+      np,
+      brand,
       manager,
     } = this.state;
 
@@ -137,7 +140,8 @@ class EditEntity extends Component {
         phone,
         region: drap,
         country,
-        nifap,
+        np,
+        brand,
         manager,
       },
       true,
@@ -266,10 +270,18 @@ class EditEntity extends Component {
                   </FormControl>
                 )}
               <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
-                <InputLabel>NIFAP</InputLabel>
+                <InputLabel>NP</InputLabel>
                 <Input
-                  name="nifap"
-                  value={this.state.nifap ? this.state.nifap : ''}
+                  name="np"
+                  value={this.state.np ? this.state.np : ''}
+                  onChange={this.handleChange}
+                />
+              </FormControl>
+              <FormControl style={{ width: '45%', margin: '10px', marginBottom: '40px' }}>
+                <InputLabel>{i18n.entity.brand}</InputLabel>
+                <Input
+                  name="brand"
+                  value={this.state.brand ? this.state.brand : ''}
                   onChange={this.handleChange}
                 />
               </FormControl>

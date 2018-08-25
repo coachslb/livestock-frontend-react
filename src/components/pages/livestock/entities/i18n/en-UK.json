@@ -8,6 +8,7 @@
     "address": "Address",
     "postalCode": "Postal code",
     "district": "District",
+    "brand": "Brand",
     "agricolaData": "Agricola data",
     "edit": "Edit",
     "cancel": "Cancel",
