@@ -12,6 +12,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Grid,
 } from 'material-ui';
 import ErrorDialog from '../../../UI/ErrorDialog/ErrorDialog';
 import InputForm from '../../../UI/Inputs/InputForm';
@@ -21,6 +22,7 @@ import ExplorationService from '../../../../services/ExplorationService';
 import AnimalService from '../../../../services/AnimalService';
 import ManagementWeighingService from '../../../../services/ManagementWeighingService';
 import { I18nContext } from '../../../App';
+import { formatAnimalList } from '../../../utils/FormatUtils';
 
 class CreateorUpdateWeighingManagementPage extends Component {
   constructor() {
@@ -120,7 +122,6 @@ class CreateorUpdateWeighingManagementPage extends Component {
       fields.forEach(element => {
         if (element !== undefined) {
           if (!element.weight) errors.weight = i18n.management.errors.required;
-          if (!element.animal) errors.animal = i18n.management.errors.required;
         } else {
           errors.number = i18n.management.errors.required;
         }
@@ -139,7 +140,7 @@ class CreateorUpdateWeighingManagementPage extends Component {
       errors.date = i18n.management.errors.invalidDate;
     }
 
-    if (!values.exploration) {
+    if (!this.state.exploration) {
       errors.exploration = i18n.management.errors.required;
     }
 
@@ -175,7 +176,11 @@ class CreateorUpdateWeighingManagementPage extends Component {
           <Fragment>
             {!isLoading && (
               <Fragment>
-                <ManagementCreationCard step={2} entityId={entityId} title={i18n.management.managementType.weighing}/>
+                <ManagementCreationCard
+                  step={2}
+                  entityId={entityId}
+                  title={i18n.management.managementType.weighing}
+                />
                 <Form
                   onSubmit={this.onSubmit}
                   mutators={{
@@ -200,49 +205,56 @@ class CreateorUpdateWeighingManagementPage extends Component {
                               {i18n.management.generalData}
                             </Typography>
                           </div>
-                          <div className="card-body">
-                            <InputForm
-                              name="date"
-                              required={true}
-                              type="date"
-                              label={i18n.management.date}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
-                            {explorationList && (
-                              <FormControl
-                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                              >
-                                <InputLabel required>{i18n.management.exploration}</InputLabel>
-                                <Select
-                                  name="exploration"
-                                  value={exploration}
-                                  onChange={this.handleExplorationChange.bind(this, values)}
-                                >
-                                  {explorationList.map(ex => {
-                                    return (
-                                      <MenuItem key={ex.id} value={ex.id}>
-                                        {ex.name}
-                                      </MenuItem>
-                                    );
-                                  })}
-                                </Select>
-                              </FormControl>
-                            )}
-                            <InputForm
-                              name="observations"
-                              required={false}
-                              type="text"
-                              label={i18n.management.obs}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
-                          </div>
+                          <Grid container spacing={16} className="card-body">
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="date"
+                                required={true}
+                                type="date"
+                                label={i18n.management.date}
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={6}>
+                              {explorationList && (
+                                <FormControl fullWidth>
+                                  <InputLabel required>{i18n.management.exploration}</InputLabel>
+                                  <Select
+                                    name="exploration"
+                                    value={exploration}
+                                    onChange={this.handleExplorationChange.bind(this, values)}
+                                  >
+                                    {explorationList.map(ex => {
+                                      return (
+                                        <MenuItem key={ex.id} value={ex.id}>
+                                          {ex.name}
+                                        </MenuItem>
+                                      );
+                                    })}
+                                  </Select>
+                                </FormControl>
+                              )}
+                            </Grid>
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="observations"
+                                required={false}
+                                type="text"
+                                label={i18n.management.obs}
+                                fullWidth
+                              />
+                            </Grid>
+                          </Grid>
                         </CardContent>
                       </Card>
                       {exploration &&
                         animalList &&
                         animalList.length > 0 && (
                           <Fragment>
-                            <FieldArray name="animalData" validate={fields => this.validateArray(fields, i18n)}>
+                            <FieldArray
+                              name="animalData"
+                              validate={fields => this.validateArray(fields, i18n)}
+                            >
                               {({ fields }) =>
                                 fields.map((name, index) => (
                                   <Card style={{ marginTop: 20 }} key={name}>
@@ -261,43 +273,38 @@ class CreateorUpdateWeighingManagementPage extends Component {
                                           delete
                                         </i>
                                       </div>
-                                      <div className="card-body">
-                                        {animalList && (
-                                          <SelectForm
-                                            label="Animal"
-                                            name={`${name}.animal`}
+                                      <Grid container spacing={16} className="card-body">
+                                        <Grid item xs={4}>
+                                          {animalList && (
+                                            <SelectForm
+                                              label="Animal"
+                                              name={`${name}.animal`}
+                                              required={true}
+                                              list={formatAnimalList(animalList)}
+                                              fullWidth
+                                            />
+                                          )}
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                          <InputForm
+                                            label={i18n.management.weight}
+                                            name={`${name}.weight`}
                                             required={true}
-                                            list={animalList}
-                                            style={{
-                                              width: '30%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
+                                            type="number"
+                                            fullWidth
+                                            inputAdornment="kg"
                                           />
-                                        )}
-                                        <InputForm
-                                          label={i18n.management.weight}
-                                          name={`${name}.weight`}
-                                          required={true}
-                                          type="number"
-                                          style={{
-                                            width: '30%',
-                                            margin: '10px',
-                                            marginBottom: '40px',
-                                          }}
-                                        />
-                                        <InputForm
-                                          label={i18n.management.weighingReason}
-                                          name={`${name}.reason`}
-                                          required={false}
-                                          type="text"
-                                          style={{
-                                            width: '30%',
-                                            margin: '10px',
-                                            marginBottom: '40px',
-                                          }}
-                                        />
-                                      </div>
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                          <InputForm
+                                            label={i18n.management.weighingReason}
+                                            name={`${name}.reason`}
+                                            required={false}
+                                            type="text"
+                                            fullWidth
+                                          />
+                                        </Grid>
+                                      </Grid>
                                     </CardContent>
                                   </Card>
                                 ))

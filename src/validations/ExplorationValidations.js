@@ -56,7 +56,7 @@ let ExplorationValidations = {
   ) {
     let errors = [];
 
-    if (chipNumber === null || chipNumber === '' || isNaN(chipNumber))
+    if (chipNumber === null || chipNumber === '')
       errors.push(['chipNumber', i18n.exploration.errors.fieldRequired]);
 
     if (

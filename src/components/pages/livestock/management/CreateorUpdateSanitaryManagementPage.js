@@ -12,6 +12,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Grid,
 } from 'material-ui';
 import SelectForm from '../../../UI/Inputs/SelectForm';
 import InputForm from '../../../UI/Inputs/InputForm';
@@ -22,6 +23,7 @@ import ManagementSanitaryService from '../../../../services/ManagementSanitarySe
 import FixedValuesService from '../../../../services/FixedValuesService';
 import AnimalService from '../../../../services/AnimalService';
 import { I18nContext } from '../../../App';
+import { formatAnimalList } from '../../../utils/FormatUtils';
 
 class CreateorUpdateSanitaryManagementPage extends Component {
   constructor() {
@@ -222,68 +224,78 @@ class CreateorUpdateSanitaryManagementPage extends Component {
                               {i18n.management.generalData}
                             </Typography>
                           </div>
-                          <div className="card-body">
+                          <Grid container spacing={16} className="card-body">
                             <InputForm name="id" type="hidden" />
-                            <InputForm
-                              name="date"
-                              required={true}
-                              type="date"
-                              label={i18n.management.date}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
-                            {explorationList && (
-                              <FormControl
-                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                              >
-                                <InputLabel>{i18n.management.exploration}</InputLabel>
-                                <Select
-                                  name="exploration"
-                                  value={exploration}
-                                  onChange={this.handleExplorationChange.bind(this, values)}
-                                >
-                                  {explorationList.map(ex => {
-                                    return (
-                                      <MenuItem key={ex.id} value={ex.id}>
-                                        {ex.name}
-                                      </MenuItem>
-                                    );
-                                  })}
-                                </Select>
-                              </FormControl>
-                            )}
-                            {eventTypeList && (
-                              <SelectForm
-                                name="eventType"
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="date"
                                 required={true}
-                                label={i18n.management.eventType}
-                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                                list={eventTypeList}
+                                type="date"
+                                label={i18n.management.date}
+                                fullWidth
                               />
-                            )}
-                            <InputForm
-                              name="cost"
-                              required={false}
-                              type="number"
-                              label={i18n.management.cost}
-                              step="0.01"
-                              inputAdornment="€"
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
-                            <InputForm
-                              name="vet"
-                              required={false}
-                              type="text"
-                              label={i18n.management.veterinaryName}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
-                            <InputForm
-                              name="observations"
-                              required={false}
-                              type="text"
-                              label={i18n.management.obs}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
-                          </div>
+                            </Grid>
+                            <Grid item xs={6}>
+                              {explorationList && (
+                                <FormControl fullWidth>
+                                  <InputLabel>{i18n.management.exploration}</InputLabel>
+                                  <Select
+                                    name="exploration"
+                                    value={exploration}
+                                    onChange={this.handleExplorationChange.bind(this, values)}
+                                  >
+                                    {explorationList.map(ex => {
+                                      return (
+                                        <MenuItem key={ex.id} value={ex.id}>
+                                          {ex.name}
+                                        </MenuItem>
+                                      );
+                                    })}
+                                  </Select>
+                                </FormControl>
+                              )}
+                            </Grid>
+                            <Grid item xs={6}>
+                              {eventTypeList && (
+                                <SelectForm
+                                  name="eventType"
+                                  required={true}
+                                  label={i18n.management.eventType}
+                                  fullWidth
+                                  list={eventTypeList}
+                                />
+                              )}
+                            </Grid>
+                            <Grid item xs={3}>
+                              <InputForm
+                                name="vet"
+                                required={false}
+                                type="text"
+                                label={i18n.management.veterinaryName}
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={3}>
+                              <InputForm
+                                name="cost"
+                                required={false}
+                                type="number"
+                                label={i18n.management.cost}
+                                step="0.01"
+                                inputAdornment="€"
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="observations"
+                                required={false}
+                                type="text"
+                                label={i18n.management.obs}
+                                fullWidth
+                              />
+                            </Grid>
+                          </Grid>
                         </CardContent>
                       </Card>
 
@@ -306,22 +318,25 @@ class CreateorUpdateSanitaryManagementPage extends Component {
                                     delete
                                   </i>
                                 </div>
-                                <div className="card-body">
+                                <Grid container spacing={16} className="card-body">
                                   <InputForm
                                     name={`${name}.management`}
                                     required={false}
                                     type="hidden"
                                   />
+
                                   {animalList && (
-                                    <SelectForm
-                                      name={`${name}.animal`}
-                                      required={true}
-                                      label="Animal"
-                                      style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                                      list={animalList}
-                                    />
+                                    <Grid item xs={6}>
+                                      <SelectForm
+                                        name={`${name}.animal`}
+                                        required={true}
+                                        label="Animal"
+                                        fullWidth
+                                        list={formatAnimalList(animalList)}
+                                      />
+                                    </Grid>
                                   )}
-                                </div>
+                                </Grid>
                               </CardContent>
                             </Card>
                           ))

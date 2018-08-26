@@ -12,6 +12,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Grid,
 } from 'material-ui';
 import ErrorDialog from '../../../UI/ErrorDialog/ErrorDialog';
 import InputForm from '../../../UI/Inputs/InputForm';
@@ -22,6 +23,7 @@ import AnimalService from '../../../../services/AnimalService';
 import FixedValuesService from '../../../../services/FixedValuesService';
 import ManagementDeathService from '../../../../services/ManagementDeathService';
 import { I18nContext } from '../../../App';
+import { formatAnimalList } from '../../../utils/FormatUtils';
 
 class CreateorUpdateDeathManagementPage extends Component {
   constructor() {
@@ -217,42 +219,47 @@ class CreateorUpdateDeathManagementPage extends Component {
                               {i18n.management.generalData}
                             </Typography>
                           </div>
-                          <div className="card-body">
-                            <InputForm
-                              name="date"
-                              required={true}
-                              type="date"
-                              label={i18n.management.date}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
+                          <Grid container spacing={16} className="card-body">
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="date"
+                                required={true}
+                                type="date"
+                                label={i18n.management.date}
+                                fullWidth
+                              />
+                            </Grid>
+
                             {explorationList && (
-                              <FormControl
-                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                              >
-                                <InputLabel>{i18n.management.exploration}</InputLabel>
-                                <Select
-                                  name="exploration"
-                                  value={exploration}
-                                  onChange={this.handleExplorationChange.bind(this, values)}
-                                >
-                                  {explorationList.map(ex => {
-                                    return (
-                                      <MenuItem key={ex.id} value={ex.id}>
-                                        {ex.name}
-                                      </MenuItem>
-                                    );
-                                  })}
-                                </Select>
-                              </FormControl>
+                              <Grid item xs={6}>
+                                <FormControl fullWidth>
+                                  <InputLabel>{i18n.management.exploration}</InputLabel>
+                                  <Select
+                                    name="exploration"
+                                    value={exploration}
+                                    onChange={this.handleExplorationChange.bind(this, values)}
+                                  >
+                                    {explorationList.map(ex => {
+                                      return (
+                                        <MenuItem key={ex.id} value={ex.id}>
+                                          {ex.name}
+                                        </MenuItem>
+                                      );
+                                    })}
+                                  </Select>
+                                </FormControl>
+                              </Grid>
                             )}
-                            <InputForm
-                              name="observations"
-                              required={false}
-                              type="text"
-                              label={i18n.management.obs}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
-                          </div>
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="observations"
+                                required={false}
+                                type="text"
+                                label={i18n.management.obs}
+                                fullWidth
+                              />
+                            </Grid>
+                          </Grid>
                         </CardContent>
                       </Card>
                       {exploration &&
@@ -280,46 +287,40 @@ class CreateorUpdateDeathManagementPage extends Component {
                                           delete
                                         </i>
                                       </div>
-                                      <div className="card-body">
+                                      <Grid container spacing={16} className="card-body">
                                         {animalList && (
-                                          <SelectForm
-                                            label="Animal"
-                                            name={`${name}.animal`}
-                                            required={true}
-                                            list={animalList}
-                                            style={{
-                                              width: '30%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
+                                          <Grid item xs={6}>
+                                            <SelectForm
+                                              label="Animal"
+                                              name={`${name}.animal`}
+                                              required={true}
+                                              list={formatAnimalList(animalList)}
+                                              fullWidth
+                                            />
+                                          </Grid>
                                         )}
                                         {deathCauses && (
-                                          <SelectForm
-                                            label={i18n.management.deathCause}
-                                            name={`${name}.deathCause`}
-                                            required={true}
-                                            list={deathCauses}
-                                            style={{
-                                              width: '30%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
+                                          <Grid item xs={3}>
+                                            <SelectForm
+                                              label={i18n.management.deathCause}
+                                              name={`${name}.deathCause`}
+                                              required={true}
+                                              list={deathCauses}
+                                              fullWidth
+                                            />
+                                          </Grid>
                                         )}
-                                        <InputForm
-                                          label={i18n.management.value}
-                                          name={`${name}.value`}
-                                          required={false}
-                                          type="number"
-                                          inputAdornment="€"
-                                          style={{
-                                            width: '30%',
-                                            margin: '10px',
-                                            marginBottom: '40px',
-                                          }}
-                                        />
-                                      </div>
+                                        <Grid item xs={3}>
+                                          <InputForm
+                                            label={i18n.management.cost}
+                                            name={`${name}.value`}
+                                            required={false}
+                                            type="number"
+                                            inputAdornment="€"
+                                            fullWidth
+                                          />
+                                        </Grid>
+                                      </Grid>
                                     </CardContent>
                                   </Card>
                                 ))
@@ -328,7 +329,7 @@ class CreateorUpdateDeathManagementPage extends Component {
                             <Card style={{ marginTop: 20 }}>
                               <CardContent style={{ display: 'flex', alignItems: 'center' }}>
                                 <Typography variant="headline" style={{ flexGrow: 1 }}>
-                                  Adicionar mais uma morte {i18n.management.addMoreDeath}
+                                  {i18n.management.addMoreDeath}
                                 </Typography>
                                 <i className="material-icons" onClick={() => push('animalData')}>
                                   add

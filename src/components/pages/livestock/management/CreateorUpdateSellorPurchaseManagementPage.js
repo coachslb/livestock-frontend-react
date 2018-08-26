@@ -12,6 +12,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Grid,
 } from 'material-ui';
 import ErrorDialog from '../../../UI/ErrorDialog/ErrorDialog';
 import InputForm from '../../../UI/Inputs/InputForm';
@@ -23,6 +24,7 @@ import AnimalService from '../../../../services/AnimalService';
 import ManagementSellOrPurchaseService from '../../../../services/ManagementSellOrPurchaseService';
 import ManagementService from '../../../../services/ManagementService';
 import { I18nContext } from '../../../App';
+import { formatAnimalList } from '../../../utils/FormatUtils';
 
 class CreateorUpdateSellorPurchaseManagementPage extends Component {
   constructor() {
@@ -32,11 +34,14 @@ class CreateorUpdateSellorPurchaseManagementPage extends Component {
       serverError: null,
       explorationList: null,
       animalTypes: null,
+      animalType: '',
       sexTypes: null,
       animalList: '',
       exploration: '',
       types: null,
       type: '',
+      currentBreedList: null,
+      breedList: null,
       sellorPurchase: {
         date: new Date().toJSON().slice(0, 10),
         type: 1,
@@ -48,9 +53,10 @@ class CreateorUpdateSellorPurchaseManagementPage extends Component {
     this.setState({ isLoading: true });
     const { entityId, id } = this.props.match.params;
 
-    let explorationsPromise = ExplorationService.get(null, entityId, true);
-    let animalTypesPromise = FixedValuesService.getExplorationTypes(true);
-    let sexTypesPromise = FixedValuesService.getSexTypes(true);
+    const explorationsPromise = ExplorationService.get(null, entityId, true);
+    const animalTypesPromise = FixedValuesService.getExplorationTypes(true);
+    const sexTypesPromise = FixedValuesService.getSexTypes(true);
+    const breedResponse = FixedValuesService.getBreeds(true);
 
     const sellOrPurchasePromise = FixedValuesService.getSellOrPurchase(true);
 
@@ -116,6 +122,14 @@ class CreateorUpdateSellorPurchaseManagementPage extends Component {
         this.setState({ animalTypes: res.data });
       })
       .catch(err => this.setState({ serverError: true }));
+
+    breedResponse
+      .then(res => {
+        this.setState({ breedList: res.data, currentBreedList: res.data });
+      })
+      .catch(err => {
+        this.setState({ serverError: true });
+      });
 
     explorationsPromise
       .then(res => {
@@ -210,6 +224,22 @@ class CreateorUpdateSellorPurchaseManagementPage extends Component {
     this.setState({ type: e.target.value });
   };
 
+  handleChangeAnimalType = e => {
+    console.log(e.target.value, this.state.breedList, this.state.currentBreedList);
+    this.setState({
+      animalType: e.target.value,
+      currentBreedList:
+        this.state.breedList &&
+        this.state.breedList.filter(value => value.animalType === e.target.value),
+    });
+  };
+
+  validateArray = (fields, i18n) => {
+    const errors = {};
+    
+    return errors;
+  };
+
   validate = (values, i18n) => {
     const errors = {};
     if (!values.date) {
@@ -234,6 +264,10 @@ class CreateorUpdateSellorPurchaseManagementPage extends Component {
     this.setState({ serverError: null });
   };
 
+  handleBreedChange = e => {
+    this.setState({ breed: e.target.value });
+  };
+
   onCancel = e => {
     const { entityId } = this.props.match.params;
     this.props.history.push(`/livestock/management/${entityId}`);
@@ -251,6 +285,7 @@ class CreateorUpdateSellorPurchaseManagementPage extends Component {
       animalList,
       sexTypes,
       animalTypes,
+      currentBreedList,
       sellorPurchase,
     } = this.state;
     return (
@@ -288,62 +323,68 @@ class CreateorUpdateSellorPurchaseManagementPage extends Component {
                               {i18n.management.generalData}
                             </Typography>
                           </div>
-                          <div className="card-body">
-                            <InputForm
-                              name="date"
-                              required={true}
-                              type="date"
-                              label={i18n.management.date}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
+                          <Grid container spacing={16} className="card-body">
+                            <InputForm name="id" type="hidden" />
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="date"
+                                required
+                                type="date"
+                                label={i18n.management.date}
+                                fullWidth
+                              />
+                            </Grid>
+
                             {explorationList && (
-                              <FormControl
-                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                              >
-                                <InputLabel>{i18n.management.exploration}</InputLabel>
-                                <Select
-                                  name="exploration"
-                                  value={exploration}
-                                  onChange={this.handleExplorationChange.bind(this, values)}
-                                >
-                                  {explorationList.map(ex => {
-                                    return (
-                                      <MenuItem key={ex.id} value={ex.id}>
-                                        {ex.name}
-                                      </MenuItem>
-                                    );
-                                  })}
-                                </Select>
-                              </FormControl>
+                              <Grid item xs={6}>
+                                <FormControl fullWidth>
+                                  <InputLabel>{i18n.management.exploration}</InputLabel>
+                                  <Select
+                                    name="exploration"
+                                    value={exploration}
+                                    onChange={this.handleExplorationChange.bind(this, values)}
+                                  >
+                                    {explorationList.map(ex => {
+                                      return (
+                                        <MenuItem key={ex.id} value={ex.id}>
+                                          {ex.name}
+                                        </MenuItem>
+                                      );
+                                    })}
+                                  </Select>
+                                </FormControl>
+                              </Grid>
                             )}
                             {types && (
-                              <FormControl
-                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                              >
-                                <InputLabel>{i18n.management.type}</InputLabel>
-                                <Select
-                                  name="type"
-                                  value={type}
-                                  onChange={this.handleTypeChange.bind(this, values)}
-                                >
-                                  {types.map(ex => {
-                                    return (
-                                      <MenuItem key={ex.id} value={ex.id}>
-                                        {ex.name}
-                                      </MenuItem>
-                                    );
-                                  })}
-                                </Select>
-                              </FormControl>
+                              <Grid item xs={6}>
+                                <FormControl fullWidth>
+                                  <InputLabel>{i18n.management.type}</InputLabel>
+                                  <Select
+                                    name="type"
+                                    value={type}
+                                    onChange={this.handleTypeChange.bind(this, values)}
+                                  >
+                                    {types.map(ex => {
+                                      return (
+                                        <MenuItem key={ex.id} value={ex.id}>
+                                          {ex.name}
+                                        </MenuItem>
+                                      );
+                                    })}
+                                  </Select>
+                                </FormControl>
+                              </Grid>
                             )}
-                            <InputForm
-                              name="observations"
-                              required={false}
-                              type="text"
-                              label={i18n.management.obs}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
-                          </div>
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="observations"
+                                required={false}
+                                type="text"
+                                label={i18n.management.obs}
+                                fullWidth
+                              />
+                            </Grid>
+                          </Grid>
                         </CardContent>
                       </Card>
                       {exploration &&
@@ -372,130 +413,104 @@ class CreateorUpdateSellorPurchaseManagementPage extends Component {
                                             delete
                                           </i>
                                         </div>
-                                        <div className="card-body">
+                                        <Grid container spacing={16} className="card-body">
                                           <InputForm
-                                            name={`${name}.id`}
+                                            name={`${name}.animal`}
                                             required={false}
                                             type="hidden"
                                           />
-                                          <InputForm
-                                            label={i18n.management.name}
-                                            name={`${name}.name`}
-                                            required={false}
-                                            type="text"
-                                            style={{
-                                              width: '22.5%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
-                                          <InputForm
-                                            label={i18n.management.number}
-                                            name={`${name}.number`}
-                                            required={true}
-                                            type="number"
-                                            style={{
-                                              width: '22.5%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
-                                          <InputForm
-                                            label={i18n.management.chipNumber}
-                                            name={`${name}.chipNumber`}
-                                            required={false}
-                                            type="text"
-                                            style={{
-                                              width: '22.5%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
-                                          {animalTypes && (
-                                            <SelectForm
-                                              label={i18n.management.animalType}
-                                              name={`${name}.explorationType`}
+                                          <Grid item xs={4}>
+                                            <InputForm
+                                              label={i18n.management.earingNumber}
+                                              name={`${name}.number`}
                                               required={true}
-                                              style={{
-                                                width: '22.5%',
-                                                margin: '10px',
-                                                marginBottom: '40px',
-                                              }}
-                                              list={animalTypes}
+                                              type="text"
+                                              fullWidth
                                             />
+                                          </Grid>
+                                          <Grid item xs={4}>
+                                            <InputForm
+                                              label={i18n.management.chipNumber}
+                                              name={`${name}.chipNumber`}
+                                              required={false}
+                                              type="text"
+                                              fullWidth
+                                            />
+                                          </Grid>
+                                          {animalTypes && (
+                                            <Grid item xs={4}>
+                                              <SelectForm
+                                                label={i18n.management.animalType}
+                                                name={`${name}.explorationType`}
+                                                required
+                                                fullWidth
+                                                list={animalTypes}
+                                              />
+                                            </Grid>
                                           )}
                                           {sexTypes && (
-                                            <SelectForm
-                                              label={i18n.management.sex}
-                                              name={`${name}.sex`}
-                                              required={true}
-                                              style={{
-                                                width: '22.5%',
-                                                margin: '10px',
-                                                marginBottom: '40px',
-                                              }}
-                                              list={sexTypes}
-                                            />
+                                            <Grid item xs={3}>
+                                              <SelectForm
+                                                label={i18n.management.sex}
+                                                name={`${name}.sex`}
+                                                required={true}
+                                                fullWidth
+                                                list={sexTypes}
+                                              />
+                                            </Grid>
                                           )}
-                                          <InputForm
-                                            label={i18n.management.breed}
-                                            name={`${name}.breed`}
-                                            required={false}
-                                            type="text"
-                                            style={{
-                                              width: '22.5%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
-                                          <InputForm
-                                            label={i18n.management.bloodType}
-                                            name={`${name}.bloodType`}
-                                            required={false}
-                                            type="text"
-                                            style={{
-                                              width: '22.5%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
-                                          <InputForm
-                                            name={`${name}.birthDate`}
-                                            required={false}
-                                            type="date"
-                                            label={i18n.management.birthDate}
-                                            style={{
-                                              width: '22.5%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
-                                          <InputForm
-                                            label={i18n.management.weight}
-                                            name={`${name}.weight`}
-                                            required={false}
-                                            type="number"
-                                            step="0.01"
-                                            inputAdornment="kg"
-                                            style={{
-                                              width: '22.5%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
-                                          <InputForm
-                                            label={i18n.management.value}
-                                            name={`${name}.value`}
-                                            required={false}
-                                            type="number"
-                                            inputAdornment="€"
-                                            style={{
-                                              width: '30%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
-                                        </div>
+                                          {currentBreedList && (
+                                            <Grid item xs={3}>
+                                              <SelectForm
+                                                label={i18n.management.breed}
+                                                name={`${name}.breed`}
+                                                required
+                                                fullWidth
+                                                list={currentBreedList}
+                                              />
+                                            </Grid>
+                                          )}
+
+                                          <Grid item xs={3}>
+                                            <InputForm
+                                              name={`${name}.birthDate`}
+                                              required={false}
+                                              type="date"
+                                              label={i18n.management.birthDate}
+                                              fullWidth
+                                            />
+                                          </Grid>
+                                          <Grid item xs={3}>
+                                            <InputForm
+                                              label={i18n.management.bloodType}
+                                              name={`${name}.bloodType`}
+                                              required={false}
+                                              type="text"
+                                              fullWidth
+                                            />
+                                          </Grid>
+                                          <Grid item xs={3}>
+                                            <InputForm
+                                              label={i18n.management.weight}
+                                              name={`${name}.weight`}
+                                              required={false}
+                                              type="number"
+                                              step="0.01"
+                                              inputAdornment="kg"
+                                              fullWidth
+                                            />
+                                          </Grid>
+                                          <Grid item xs={3}>
+                                            <InputForm
+                                              label={i18n.management.value}
+                                              name={`${name}.value`}
+                                              required={false}
+                                              type="number"
+                                              inputAdornment="€"
+                                              fullWidth
+                                            />
+                                          </Grid>
+                                        </Grid>
                                       </CardContent>
                                     </Card>
                                   ))
@@ -524,45 +539,39 @@ class CreateorUpdateSellorPurchaseManagementPage extends Component {
                                             delete
                                           </i>
                                         </div>
-                                        <div className="card-body">
+                                        <Grid container spacing={16} className="card-body">
                                           {animalList && (
-                                            <SelectForm
-                                              label="Animal"
-                                              name={`${name}.animal`}
-                                              required={true}
-                                              list={animalList}
-                                              style={{
-                                                width: '30%',
-                                                margin: '10px',
-                                                marginBottom: '40px',
-                                              }}
-                                            />
+                                            <Grid item xs={4}>
+                                              <SelectForm
+                                                label="Animal"
+                                                name={`${name}.animal`}
+                                                required={true}
+                                                list={formatAnimalList(animalList)}
+                                                fullWidth
+                                              />
+                                            </Grid>
                                           )}
-                                          <InputForm
-                                            label={i18n.management.weight}
-                                            name={`${name}.weight`}
-                                            required={false}
-                                            type="number"
-                                            inputAdornment="kg"
-                                            style={{
-                                              width: '30%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
-                                          <InputForm
-                                            label={i18n.management.value}
-                                            name={`${name}.value`}
-                                            required={false}
-                                            type="number"
-                                            inputAdornment="€"
-                                            style={{
-                                              width: '30%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
-                                        </div>
+                                          <Grid item xs={4}>
+                                            <InputForm
+                                              label={i18n.management.weight}
+                                              name={`${name}.weight`}
+                                              required={false}
+                                              type="number"
+                                              inputAdornment="kg"
+                                              fullWidth
+                                            />
+                                          </Grid>
+                                          <Grid item xs={4}>
+                                            <InputForm
+                                              label={i18n.management.value}
+                                              name={`${name}.value`}
+                                              required={false}
+                                              type="number"
+                                              inputAdornment="€"
+                                              fullWidth
+                                            />
+                                          </Grid>
+                                        </Grid>
                                       </CardContent>
                                     </Card>
                                   ))

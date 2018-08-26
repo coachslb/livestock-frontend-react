@@ -13,6 +13,7 @@ import ManagementSellOrPurchaseService from '../../../../services/ManagementSell
 import ManagementSanitaryService from '../../../../services/ManagementSanitaryService';
 import ManagementChipService from '../../../../services/ManagementChipService';
 import ManagementTransferService from '../../../../services/ManagementTransferService';
+import ManagementProductionService from '../../../../services/ManagementProductionService';
 import { I18nContext } from '../../../App';
 
 export const managementTypes = [
@@ -28,6 +29,7 @@ export const managementTypes = [
   { id: 9, service: ManagementTransferService, name: 'transfer' },
   { id: 10, service: ManagementSanitaryService, name: 'sanitary' },
   { id: 11, service: ManagementChipService, name: 'chip' },
+  { id: 12, service: ManagementProductionService, name: 'production' },
 ];
 
 // const aa={

@@ -12,6 +12,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Grid,
 } from 'material-ui';
 import ErrorDialog from '../../../UI/ErrorDialog/ErrorDialog';
 import ManagementCreationCard from '../../../livestock/management/ManagementCreationCard';
@@ -22,6 +23,7 @@ import ExplorationService from '../../../../services/ExplorationService';
 import FixedValuesService from '../../../../services/FixedValuesService';
 import AnimalService from '../../../../services/AnimalService';
 import { I18nContext } from '../../../App';
+import { formatAnimalList } from '../../../utils/FormatUtils';
 
 class CreateorUpdateCoberturaManagementPage extends Component {
   constructor() {
@@ -249,42 +251,47 @@ class CreateorUpdateCoberturaManagementPage extends Component {
                               {i18n.management.generalData}
                             </Typography>
                           </div>
-                          <div className="card-body">
-                            <InputForm
-                              name="date"
-                              required={true}
-                              type="date"
-                              label={i18n.management.date}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
+                          <Grid container spacing={16} className="card-body">
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="date"
+                                required={true}
+                                type="date"
+                                label={i18n.management.date}
+                                fullWidth
+                              />
+                            </Grid>
+
                             {explorationList && (
-                              <FormControl
-                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                              >
-                                <InputLabel>{i18n.management.exploration}</InputLabel>
-                                <Select
-                                  name="exploration"
-                                  value={exploration}
-                                  onChange={this.handleExplorationChange.bind(this, values)}
-                                >
-                                  {explorationList.map(ex => {
-                                    return (
-                                      <MenuItem key={ex.id} value={ex.id}>
-                                        {ex.name}
-                                      </MenuItem>
-                                    );
-                                  })}
-                                </Select>
-                              </FormControl>
+                              <Grid item xs={6}>
+                                <FormControl fullWidth>
+                                  <InputLabel>{i18n.management.exploration}</InputLabel>
+                                  <Select
+                                    name="exploration"
+                                    value={exploration}
+                                    onChange={this.handleExplorationChange.bind(this, values)}
+                                  >
+                                    {explorationList.map(ex => {
+                                      return (
+                                        <MenuItem key={ex.id} value={ex.id}>
+                                          {ex.name}
+                                        </MenuItem>
+                                      );
+                                    })}
+                                  </Select>
+                                </FormControl>
+                              </Grid>
                             )}
-                            <InputForm
-                              name="observations"
-                              required={false}
-                              type="text"
-                              label={i18n.management.obs}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
-                          </div>
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="observations"
+                                required={false}
+                                type="text"
+                                label={i18n.management.obs}
+                                fullWidth
+                              />
+                            </Grid>
+                          </Grid>
                         </CardContent>
                       </Card>
                       {exploration &&
@@ -312,79 +319,69 @@ class CreateorUpdateCoberturaManagementPage extends Component {
                                           delete
                                         </i>
                                       </div>
-                                      <div className="card-body">
+                                      <Grid container spacing={16} className="card-body">
                                         {coberturaTypes && (
-                                          <SelectForm
-                                            label={i18n.management.servicingType}
-                                            name={`${name}.coberturaType`}
-                                            required={true}
-                                            list={coberturaTypes}
-                                            style={{
-                                              width: '45%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
+                                          <Grid item xs={6}>
+                                            <SelectForm
+                                              label={i18n.management.servicingType}
+                                              name={`${name}.coberturaType`}
+                                              required={true}
+                                              list={coberturaTypes}
+                                              fullWidth
+                                            />
+                                          </Grid>
                                         )}
                                         <Fragment>
                                           {femaleList && (
-                                            <SelectForm
-                                              label={i18n.management.female}
-                                              name={`${name}.female`}
-                                              required={true}
-                                              list={femaleList}
-                                              style={{
-                                                width: '45%',
-                                                margin: '10px',
-                                                marginBottom: '40px',
-                                              }}
-                                            />
+                                            <Grid item xs={6}>
+                                              <SelectForm
+                                                label={i18n.management.female}
+                                                name={`${name}.female`}
+                                                required={true}
+                                                list={formatAnimalList(femaleList)}
+                                                fullWidth
+                                              />
+                                            </Grid>
                                           )}
                                           {maleList &&
                                             fields.value[index] &&
                                             fields.value[index].coberturaType === 1 && (
-                                              <SelectForm
-                                                label={i18n.management.male}
-                                                name={`${name}.male`}
-                                                required={false}
-                                                list={maleList}
-                                                style={{
-                                                  width: '45%',
-                                                  margin: '10px',
-                                                  marginBottom: '40px',
-                                                }}
-                                              />
+                                              <Grid item xs={6}>
+                                                <SelectForm
+                                                  label={i18n.management.male}
+                                                  name={`${name}.male`}
+                                                  required={false}
+                                                  list={formatAnimalList(maleList)}
+                                                  fullWidth
+                                                />
+                                              </Grid>
                                             )}
                                           {fields.value[index] &&
                                             fields.value[index].coberturaType === 2 && (
                                               <Fragment>
-                                                <InputForm
-                                                  name={`${name}.dose`}
-                                                  required={false}
-                                                  type="number"
-                                                  label={i18n.management.dose}
-                                                  inputAdornment="g"
-                                                  style={{
-                                                    width: '45%',
-                                                    margin: '10px',
-                                                    marginBottom: '40px',
-                                                  }}
-                                                />
-                                                <InputForm
-                                                  name={`${name}.vet`}
-                                                  required={false}
-                                                  type="text"
-                                                  label={i18n.management.inseminator}
-                                                  style={{
-                                                    width: '45%',
-                                                    margin: '10px',
-                                                    marginBottom: '40px',
-                                                  }}
-                                                />
+                                                <Grid item xs={6}>
+                                                  <InputForm
+                                                    name={`${name}.dose`}
+                                                    required={false}
+                                                    type="number"
+                                                    label={i18n.management.dose}
+                                                    inputAdornment="g"
+                                                    fullWidth
+                                                  />
+                                                </Grid>
+                                                <Grid item xs={6}>
+                                                  <InputForm
+                                                    name={`${name}.vet`}
+                                                    required={false}
+                                                    type="text"
+                                                    label={i18n.management.inseminator}
+                                                    fullWidth
+                                                  />
+                                                </Grid>
                                               </Fragment>
                                             )}
                                         </Fragment>
-                                      </div>
+                                      </Grid>
                                     </CardContent>
                                   </Card>
                                 ))

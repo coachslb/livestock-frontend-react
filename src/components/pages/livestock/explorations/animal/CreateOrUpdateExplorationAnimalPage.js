@@ -185,7 +185,7 @@ class CreateOrUpdateExplorationAnimalPage extends Component {
       birthDate,
       i18n,
     );
-    if (errors.length > 0) this.setState({ errors, isLoading: false });
+    if (errors.length > 0) {console.log(errors); this.setState({ errors, isLoading: false });}
     else {
       if (!id) {
         let groupIds = group.map(elem => groupList.find(exp => exp.name === elem).id);

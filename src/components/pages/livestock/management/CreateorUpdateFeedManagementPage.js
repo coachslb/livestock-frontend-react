@@ -21,6 +21,7 @@ import ExplorationService from '../../../../services/ExplorationService';
 import ManagementFeedingService from '../../../../services/ManagementFeedingService';
 import GroupService from '../../../../services/GroupService';
 import { I18nContext } from '../../../App';
+import { Grid } from 'material-ui';
 
 class CreateorUpdateFeedManagementPage extends Component {
   constructor() {
@@ -206,43 +207,47 @@ class CreateorUpdateFeedManagementPage extends Component {
                               {i18n.management.generalData}
                             </Typography>
                           </div>
-                          <div className="card-body">
+                          <Grid container spacing={16} className="card-body">
                             <InputForm name="id" type="hidden" />
-                            <InputForm
-                              name="date"
-                              required={true}
-                              type="date"
-                              label={i18n.management.date}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
-                            {explorationList && (
-                              <FormControl
-                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                              >
-                                <InputLabel required>{i18n.management.exploration}</InputLabel>
-                                <Select
-                                  name="exploration"
-                                  value={exploration}
-                                  onChange={this.handleExplorationChange.bind(this, values)}
-                                >
-                                  {explorationList.map(ex => {
-                                    return (
-                                      <MenuItem key={ex.id} value={ex.id}>
-                                        {ex.name}
-                                      </MenuItem>
-                                    );
-                                  })}
-                                </Select>
-                              </FormControl>
-                            )}
-                            <InputForm
-                              name="observations"
-                              required={false}
-                              type="text"
-                              label={i18n.management.obs}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
-                          </div>
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="date"
+                                required={true}
+                                type="date"
+                                label={i18n.management.date}
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={6}>
+                              {explorationList && (
+                                <FormControl fullWidth>
+                                  <InputLabel required>{i18n.management.exploration}</InputLabel>
+                                  <Select
+                                    name="exploration"
+                                    value={exploration}
+                                    onChange={this.handleExplorationChange.bind(this, values)}
+                                  >
+                                    {explorationList.map(ex => {
+                                      return (
+                                        <MenuItem key={ex.id} value={ex.id}>
+                                          {ex.name}
+                                        </MenuItem>
+                                      );
+                                    })}
+                                  </Select>
+                                </FormControl>
+                              )}
+                            </Grid>
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="observations"
+                                required={false}
+                                type="text"
+                                label={i18n.management.obs}
+                                fullWidth
+                              />
+                            </Grid>
+                          </Grid>
                         </CardContent>
                       </Card>
                       {groupList && (
@@ -253,15 +258,17 @@ class CreateorUpdateFeedManagementPage extends Component {
                                 {i18n.management.animalGroup}
                               </Typography>
                             </div>
-                            <div className="card-body">
-                              <SelectForm
-                                name="group"
-                                required={true}
-                                label={i18n.management.group}
-                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                                list={groupList}
-                              />
-                            </div>
+                            <Grid container className="card-body">
+                              <Grid item xs={6}>
+                                <SelectForm
+                                  name="group"
+                                  required={true}
+                                  label={i18n.management.group}
+                                  fullWidth
+                                  list={groupList}
+                                />
+                              </Grid>
+                            </Grid>
                           </CardContent>
                         </Card>
                       )}
@@ -290,36 +297,33 @@ class CreateorUpdateFeedManagementPage extends Component {
                                           delete
                                         </i>
                                       </div>
-                                      <div className="card-body">
+                                      <Grid container spacing={16} className="card-body">
                                         <InputForm
                                           name={`${name}.id`}
                                           required={false}
                                           type="hidden"
                                         />
-                                        <InputForm
-                                          label={i18n.management.food}
-                                          name={`${name}.food`}
-                                          required={true}
-                                          type="text"
-                                          style={{
-                                            width: '45%',
-                                            margin: '10px',
-                                            marginBottom: '40px',
-                                          }}
-                                        />
-                                        <InputForm
-                                          label={i18n.management.qty}
-                                          name={`${name}.qty`}
-                                          required={false}
-                                          type="number"
-                                          inputAdornment="kg"
-                                          style={{
-                                            width: '45%',
-                                            margin: '10px',
-                                            marginBottom: '40px',
-                                          }}
-                                        />
-                                      </div>
+                                        <Grid item xs={6}>
+                                          <InputForm
+                                            label={i18n.management.food}
+                                            name={`${name}.food`}
+                                            required={true}
+                                            type="text"
+                                            fullWidth
+                                          />
+                                        </Grid>
+
+                                        <Grid item xs={6}>
+                                          <InputForm
+                                            label={i18n.management.qty}
+                                            name={`${name}.qty`}
+                                            required={false}
+                                            type="number"
+                                            inputAdornment="kg"
+                                            fullWidth
+                                          />
+                                        </Grid>
+                                      </Grid>
                                     </CardContent>
                                   </Card>
                                 ))

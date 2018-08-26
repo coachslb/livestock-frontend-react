@@ -12,6 +12,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Grid,
 } from 'material-ui';
 import ErrorDialog from '../../../UI/ErrorDialog/ErrorDialog';
 import InputForm from '../../../UI/Inputs/InputForm';
@@ -23,6 +24,7 @@ import AnimalService from '../../../../services/AnimalService';
 import FixedValuesService from '../../../../services/FixedValuesService';
 import ManagementTransferService from '../../../../services/ManagementTransferService';
 import { I18nContext } from '../../../App';
+import { formatAnimalList } from '../../../utils/FormatUtils';
 
 class CreateorUpdateTransferManagementPage extends Component {
   constructor() {
@@ -249,95 +251,96 @@ class CreateorUpdateTransferManagementPage extends Component {
                               {i18n.management.generalData}
                             </Typography>
                           </div>
-                          <div className="card-body">
-                            <InputForm
-                              name="date"
-                              required={true}
-                              type="date"
-                              label={i18n.management.date}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
+                          <Grid container spacing={16} className="card-body">
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="date"
+                                required={true}
+                                type="date"
+                                label={i18n.management.date}
+                                fullWidth
+                              />
+                            </Grid>
+
                             {explorationList && (
-                              <FormControl
-                                style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                              >
-                                <InputLabel required>{i18n.management.exploration}</InputLabel>
-                                <Select
-                                  name="exploration"
-                                  value={exploration}
-                                  onChange={this.handleExplorationChange.bind(this, values)}
-                                >
-                                  {explorationList.map(ex => {
-                                    return (
-                                      <MenuItem key={ex.id} value={ex.id}>
-                                        {ex.name}
-                                      </MenuItem>
-                                    );
-                                  })}
-                                </Select>
-                              </FormControl>
+                              <Grid item xs={6}>
+                                <FormControl fullWidth>
+                                  <InputLabel required>{i18n.management.exploration}</InputLabel>
+                                  <Select
+                                    name="exploration"
+                                    value={exploration}
+                                    onChange={this.handleExplorationChange.bind(this, values)}
+                                  >
+                                    {explorationList.map(ex => {
+                                      return (
+                                        <MenuItem key={ex.id} value={ex.id}>
+                                          {ex.name}
+                                        </MenuItem>
+                                      );
+                                    })}
+                                  </Select>
+                                </FormControl>
+                              </Grid>
                             )}
                             {transferTypeList && (
-                              <SelectForm
-                                label={i18n.management.transferType}
-                                name="transferType"
-                                required={true}
-                                list={transferTypeList}
-                                style={{
-                                  width: '45%',
-                                  margin: '10px',
-                                  marginBottom: '40px',
-                                }}
-                              />
+                              <Grid item xs={6}>
+                                <SelectForm
+                                  label={i18n.management.transferType}
+                                  name="transferType"
+                                  required={true}
+                                  list={transferTypeList}
+                                  fullWidth
+                                />
+                              </Grid>
                             )}
                             {values.transferType &&
                               values.transferType === 3 && (
-                                <InputForm
-                                  name="destinationAddress"
-                                  required={false}
-                                  type="text"
-                                  label={i18n.management.destinationAddress}
-                                  style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                                />
+                                <Grid item xs={6}>
+                                  <InputForm
+                                    name="destinationAddress"
+                                    required={false}
+                                    type="text"
+                                    label={i18n.management.destinationAddress}
+                                    fullWidth
+                                  />
+                                </Grid>
                               )}
                             {values.transferType &&
                               values.transferType === 2 &&
                               explorationList && (
-                                <SelectForm
-                                  label={i18n.management.destinationExploration}
-                                  name="destination"
-                                  required={true}
-                                  list={explorationList}
-                                  style={{
-                                    width: '45%',
-                                    margin: '10px',
-                                    marginBottom: '40px',
-                                  }}
-                                />
+                                <Grid item xs={6}>
+                                  <SelectForm
+                                    label={i18n.management.destinationExploration}
+                                    name="destination"
+                                    required={true}
+                                    list={explorationList}
+                                    fullWidth
+                                  />
+                                </Grid>
                               )}
                             {values.transferType &&
                               values.transferType === 1 &&
                               groupList && (
-                                <SelectForm
-                                  label={i18n.management.destinationGroup}
-                                  name="destination"
-                                  required={true}
-                                  list={groupList}
-                                  style={{
-                                    width: '45%',
-                                    margin: '10px',
-                                    marginBottom: '40px',
-                                  }}
-                                />
+                                <Grid item xs={6}>
+                                  <SelectForm
+                                    label={i18n.management.destinationGroup}
+                                    name="destination"
+                                    required={true}
+                                    list={groupList}
+                                    fullWidth
+                                  />
+                                </Grid>
                               )}
-                            <InputForm
-                              name="observations"
-                              required={false}
-                              type="text"
-                              label={i18n.management.obs}
-                              style={{ width: '45%', margin: '10px', marginBottom: '40px' }}
-                            />
-                          </div>
+                            <Grid item xs={6}>
+                              <InputForm
+                                name="observations"
+                                required={false}
+                                type="text"
+                                label={i18n.management.obs}
+                                fullWidth
+                              />
+                            </Grid>
+                          </Grid>
                         </CardContent>
                       </Card>
                       {exploration &&
@@ -366,21 +369,19 @@ class CreateorUpdateTransferManagementPage extends Component {
                                           delete
                                         </i>
                                       </div>
-                                      <div className="card-body">
+                                      <Grid container spacing={16} className="card-body">
                                         {animalList && (
-                                          <SelectForm
-                                            label="Animal"
-                                            name={`${name}.animal`}
-                                            required={true}
-                                            list={animalList}
-                                            style={{
-                                              width: '45%',
-                                              margin: '10px',
-                                              marginBottom: '40px',
-                                            }}
-                                          />
+                                          <Grid item xs={6}>
+                                            <SelectForm
+                                              label="Animal"
+                                              name={`${name}.animal`}
+                                              required={true}
+                                              list={formatAnimalList(animalList)}
+                                              fullWidth
+                                            />
+                                          </Grid>
                                         )}
-                                      </div>
+                                      </Grid>
                                     </CardContent>
                                   </Card>
                                 ))

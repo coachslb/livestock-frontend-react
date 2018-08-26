@@ -42,10 +42,10 @@ class ExplorationGroupPage extends Component {
 
   onDelete = (e, groupId) => {
     e.preventDefault();
-    const { id } = this.props.match.params;
+    const { explorationId } = this.props.match.params;
     this.setState({ isLoading: true });
 
-    const deleteExplorationGroupResponse = GroupService.deleteGroup(groupId, id, false, true);
+    const deleteExplorationGroupResponse = GroupService.deleteGroup(groupId, explorationId, false, true);
     deleteExplorationGroupResponse
       .then(res => {
         if (res.data.length > 0) {
