@@ -68,6 +68,7 @@ export const TRANSFER = "/transfer";
 export const CHIP = "/chip";
 export const PURCHASE = "/purchase";
 export const SELL = "/sell";
+export const PRODUCTION = "/production";
 
 /** Task */
 export const TASK = "/task";
@@ -78,6 +79,9 @@ export const LICENSE = "/license";
 /** Weather */
 export const WEATHER = "/weather";
 export const WEATHER_RESUME = "/weather/resume";
+
+/** RED */
+export const EXPORT_RED = "/export/red"
 
 /** Workers */
 export const WORKER = "/worker";

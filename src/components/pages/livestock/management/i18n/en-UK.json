@@ -26,6 +26,7 @@
     "dose": "Dose",
     "inseminator": "Inseminator",
     "deathCause": "Death cause",
+    "productionType": "Production type",
     "value": "Value",
     "animalGroup": "Animal group",
     "group": "Group",
@@ -49,6 +50,7 @@
     "addAnimal": "Add animal",
     "addMorePurchase": "Add other purchase",
     "addMoreSell": "Add other sell",
+    "addMoreProduction": "Add other production",
     "managementType":{
         "childBirth": "Child Birth",
         "birth": "Birth",

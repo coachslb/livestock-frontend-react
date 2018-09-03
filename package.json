@@ -10,6 +10,7 @@
     "downshift": "^2.0.10",
     "final-form": "^4.8.3",
     "final-form-arrays": "^1.0.4",
+    "final-form-set-field-data": "^1.0.1",
     "formik": "^0.11.11",
     "globalize": "^1.4.0",
     "iana-tz-data": "^2017.1.0",

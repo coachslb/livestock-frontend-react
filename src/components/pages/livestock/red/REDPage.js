@@ -10,28 +10,53 @@ import {
   Grid,
   FormControlLabel,
   Switch,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Input,
 } from 'material-ui';
-import SelectForm from '../../../UI/Inputs/SelectForm';
-import InputForm from '../../../UI/Inputs/InputForm';
 import ErrorDialog from '../../../UI/ErrorDialog/ErrorDialog';
 import { I18nContext } from '../../../App';
 import ExplorationService from '../../../../services/ExplorationService';
+import EntityService from '../../../../services/EntityService';
+import REDService from '../../../../services/REDService';
+import { saveBlob } from '../../../utils/ExcelUtils';
 
 class REDPage extends Component {
   constructor() {
     super();
     this.state = {
-      exploration: null,
+      exploration: '',
       explorationList: null,
       serverError: null,
       isLoading: null,
       addAnimals: false,
       addTransfers: false,
+      addSanitaryEvents: false,
+      year: '',
+      name: '',
+      nif: '',
+      np: '',
+      address: '',
+      brand: '',
+      phone: '',
+      explorationName: '',
+      explorationNumber: '',
+      species: '',
+      parcelNumber: '',
+      explorationAddress: '',
+      explorationParish: '',
+      explorationCounty: '',
+      explorationPostalCode: '',
+      explorationSystem: '',
+      explorationProduction: '',
+      observations: '',
     };
   }
 
   componentWillMount() {
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true, year: new Date().getFullYear() });
     const entityId = localStorage.getItem('entityId');
 
     const explorationsPromise = ExplorationService.get(null, entityId, true);
@@ -46,8 +71,137 @@ class REDPage extends Component {
     this.setState({ [name]: event.target.checked });
   };
 
+  handleExplorationChange = async (values, e) => {
+    const entityId = localStorage.getItem('entityId');
+    this.setState({ exploration: e.target.value, isLoading: true });
+
+    //get exploration info
+    const entityInfoResponse = EntityService.getOneEntity(entityId, true);
+    const explorationResponse = ExplorationService.get(e.target.value, entityId, true);
+
+    entityInfoResponse
+      .then(res => {
+        this.setState({
+          isLoading: false,
+          name: res.data.name,
+          nif: res.data.nif,
+          np: res.data.np,
+          address: res.data.address
+            ? res.data.address.detail + ' - ' + res.data.address.district || ''
+            : '',
+          brand: res.data.brand || '',
+          phone: res.data.phone,
+        });
+      })
+      .catch(err => this.setState({ serverError: true, isLoading: false }));
+
+    explorationResponse
+      .then(res => {
+        this.setState({
+          explorationName: res.data.name || '',
+          explorationNumber: res.data.number || '',
+          parcelNumber: res.data.parcelNumber || '',
+          explorationAddress: res.data.address ? res.data.address.detail : '',
+          explorationParish: '',
+          explorationCounty: '',
+          explorationPostalCode: res.data.address ? res.data.address.postalCode : '',
+          explorationSystem:
+            res.data.explorationSystem && res.data.explorationSystem.id
+              ? res.data.explorationSystem.name
+              : '',
+          explorationProduction: res.data.productionTypes
+            ? res.data.productionTypes
+                .reduce((acc, value) => (acc += value.name + ', '), '')
+                .slice(0, -2)
+            : '',
+            species: res.data.explorationTypes
+            ? res.data.explorationTypes
+                .reduce((acc, value) => (acc += value.name + ', '), '')
+                .slice(0, -2)
+            : '',
+        });
+        this.setState({ isLoading: false });
+      })
+      .catch(err => this.setState({ serverError: true, isLoading: false }));
+
+    console.log(values);
+    return values;
+  };
+
+  validate = (values, i18n) => {
+    const errors = {};
+    return errors;
+  };
+
   onSubmit = async values => {
+    const {
+      exploration,
+      year,
+      name,
+      nif,
+      np,
+      address,
+      brand,
+      phone,
+      explorationName,
+      explorationNumber,
+      parcelNumber,
+      explorationAddress,
+      explorationParish,
+      explorationCounty,
+      explorationPostalCode,
+      explorationSystem,
+      explorationProduction,
+      species,
+      observations,
+      addAnimals,
+      addTransfers,
+      addSanitaryEvents,
+    } = this.state;
     this.setState({ isLoading: true });
+    const entityId = localStorage.getItem('entityId');
+
+    const exportResponse = REDService.exportRED(
+      {
+        year,
+        name,
+        nif,
+        np,
+        userAddress: address,
+        brand,
+        explorationNumber,
+        explorationName,
+        explorationAddress,
+        explorationPostalCode,
+        explorationCounty,
+        explorationParish,
+        phone,
+        parcelNumber,
+        explorationSystem,
+        explorationProduction,
+        species,
+        observations,
+        addAnimals,
+        addTransfers,
+        addSanitaryEvents,
+        entityId,
+        explorationId: exploration,
+      },
+      true,
+    );
+
+    exportResponse.then(res => {
+      console.log(res);
+      saveBlob(res, `RED_${explorationName}.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      this.setState({ isLoading: false });
+    }).catch(err => {
+      console.log(err);
+      this.setState({ isLoading: false });
+    })
+  };
+
+  handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   onDialogClose = e => {
@@ -55,9 +209,29 @@ class REDPage extends Component {
   };
 
   render() {
-    const { isLoading, serverError, explorationList } = this.state;
-
-    console.log(this.state);
+    const {
+      isLoading,
+      serverError,
+      explorationList,
+      exploration,
+      year,
+      name,
+      nif,
+      np,
+      address,
+      brand,
+      phone,
+      explorationName,
+      explorationNumber,
+      parcelNumber,
+      explorationAddress,
+      explorationParish,
+      explorationCounty,
+      explorationPostalCode,
+      explorationSystem,
+      explorationProduction,
+      species
+    } = this.state;
     return (
       <I18nContext.Consumer>
         {({ i18n }) => (
@@ -87,12 +261,13 @@ class REDPage extends Component {
                   ...arrayMutators,
                 }}
                 initialValues={{ year: new Date().getFullYear() }}
-                validate={this.validate}
+                validate={fields => this.validate(fields, i18n)}
                 render={({
                   handleSubmit,
                   invalid,
                   pristine,
                   values,
+                  form,
                   form: {
                     mutators: { push, pop },
                   },
@@ -109,199 +284,252 @@ class REDPage extends Component {
                             {i18n.red.title}
                           </Typography>
                           {explorationList && (
-                            <SelectForm
-                              label={i18n.red.exploration}
-                              name="exploration"
-                              required={true}
-                              list={explorationList}
+                            <FormControl
                               style={{
                                 width: '45%',
                                 margin: '10px',
                                 marginBottom: '40px',
                               }}
-                            />
+                            >
+                              <InputLabel>{i18n.management.exploration}</InputLabel>
+                              <Select
+                                name="exploration"
+                                value={exploration}
+                                onChange={this.handleExplorationChange.bind(this, values)}
+                              >
+                                {explorationList.map(ex => {
+                                  return (
+                                    <MenuItem key={ex.id} value={ex.id}>
+                                      {ex.name}
+                                    </MenuItem>
+                                  );
+                                })}
+                              </Select>
+                            </FormControl>
                           )}
                         </div>
                         {explorationList &&
-                          values.exploration && (
+                          this.state.exploration && (
                             <Fragment>
                               <Grid container spacing={16} style={{ marginBottom: 20 }}>
                                 <Grid item xs={3}>
-                                  <InputForm
-                                    label={i18n.red.year}
-                                    name="year"
-                                    required={true}
-                                    fullWidth={true}
-                                    type="number"
-                                  />
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.year}*</InputLabel>
+                                    <Input
+                                      name="year"
+                                      value={year}
+                                      onChange={this.handleChange}
+                                      type="number"
+                                    />
+                                  </FormControl>
                                 </Grid>
                                 <Grid item xs={3}>
-                                  <InputForm
-                                    label={i18n.red.name}
-                                    name="name"
-                                    required={true}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.entityName}*</InputLabel>
+                                    <Input
+                                      name="name"
+                                      value={name}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
                                 </Grid>
                                 <Grid item xs={3}>
-                                  <InputForm
-                                    label="NIF"
-                                    name="nif"
-                                    required={false}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
+                                  <FormControl fullWidth>
+                                    <InputLabel>NIF</InputLabel>
+                                    <Input
+                                      name="nif"
+                                      value={nif}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
                                 </Grid>
                                 <Grid item xs={3}>
-                                  <InputForm
-                                    label={i18n.red.np}
-                                    name="np"
-                                    required={false}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.np}</InputLabel>
+                                    <Input
+                                      name="np"
+                                      value={np}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
                                 </Grid>
                                 <Grid item xs={6}>
-                                  <InputForm
-                                    label={i18n.red.address}
-                                    name="userAddress"
-                                    required={false}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.address}</InputLabel>
+                                    <Input
+                                      name="address"
+                                      value={address}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
                                 </Grid>
                                 <Grid item xs={3}>
-                                  <InputForm
-                                    label={i18n.red.brand}
-                                    name="brand"
-                                    required={false}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.brand}</InputLabel>
+                                    <Input
+                                      name="brand"
+                                      value={brand}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
                                 </Grid>
                                 <Grid item xs={3}>
-                                  <InputForm
-                                    label={i18n.red.phone}
-                                    name="phone"
-                                    required={false}
-                                    fullWidth={true}
-                                    type="number"
-                                  />
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.phone}</InputLabel>
+                                    <Input
+                                      name="phone"
+                                      value={phone}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
                                 </Grid>
                                 <Grid item xs={12} style={{ margin: '10px 0' }}>
                                   <Typography variant="headline" className="card-header_title">
                                     {i18n.red.explorationInfo}
                                   </Typography>
                                 </Grid>
+                                <Grid item xs={4}>
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.name}</InputLabel>
+                                    <Input
+                                      name="explorationName"
+                                      value={explorationName}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
+                                </Grid>
+                                <Grid item xs={2}>
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.number}</InputLabel>
+                                    <Input
+                                      name="explorationNumber"
+                                      value={explorationNumber}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
+                                </Grid>
+                                <Grid item xs={4}>
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.species}</InputLabel>
+                                    <Input
+                                      name="species"
+                                      value={species}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
+                                </Grid>
+                                <Grid item xs={2}>
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.parcelNumber}</InputLabel>
+                                    <Input
+                                      name="parcelNumber"
+                                      value={parcelNumber}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
+                                </Grid>
+                                <Grid item xs={4}>
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.address}</InputLabel>
+                                    <Input
+                                      name="explorationAddress"
+                                      value={explorationAddress}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
+                                </Grid>
+                                <Grid item xs={3}>
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.parish}</InputLabel>
+                                    <Input
+                                      name="explorationParish"
+                                      value={explorationParish}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
+                                </Grid>
+                                <Grid item xs={3}>
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.county}</InputLabel>
+                                    <Input
+                                      name="explorationCounty"
+                                      value={explorationCounty}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
+                                </Grid>
+                                <Grid item xs={2}>
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.postalCode}</InputLabel>
+                                    <Input
+                                      name="explorationPostalCode"
+                                      value={explorationPostalCode}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
+                                </Grid>
                                 <Grid item xs={6}>
-                                  <InputForm
-                                    label={i18n.red.name}
-                                    name="explorationName"
-                                    required={true}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
-                                </Grid>
-                                <Grid item xs={3}>
-                                  <InputForm
-                                    label={i18n.red.number}
-                                    name="explorationNumber"
-                                    required={true}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
-                                </Grid>
-                                <Grid item xs={3}>
-                                  <InputForm
-                                    label={i18n.red.parcelNumber}
-                                    name="explorationType"
-                                    required={false}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.explorationSystem}</InputLabel>
+                                    <Input
+                                      name="explorationSystem"
+                                      value={explorationSystem}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
                                 </Grid>
                                 <Grid item xs={6}>
-                                  <InputForm
-                                    label={i18n.red.address}
-                                    name="explorationAddress"
-                                    required={false}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
-                                </Grid>
-                                <Grid item xs={3}>
-                                  <InputForm
-                                    label={i18n.red.parish}
-                                    name="explorationParish"
-                                    required={false}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
-                                </Grid>
-                                <Grid item xs={3}>
-                                  <InputForm
-                                    label={i18n.red.county}
-                                    name="parcelCounty"
-                                    required={false}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
-                                </Grid>
-                                <Grid item xs={3}>
-                                  <InputForm
-                                    label={i18n.red.postalCode}
-                                    name="explorationPostalCode"
-                                    required={false}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
-                                </Grid>
-                                <Grid item xs={3}>
-                                  <InputForm
-                                    label={i18n.red.parcelNumber}
-                                    name="explorationType"
-                                    required={false}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
-                                </Grid>
-                                <Grid item xs={3}>
-                                  <InputForm
-                                    label={i18n.red.explorationSystem}
-                                    name="explorationSystem"
-                                    required={false}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
-                                </Grid>
-                                <Grid item xs={3}>
-                                  <InputForm
-                                    label={i18n.red.explorationProduction}
-                                    name="explorationProduction"
-                                    required={false}
-                                    fullWidth={true}
-                                    type="text"
-                                  />
+                                  <FormControl fullWidth>
+                                    <InputLabel>{i18n.red.explorationProduction}</InputLabel>
+                                    <Input
+                                      name="explorationProduction"
+                                      value={explorationProduction}
+                                      onChange={this.handleChange}
+                                      type="text"
+                                    />
+                                  </FormControl>
                                 </Grid>
                                 <Grid container spacing={16} style={{ marginTop: 20 }}>
-                                <Grid item xs={12}>
-                                  <FormControlLabel
-                                    label={<Typography variant="subheading">{i18n.red.addAnimals}</Typography>}
-                                    labelplacement="start"
-                                    control={
-                                      <Switch
-                                        checked={this.state.addAnimals}
-                                        onChange={this.onSwitchValue('addAnimals')}
-                                        value="addAnimals"
-                                        color="primary"
-                                      />
-                                    }
-                                  />
-                                </Grid>
-                                <Grid item xs={12}>
+                                  <Grid item xs={12}>
                                     <FormControlLabel
-                                      label={<Typography variant="subheading">{i18n.red.addTransfers}</Typography>}
+                                      label={
+                                        <Typography variant="subheading">
+                                          {i18n.red.addAnimals}
+                                        </Typography>
+                                      }
+                                      labelplacement="start"
+                                      control={
+                                        <Switch
+                                          checked={this.state.addAnimals}
+                                          onChange={this.onSwitchValue('addAnimals')}
+                                          value="addAnimals"
+                                          color="primary"
+                                        />
+                                      }
+                                    />
+                                  </Grid>
+                                  <Grid item xs={12}>
+                                    <FormControlLabel
+                                      label={
+                                        <Typography variant="subheading">
+                                          {i18n.red.addTransfers}
+                                        </Typography>
+                                      }
                                       labelplacement="start"
                                       control={
                                         <Switch
@@ -312,7 +540,25 @@ class REDPage extends Component {
                                         />
                                       }
                                     />
-                                </Grid>
+                                  </Grid>
+                                  <Grid item xs={12}>
+                                    <FormControlLabel
+                                      label={
+                                        <Typography variant="subheading">
+                                          {i18n.red.addSanitaryEvents}
+                                        </Typography>
+                                      }
+                                      labelplacement="start"
+                                      control={
+                                        <Switch
+                                          checked={this.state.addSanitaryEvents}
+                                          onChange={this.onSwitchValue('addSanitaryEvents')}
+                                          value="addSanitaryEvents"
+                                          color="primary"
+                                        />
+                                      }
+                                    />
+                                  </Grid>
                                 </Grid>
                               </Grid>
                               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -322,7 +568,6 @@ class REDPage extends Component {
                                   color="primary"
                                   className="card-button"
                                   type="submit"
-                                  disabled={invalid || pristine}
                                 >
                                   {i18n.red.button.export}
                                 </Button>

@@ -4,6 +4,7 @@
     "year": "Year",
     "np": "Farmer number",
     "name": "Name",
+    "entityName": "Entity name",
     "number": "Number",
     "address": "Address",
     "brand": "Brand",
@@ -15,8 +16,10 @@
     "parish": "Parish",
     "explorationSystem": "Exploration system",
     "explorationProduction": "Exploration production",
+    "species": "Species",
     "addAnimals": "Add all animals registered in Agroop Livestock",
     "addTransfers": "Add all transfer managements registered in Agroop Livestock (corresponding year)",
+    "addSanitaryEvents": "Add sanitary events registered in Agroop Livestock (corresponding year)",
     "button":{
         "export": "Export"
     }

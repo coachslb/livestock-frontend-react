@@ -90,3 +90,57 @@
     width: 100%;
   }
 }
+
+.management-type{
+  width: 64px;
+  height: 64px;
+  box-shadow: 5px 5px 22px -8px rgba(74, 72, 74, 1);
+  border-radius: 10%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.management-type--weighing{
+  background-image: url('../../../assets/imgs/managements/weighing.svg');
+  background-color: #F9690E;
+}
+.management-type--feeding{
+  background-image: url('../../../assets/imgs/managements/feed.svg');
+  background-color: #D9B611;
+}
+.management-type--sanitary{
+  background-image: url('../../../assets/imgs/managements/sanitary.svg');
+  background-color: #8DB255;
+}
+.management-type--servicing{
+  background-image: url('../../../assets/imgs/managements/servicing.svg');
+  background-color: #A17917;
+}
+.management-type--birth{
+  background-image: url('../../../assets/imgs/managements/birth.svg');
+  background-color: #F5D76E;
+}
+.management-type--childBirth{
+  background-image: url('../../../assets/imgs/managements/childBirth.svg');
+}
+.management-type--chiping{
+  background-image: url('../../../assets/imgs/managements/chiping.svg');
+  background-color: #DC3023;
+}
+.management-type--death{
+  background-image: url('../../../assets/imgs/managements/death.svg');
+  background-color: #CA6924
+}
+.management-type--transfer{
+  background-image: url('../../../assets/imgs/managements/transfer.svg');
+  background-color: #7A942E;
+}
+.management-type--sellOrPurchase{
+  background-image: url('../../../assets/imgs/managements/sellOrPurchase.svg');
+  background-color: #E29C45;
+}
+.management-type--production{
+  background-image: url('../../../assets/imgs/managements/production.svg');
+  background-color: #5B8930;
+}

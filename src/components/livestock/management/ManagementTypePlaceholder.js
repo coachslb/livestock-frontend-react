@@ -5,9 +5,9 @@ import '../../pages/livestock/management/management.css';
 
 const ManagementTypePlaceholder = props => {
   return (
-      <div className={`management-type-container ${props.imgUrl}`}>
+      <div className={`management-type-container`}>
       <Link to={props.route}>
-        <div style={{ width: 180, height: 180, border: '2px solid black', marginBottom: 10}} />
+        <div className={`management-type ${props.imgUrl}`} />
         <Typography variant="title">{props.title}</Typography>
         </Link>
       </div>

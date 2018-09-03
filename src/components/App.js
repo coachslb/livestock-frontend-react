@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import Routes from '../routes/index';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import amber from 'material-ui/colors/amber';
 import allI18n from './utils/i18n';
 
 export const I18nContext = React.createContext();
@@ -21,7 +20,14 @@ class App extends Component {
   render() {
     const theme = createMuiTheme({
       palette: {
-        primary: amber,
+        primary: {
+          main: "#ffb300",
+          contrastText: "#fff",
+        },
+        secondary: {
+          main: "#f50057",
+          contrastText: "#fff",
+        }
       },
     });
 
