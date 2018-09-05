@@ -19,6 +19,7 @@ export const SANITARY_EVENT_TYPES = "/fixedvalues/eventTypes";
 export const COBERTURA_TYPES = "/fixedvalues/coberturaTypes";
 export const TRANSFER_TYPES = "/fixedvalues/transferTypes";
 export const SELL_OR_PURCHASE_TYPES = "/fixedvalues/sellOrPurchaseTypes";
+export const MANAGEMENT_TYPES = "/fixedvalues/managementTypes";
 
 /** Accounts */
 export const REGISTRATION = "/registration";
@@ -86,3 +87,9 @@ export const EXPORT_RED = "/export/red"
 /** Workers */
 export const WORKER = "/worker";
 export const FIND_USER_EMAIL = "/userEmail";
+
+/** Results */
+export const RESULTS_GENERAL = "/results";
+export const RESULTS_ANIMAL = "/results/animals";
+export const RESULTS_MANAGEMENT = "/results/managements";
+export const RESULTS_PRODUCTION = "/results/production";

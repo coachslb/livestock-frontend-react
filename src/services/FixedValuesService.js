@@ -84,6 +84,11 @@ let FixedValuesService = {
     if(isAuthenticated) config = await AuthenticationService.checkAndGetToken();
     return axios.get(end.URL + end.VERSION + end.SELL_OR_PURCHASE_TYPES, config).then(handleResponse);
   },
+  getManagementTypes: async function(isAuthenticated){
+    let config = null;
+    if(isAuthenticated) config = await AuthenticationService.checkAndGetToken();
+    return axios.get(end.URL + end.VERSION + end.MANAGEMENT_TYPES, config).then(handleResponse);
+  },
 };
 
 export default FixedValuesService;

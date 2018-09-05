@@ -87,7 +87,6 @@ class Login extends Component {
     const { errors, serverError, isLoading, serverErrorTitle, serverErrorMessage } = this.state;
     const { i18n } = this.props;
 
-    console.log(errors)
     return (
       <div className="loginForm">
         <form onSubmit={this.onSubmitLogin.bind(this)}>

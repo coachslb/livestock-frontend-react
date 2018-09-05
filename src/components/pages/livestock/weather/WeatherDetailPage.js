@@ -34,8 +34,6 @@ class WeatherDetailPage extends Component {
   render() {
     const { weatherData, isLoading, serverError } = this.state;
 
-    console.log(weatherData);
-
     return (
       <I18nContext.Consumer>
         {({ i18n }) => (

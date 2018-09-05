@@ -45,7 +45,7 @@ class CreateorUpdateSanitaryManagementPage extends Component {
     this.setState({ isLoading: true });
     const { entityId, id } = this.props.match.params;
 
-    let explorationsPromise = ExplorationService.get(null, entityId, true);
+    const explorationsPromise = ExplorationService.get(null, entityId, true);
     const eventTypePromise = FixedValuesService.getSanitaryEventTypes(true);
 
     if (id) {
@@ -77,7 +77,23 @@ class CreateorUpdateSanitaryManagementPage extends Component {
       .catch(err => this.setState({ serverError: true }));
 
     explorationsPromise.then(res => {
-      this.setState({ explorationList: res.data, isLoading: false });
+      this.setState({
+        explorationList: res.data,
+        exploration: res.data.length === 1 ? res.data[0].id : '',
+        isLoading: false,
+      });
+
+      if (res.data[0].length === 1) {
+        const getAnimalResponse = AnimalService.get(null, res.data[0].id, true);
+
+        getAnimalResponse
+          .then(res => {
+            this.setState({ animalList: res.data, isLoading: false });
+          })
+          .catch(err => {
+            this.setState({ isLoading: false, serverError: true });
+          });
+      }
     });
   }
 
@@ -298,61 +314,67 @@ class CreateorUpdateSanitaryManagementPage extends Component {
                           </Grid>
                         </CardContent>
                       </Card>
+                      {exploration && (
+                          <Fragment>
+                            <FieldArray
+                              name="animalData"
+                              validate={fields => this.validateArray(fields, i18n)}
+                            >
+                              {({ fields }) =>
+                                fields.map((name, index) => (
+                                  <Card style={{ marginTop: 20 }} key={name}>
+                                    <CardContent>
+                                      <div className="card-header">
+                                        <Typography
+                                          variant="headline"
+                                          className="card-header_title"
+                                        >
+                                          {index + 1}. Animal
+                                        </Typography>
+                                        <i
+                                          className="material-icons"
+                                          onClick={() => fields.remove(index)}
+                                        >
+                                          delete
+                                        </i>
+                                      </div>
+                                      <Grid container spacing={16} className="card-body">
+                                        <InputForm
+                                          name={`${name}.management`}
+                                          required={false}
+                                          type="hidden"
+                                        />
 
-                      <FieldArray
-                        name="animalData"
-                        validate={fields => this.validateArray(fields, i18n)}
-                      >
-                        {({ fields }) =>
-                          fields.map((name, index) => (
-                            <Card style={{ marginTop: 20 }} key={name}>
-                              <CardContent>
-                                <div className="card-header">
-                                  <Typography variant="headline" className="card-header_title">
-                                    {index + 1}. Animal
-                                  </Typography>
-                                  <i
-                                    className="material-icons"
-                                    onClick={() => fields.remove(index)}
-                                  >
-                                    delete
-                                  </i>
-                                </div>
-                                <Grid container spacing={16} className="card-body">
-                                  <InputForm
-                                    name={`${name}.management`}
-                                    required={false}
-                                    type="hidden"
-                                  />
+                                        {animalList && (
+                                          <Grid item xs={6}>
+                                            <SelectForm
+                                              name={`${name}.animal`}
+                                              required={true}
+                                              label="Animal"
+                                              fullWidth
+                                              list={formatAnimalList(animalList)}
+                                            />
+                                          </Grid>
+                                        )}
+                                      </Grid>
+                                    </CardContent>
+                                  </Card>
+                                ))
+                              }
+                            </FieldArray>
 
-                                  {animalList && (
-                                    <Grid item xs={6}>
-                                      <SelectForm
-                                        name={`${name}.animal`}
-                                        required={true}
-                                        label="Animal"
-                                        fullWidth
-                                        list={formatAnimalList(animalList)}
-                                      />
-                                    </Grid>
-                                  )}
-                                </Grid>
+                            <Card style={{ marginTop: 20 }}>
+                              <CardContent style={{ display: 'flex', alignItems: 'center' }}>
+                                <Typography variant="headline" style={{ flexGrow: 1 }}>
+                                  {i18n.management.addAnimal}
+                                </Typography>
+                                <i className="material-icons" onClick={() => push('animalData')}>
+                                  add
+                                </i>
                               </CardContent>
                             </Card>
-                          ))
-                        }
-                      </FieldArray>
-
-                      <Card style={{ marginTop: 20 }}>
-                        <CardContent style={{ display: 'flex', alignItems: 'center' }}>
-                          <Typography variant="headline" style={{ flexGrow: 1 }}>
-                            {i18n.management.addAnimal}
-                          </Typography>
-                          <i className="material-icons" onClick={() => push('animalData')}>
-                            add
-                          </i>
-                        </CardContent>
-                      </Card>
+                          </Fragment>
+                        )}
                       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <Button
                           size="medium"

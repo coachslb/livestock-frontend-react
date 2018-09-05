@@ -374,18 +374,6 @@ class Layout extends Component {
               </MenuItem>
               <MenuItem
                 className={
-                  pathname.startsWith('/livestock/results') ? 'menu-item-selected' : 'menu-item'
-                }
-                component={Link}
-                to="/livestock/results"
-                style={{ padding: '20px' }}
-                selected={pathname.startsWith('/livestock/results')}
-              >
-                <i className="material-icons material-icons-menu">poll</i>
-                {i18n.general.results}
-              </MenuItem>
-              <MenuItem
-                className={
                   pathname.startsWith('/livestock/tasks') ? 'menu-item-selected' : 'menu-item'
                 }
                 component={Link}
@@ -407,6 +395,18 @@ class Layout extends Component {
               >
                 <i className="material-icons material-icons-menu">wb_sunny</i>
                 {i18n.general.weather}
+              </MenuItem>
+              <MenuItem
+                className={
+                  pathname.startsWith('/livestock/results') ? 'menu-item-selected' : 'menu-item'
+                }
+                component={Link}
+                to="/livestock/results"
+                style={{ padding: '20px' }}
+                selected={pathname.startsWith('/livestock/results')}
+              >
+                <i className="material-icons material-icons-menu">poll</i>
+                {i18n.general.results}
               </MenuItem>
               <MenuItem
                 className={

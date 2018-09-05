@@ -10,6 +10,7 @@ import {
   Button,
   MenuItem,
   CircularProgress,
+  Grid,
 } from 'material-ui';
 import ErrorDialog from '../../../../UI/ErrorDialog/ErrorDialog';
 import FixedValuesService from '../../../../../services/FixedValuesService';
@@ -17,7 +18,6 @@ import ExplorationValidations from '../../../../../validations/ExplorationValida
 import PlaceService from '../../../../../services/PlaceService';
 import MapDraw from '../../../../UI/MapDraw';
 import { I18nContext } from '../../../../App';
-import { Grid } from '@material-ui/core';
 
 class CreateorUpdateExplorationPlacePage extends Component {
   constructor() {
@@ -62,7 +62,6 @@ class CreateorUpdateExplorationPlacePage extends Component {
           });
         })
         .catch(err => {
-          console.log(err);
           this.setState({ isLoading: false, serverError: true });
         });
     }
@@ -72,7 +71,6 @@ class CreateorUpdateExplorationPlacePage extends Component {
         this.setState({ placeTypes: res.data });
       })
       .catch(err => {
-        console.log(err);
         this.setState({ isLoading: false, serverError: true });
       });
 
@@ -81,7 +79,6 @@ class CreateorUpdateExplorationPlacePage extends Component {
         this.setState({ cropTypes: res.data, isLoading: false });
       })
       .catch(err => {
-        console.log(err);
         this.setState({ isLoading: false, serverError: true });
       });
   }

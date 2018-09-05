@@ -100,7 +100,29 @@ class CreateorUpdateCoberturaManagementPage extends Component {
 
     explorationsPromise
       .then(res => {
-        this.setState({ explorationList: res.data, isLoading: false });
+        this.setState({
+          explorationList: res.data,
+          exploration: res.data.length === 1 ? res.data[0].id : '',
+          isLoading: false,
+        });
+
+        if (res.data.length === 1) {
+          let animalMalePromise = AnimalService.getAnimalBySex(1, entityId, res.data[0].id, true);
+
+          let animalFemalePromise = AnimalService.getAnimalBySex(2, entityId, res.data[0].id, true);
+
+          animalMalePromise
+            .then(res => {
+              this.setState({ maleList: res.data });
+            })
+            .catch(err => this.setState({ serverError: true, isLoading: false }));
+
+          animalFemalePromise
+            .then(res => {
+              this.setState({ femaleList: res.data, isLoading: false });
+            })
+            .catch(err => this.setState({ serverError: true, isLoading: false }));
+        }
       })
       .catch(err => this.setState({ serverError: true, isLoading: false }));
   }

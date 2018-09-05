@@ -45,8 +45,6 @@ class CreateorUpdateProductionManagementPage extends Component {
   }
 
   getQuantity = productionType => {
-    console.log(productionType);
-
     switch (productionType) {
       case ProductionTypes.CATTLE_BREEDING:
         return 'uni';
@@ -103,7 +101,21 @@ class CreateorUpdateProductionManagementPage extends Component {
 
     explorationsPromise
       .then(res => {
-        this.setState({ explorationList: res.data, isLoading: false });
+        this.setState({
+          explorationList: res.data,
+          exploration: res.data.length === 1 ? res.data[0].id : '',
+          isLoading: false,
+        });
+
+        if (res.data.length === 1) {
+          let animalPromise = AnimalService.get(null, res.data[0].id, true);
+
+          animalPromise
+            .then(res => {
+              this.setState({ animalList: res.data, isLoading: false });
+            })
+            .catch(err => this.setState({ serverError: true, isLoading: false }));
+        }
       })
       .catch(err => this.setState({ serverError: true, isLoading: false }));
   }

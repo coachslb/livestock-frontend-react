@@ -90,7 +90,28 @@ class CreateorUpdateTransferManagementPage extends Component {
       });
 
     explorationsPromise.then(res => {
-      this.setState({ explorationList: res.data, isLoading: false });
+      this.setState({
+        explorationList: res.data,
+        exploration: res.data.length === 1 ? res.data[0].id : '',
+        isLoading: false,
+      });
+
+      if (res.data.length === 1) {
+        let animalPromise = AnimalService.get(null, res.data[0].id, true);
+        let groupPromise = GroupService.get(null, res.data[0].id, true);
+
+        groupPromise
+          .then(res => {
+            this.setState({ groupList: res.data });
+          })
+          .catch(err => this.setState({ serverError: true, isLoading: false }));
+
+        animalPromise
+          .then(res => {
+            this.setState({ animalList: res.data, isLoading: false });
+          })
+          .catch(err => this.setState({ serverError: true, isLoading: false }));
+      }
     });
   }
 

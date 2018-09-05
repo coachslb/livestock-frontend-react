@@ -12,6 +12,7 @@ import users from '../pages/livestock/users/i18n'
 import license from '../pages/livestock/license/i18n'
 import weather from '../pages/livestock/weather/i18n'
 import red from '../pages/livestock/red/i18n'
+import results from '../pages/livestock/results/i18n'
 import general from '../pages/i18n'
 
 export default {
@@ -30,6 +31,7 @@ export default {
         license: license.pt,
         weather: weather.pt,
         red: red.pt,
+        results: results.pt,
         general: general.pt,
     },
     'en-UK': {
@@ -47,6 +49,7 @@ export default {
         license: license.en,
         weather: weather.en,
         red: red.en,
+        results: results.en,
         general:general.en,
     }
 }

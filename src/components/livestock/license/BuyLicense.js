@@ -53,9 +53,7 @@ class BuyLicense extends Component {
     const entityId = localStorage.getItem('entityId');
     const workerId = localStorage.getItem('workerId');
 
-    console.log(values)
     if (values.numberOfMonths > 0) {
-      console.log('Hello')
       values.agricolaEntityId = entityId;
       values.licenseType = this.props.licenseType;
       const createNewLicenseResponse = LicenseService.createLicense(values, true);

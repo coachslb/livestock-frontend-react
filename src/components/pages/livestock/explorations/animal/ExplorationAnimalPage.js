@@ -94,7 +94,7 @@ class ExplorationAnimalPage extends Component {
         <I18nContext.Consumer>
           {({ i18n }) => (
             <Fragment>
-              <div style={{ width: '100%', margin: '20px 0' }}>
+              <div style={{ width: '100%', margin: '20px 0', display: 'flex' }}>
                 <FormControl style={{ width: '200px', marginRight: '20px' }}>
                   <InputLabel>{i18n.general.search}</InputLabel>
                   <Input

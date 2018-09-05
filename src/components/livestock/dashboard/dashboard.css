@@ -37,15 +37,15 @@
   flex-wrap: wrap;
 }
 
-.statistics-section{
+.statistics-section {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  min-height: 800px;
+  min-height: 700px;
 }
 
-.first-use-card-content{
-    padding: 25px 0;
+.first-use-card-content {
+  padding: 25px 0;
 }
 
 .first-use-card {
@@ -59,14 +59,14 @@
   text-align: center;
 }
 
-.statistics-card{
+.statistics-card {
   display: flex;
   flex-direction: column;
   margin: 10px 0;
-  width: 48%
+  width: 48%;
 }
 
-.statistic-element{
+.statistic-element {
   margin: 40px 0;
   font-size: 16px;
   font-weight: 500;
@@ -75,9 +75,24 @@
   margin-left: 20px;
 }
 
-.statistic-element-number{
+.statistic-element-number {
   margin-right: 20%;
-  font-size: 5em
+  font-size: 4em;
+  box-shadow: -2px -5px 30px 18px rgba(242, 233, 242, 1);
+  border-radius: 10%;
+  /* background-color: #CA6924; */
+  color: #fff;
+  padding: 10px;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffaf4b+38,ff920a+52 */
+  background: #ffaf4b; /* Old browsers */
+  background: -moz-linear-gradient(top, #ffaf4b 38%, #ff920a 52%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #ffaf4b 38%, #ff920a 52%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #ffaf4b 38%,
+    #ff920a 52%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', endColorstr='#ff920a',GradientType=0 ); /* IE6-9 */
 }
 
 @media (max-width: 1600px) {
@@ -86,12 +101,12 @@
     justify-content: center;
     text-align: center;
   }
-  .statistics-card{
+  .statistics-card {
     width: 100%;
   }
 }
 
-.management-type{
+.management-type {
   width: 64px;
   height: 64px;
   box-shadow: 5px 5px 22px -8px rgba(74, 72, 74, 1);
@@ -101,46 +116,46 @@
   background-position: center;
 }
 
-.management-type--weighing{
+.management-type--weighing {
   background-image: url('../../../assets/imgs/managements/weighing.svg');
-  background-color: #F9690E;
+  background-color: #f9690e;
 }
-.management-type--feeding{
+.management-type--feeding {
   background-image: url('../../../assets/imgs/managements/feed.svg');
-  background-color: #D9B611;
+  background-color: #d9b611;
 }
-.management-type--sanitary{
+.management-type--sanitary {
   background-image: url('../../../assets/imgs/managements/sanitary.svg');
-  background-color: #8DB255;
+  background-color: #8db255;
 }
-.management-type--servicing{
+.management-type--servicing {
   background-image: url('../../../assets/imgs/managements/servicing.svg');
-  background-color: #A17917;
+  background-color: #a17917;
 }
-.management-type--birth{
+.management-type--birth {
   background-image: url('../../../assets/imgs/managements/birth.svg');
-  background-color: #F5D76E;
+  background-color: #f5d76e;
 }
-.management-type--childBirth{
+.management-type--childBirth {
   background-image: url('../../../assets/imgs/managements/childBirth.svg');
 }
-.management-type--chiping{
+.management-type--chiping {
   background-image: url('../../../assets/imgs/managements/chiping.svg');
-  background-color: #DC3023;
+  background-color: #dc3023;
 }
-.management-type--death{
+.management-type--death {
   background-image: url('../../../assets/imgs/managements/death.svg');
-  background-color: #CA6924
+  background-color: #ca6924;
 }
-.management-type--transfer{
+.management-type--transfer {
   background-image: url('../../../assets/imgs/managements/transfer.svg');
-  background-color: #7A942E;
+  background-color: #7a942e;
 }
-.management-type--sellOrPurchase{
+.management-type--sellOrPurchase {
   background-image: url('../../../assets/imgs/managements/sellOrPurchase.svg');
-  background-color: #E29C45;
+  background-color: #e29c45;
 }
-.management-type--production{
+.management-type--production {
   background-image: url('../../../assets/imgs/managements/production.svg');
-  background-color: #5B8930;
+  background-color: #5b8930;
 }

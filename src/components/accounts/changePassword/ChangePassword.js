@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Typography } from 'material-ui';
+import { Typography, CircularProgress } from 'material-ui';
 import { Redirect } from 'react-router-dom';
 import InputField from '../../UI/Inputs/InputField';
 import SubmitButton from '../../UI/Buttons/SubmitButton';
@@ -8,7 +8,6 @@ import AccountsValidations from '../../../validations/AccountsValidations';
 import ForgotPasswordService from '../../../services/ForgotPasswordService';
 import SuccessCard from '../../UI/Cards/SuccessCard';
 import { withRouter } from 'react-router-dom';
-import { CircularProgress } from '@material-ui/core';
 import queryString from 'query-string';
 
 class ChangePassword extends Component {

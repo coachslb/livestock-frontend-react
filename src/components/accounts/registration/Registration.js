@@ -160,7 +160,6 @@ class Registration extends Component {
             label={i18n.registration.password}
             type="password"
             errorMessage={errors != null && errors.filter(error => {
-              console.log(error[0])
               return error[0] === 'password';
             })}
           />

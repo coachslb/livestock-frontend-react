@@ -42,7 +42,7 @@ class CreateorUpdateWeighingManagementPage extends Component {
     this.setState({ isLoading: true });
     const { entityId, id } = this.props.match.params;
 
-    let explorationsPromise = ExplorationService.get(null, entityId, true);
+    const explorationsPromise = ExplorationService.get(null, entityId, true);
 
     if (id) {
       this.setState({ id });
@@ -65,7 +65,18 @@ class CreateorUpdateWeighingManagementPage extends Component {
     }
 
     explorationsPromise.then(res => {
-      this.setState({ explorationList: res.data, isLoading: false });
+      this.setState({ explorationList: res.data, exploration: res.data.length === 1 ? res.data[0].id : '', isLoading: false });
+
+      if(res.data.length === 1){
+        //get animals
+        let animalPromise = AnimalService.get(null, res.data[0].id, true);
+
+        animalPromise
+        .then(res => {
+        this.setState({ animalList: res.data, isLoading: false });
+        })
+        .catch(err => this.setState({ serverError: true, isLoading: false }));
+      }
     });
   }
 

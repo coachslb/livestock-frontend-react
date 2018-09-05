@@ -67,8 +67,20 @@ class CreateorUpdateFeedManagementPage extends Component {
     }
 
     explorationsPromise.then(res => {
-      this.setState({ explorationList: res.data, isLoading: false });
-    });
+      this.setState({ explorationList: res.data, exploration: res.data.length === 1 ? res.data[0].id : '', isLoading: false });
+
+      if(res.data.length === 1){
+        const getGroupResponse = GroupService.get(null, res.data[0].id, true);
+
+        getGroupResponse
+          .then(res => {
+            this.setState({ groupList: res.data, isLoading: false });
+          })
+          .catch(err => {
+            this.setState({ isLoading: false, serverError: true });
+          });
+          }
+      });
   }
 
   handleExplorationChange = async (values, e) => {

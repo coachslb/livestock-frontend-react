@@ -23,7 +23,6 @@ let AuthenticationService = {
           .post(end.URL + end.VERSION + end.LOGIN + end.DEVICE_TOKEN + `?token=${deviceToken}`, {})
           .then(handleResponse)
           .then(res => {
-            console.log('device token');
             localStorage.setItem('token', res.data.token);
             expirationDate = new Date().getTime() + 900000
             localStorage.setItem('expirationDate', expirationDate);
@@ -35,7 +34,6 @@ let AuthenticationService = {
             .put(end.URL + end.VERSION + end.LOGIN + `?token=${token}`, {})
             .then(handleResponse)
             .then(res => {
-              console.log('new login');
               localStorage.setItem('token', res.data.token);
               localStorage.setItem('deviceToken', res.data.deviceToken);
               localStorage.setItem('language', res.data.language.code);

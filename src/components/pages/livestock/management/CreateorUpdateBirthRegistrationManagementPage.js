@@ -210,7 +210,7 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
                   mutators={{
                     ...arrayMutators,
                   }}
-                  initialValues={{ ...birthRegistration }}
+                  initialValues={{...birthRegistration }}
                   validate={fields => this.validate(fields, i18n)}
                   render={({
                     handleSubmit,
@@ -241,7 +241,7 @@ class CreateorUpdateBirthRegistrationManagementPage extends Component {
                               />
                             </Grid>
                             <Grid item xs={3}>
-                              {animalTypeList && (
+                              {explorationList && (
                                 <SelectForm
                                   label={i18n.management.exploration}
                                   name="exploration"

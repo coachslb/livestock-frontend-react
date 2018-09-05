@@ -1,0 +1,24 @@
+{
+    "title": "Resultados",
+    "general": "Resultados gerais",
+    "places": "Animais por local",
+    "groups": "Animais por grupo",
+    "totalPlaces": "Número de locais na exploração",
+    "totalGroups": "Número de grupos na exploração",
+    "totalAnimals": "Número total de animais na exploração",
+    "animals": "Resultados de Animais",
+    "animal": "Animal",
+    "managementResults": "Resultados de maneios",
+    "managements": "Maneios",
+    "managementType": "Tipo de maneio",
+    "beginDate": "Data de inicio",
+    "endDate": "Data de fim",
+    "production": "Produção",
+    "productionResults": "Resultados de produção",
+    "animalData":{
+        "type": "Por tipo",
+        "sex": "Por sexo",
+        "breed": "Por raça",
+        "state": "Por estado"
+    }
+}

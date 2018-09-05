@@ -1,0 +1,24 @@
+{
+    "title": "Results",
+    "general": "General results",
+    "places": "Animals by place",
+    "groups": "Animals by group",
+    "totalPlaces": "Exploration places number",
+    "totalGroups": "Exploration groups number",
+    "totalAnimals": "Total exploration animal number",
+    "animals": "Animal results",
+    "animal": "Animal",
+    "managementResults": "Management results",
+    "managements": "Managements",
+    "managementType": "Management type",
+    "beginDate": "Begin Date",
+    "endDate": "End Date",
+    "production": "Production",
+    "productionResults": "Production results",
+    "animalData":{
+        "type": "By Type",
+        "sex": "By sex",
+        "breed": "By breed",
+        "state": "By state"
+    }
+}

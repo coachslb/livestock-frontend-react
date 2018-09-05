@@ -246,10 +246,6 @@ class CreateOrUpdateExplorationGroupPage extends Component {
             i18n={i18n}
             header={[
               {
-                name: i18n.exploration.name,
-                prop: 'name',
-              },
-              {
                 name: i18n.exploration.animals.number,
                 prop: 'number',
               },
@@ -342,7 +338,7 @@ class CreateOrUpdateExplorationGroupPage extends Component {
                               {explorationAnimalList.map(a => {
                                 return (
                                   <MenuItem key={a.id} value={a.id}>
-                                    {a.name}
+                                    {`${a.number} ${a.chipNumber ? `(${a.chipNumber})` : ''}`}
                                   </MenuItem>
                                 );
                               })}

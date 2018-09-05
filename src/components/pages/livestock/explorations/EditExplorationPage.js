@@ -182,7 +182,6 @@ class EditExplorationPage extends Component {
 
   render() {
     const { isLoading, explorationTypes, explorationSystems, explorationSystem, productionTypes, errors, serverError } = this.state;
-    console.log(this.state)
     return (
       <I18nContext.Consumer>
         {({ i18n }) => (

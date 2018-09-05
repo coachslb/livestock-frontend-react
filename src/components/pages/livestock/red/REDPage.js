@@ -62,12 +62,62 @@ class REDPage extends Component {
     const explorationsPromise = ExplorationService.get(null, entityId, true);
 
     explorationsPromise.then(res => {
-      this.setState({ explorationList: res.data, isLoading: false });
+      this.setState({ explorationList: res.data, isLoading: false, exploration: res.data.length === 1 ? res.data[0].id : '', });
+
+      if (res.data.length === 1) {
+        //get exploration info
+        const entityInfoResponse = EntityService.getOneEntity(entityId, true);
+        const explorationResponse = ExplorationService.get(res.data[0].id, entityId, true);
+
+        entityInfoResponse
+          .then(res => {
+            this.setState({
+              isLoading: false,
+              name: res.data.name,
+              nif: res.data.nif,
+              np: res.data.np,
+              address: res.data.address
+                ? res.data.address.detail + ' - ' + res.data.address.district || ''
+                : '',
+              brand: res.data.brand || '',
+              phone: res.data.phone,
+            });
+          })
+          .catch(err => this.setState({ serverError: true, isLoading: false }));
+
+        explorationResponse
+          .then(res => {
+            this.setState({
+              explorationName: res.data.name || '',
+              explorationNumber: res.data.number || '',
+              parcelNumber: res.data.parcelNumber || '',
+              explorationAddress: res.data.address ? res.data.address.detail : '',
+              explorationParish: '',
+              explorationCounty: '',
+              explorationPostalCode: res.data.address ? res.data.address.postalCode : '',
+              explorationSystem:
+                res.data.explorationSystem && res.data.explorationSystem.id
+                  ? res.data.explorationSystem.name
+                  : '',
+              explorationProduction: res.data.productionTypes
+                ? res.data.productionTypes
+                    .reduce((acc, value) => (acc += value.name + ', '), '')
+                    .slice(0, -2)
+                : '',
+              species: res.data.explorationTypes
+                ? res.data.explorationTypes
+                    .reduce((acc, value) => (acc += value.name + ', '), '')
+                    .slice(0, -2)
+                : '',
+            });
+            this.setState({ isLoading: false });
+          })
+          .catch(err => this.setState({ serverError: true, isLoading: false }));
+      }
     });
   }
 
   onSwitchValue = name => event => {
-    console.log(name, event.target.checked);
     this.setState({ [name]: event.target.checked });
   };
 
@@ -114,7 +164,7 @@ class REDPage extends Component {
                 .reduce((acc, value) => (acc += value.name + ', '), '')
                 .slice(0, -2)
             : '',
-            species: res.data.explorationTypes
+          species: res.data.explorationTypes
             ? res.data.explorationTypes
                 .reduce((acc, value) => (acc += value.name + ', '), '')
                 .slice(0, -2)
@@ -124,7 +174,6 @@ class REDPage extends Component {
       })
       .catch(err => this.setState({ serverError: true, isLoading: false }));
 
-    console.log(values);
     return values;
   };
 
@@ -190,14 +239,18 @@ class REDPage extends Component {
       true,
     );
 
-    exportResponse.then(res => {
-      console.log(res);
-      saveBlob(res, `RED_${explorationName}.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      this.setState({ isLoading: false });
-    }).catch(err => {
-      console.log(err);
-      this.setState({ isLoading: false });
-    })
+    exportResponse
+      .then(res => {
+        saveBlob(
+          res,
+          `RED_${explorationName}.xlsx`,
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        );
+        this.setState({ isLoading: false });
+      })
+      .catch(err => {
+        this.setState({ isLoading: false });
+      });
   };
 
   handleChange = e => {
@@ -230,7 +283,7 @@ class REDPage extends Component {
       explorationPostalCode,
       explorationSystem,
       explorationProduction,
-      species
+      species,
     } = this.state;
     return (
       <I18nContext.Consumer>
@@ -296,6 +349,7 @@ class REDPage extends Component {
                                 name="exploration"
                                 value={exploration}
                                 onChange={this.handleExplorationChange.bind(this, values)}
+                                disabled={explorationList.length === 1}
                               >
                                 {explorationList.map(ex => {
                                   return (

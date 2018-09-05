@@ -19,5 +19,4 @@ export const loadScripts = (url, callback) => {
 
   scriptTag.src = url;
   document.head.appendChild(scriptTag);
-  // console.log('load scripts', document.head.querySelector('script'));
 };

@@ -83,7 +83,6 @@ class CreateEntity extends Component {
   render() {
     const { countries, country, name, email, errors, serverError, isLoading, serverErrorMessage, serverErrorTitle } = this.state;
     const { i18n } = this.props;
-    console.log(this.state)
     return (
       <Fragment>
       {!isLoading && (
