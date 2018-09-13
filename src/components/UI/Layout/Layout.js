@@ -420,20 +420,20 @@ class Layout extends Component {
                 <i className="material-icons material-icons-menu">library_books</i>
                 RED
               </MenuItem>
-              <MenuItem
-                className={
-                  pathname.startsWith('/livestock/users') ? 'menu-item-selected' : 'menu-item'
-                }
-                component={Link}
-                to={`/livestock/users/${entityId}`}
-                style={{ padding: '20px' }}
-                selected={pathname.startsWith('/livestock/users')}
-              >
-                <i className="material-icons material-icons-menu">people</i>
-                {i18n.general.users}
-              </MenuItem>
             </MenuList>
             <Divider />
+            <MenuItem
+              className={
+                pathname.startsWith('/livestock/users') ? 'menu-item-selected' : 'menu-item'
+              }
+              component={Link}
+              to={`/livestock/users/${entityId}`}
+              style={{ padding: '20px' }}
+              selected={pathname.startsWith('/livestock/users')}
+            >
+              <i className="material-icons material-icons-menu">people</i>
+              {i18n.general.users}
+            </MenuItem>
             <MenuList>
               <MenuItem
                 className={

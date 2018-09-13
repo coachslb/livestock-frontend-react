@@ -1,0 +1,11 @@
+{
+    "historyTitle": "Support history",
+    "noHistory": "There are no messages sent.",
+    "subject": "Subject",
+    "name": "Name",
+    "by": "by",
+    "message": "Write your question",
+    "button":{
+        "send": "Send"
+    }
+}

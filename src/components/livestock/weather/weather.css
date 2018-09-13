@@ -71,6 +71,16 @@
   margin-right: 20px;
 }
 
+.weather-exploration-dashboard-icon {
+  background-repeat: no-repeat;
+  background-size: 60px 60px;
+  height: 120px;
+  width: 120px;
+  align-content: flex-end;
+  margin-right: 20px;
+  background-size: cover;
+}
+
 .icon--clear-day {
   background-image: url('../../../assets/imgs/weather/clear-day.svg');
 }

@@ -24,7 +24,7 @@ let ExplorationValidations = {
 
     if (name === null || name === '') errors.push(['name', i18n.exploration.errors.invalidName]);
 
-    if (number === null || number === '' || isNaN(number))
+    if (number === null || number === '')
       errors.push(['number', i18n.exploration.errors.fieldRequired]);
 
     if (

@@ -45,6 +45,8 @@ class DashboardPage extends Component {
       firstUse,
       agricolaEntity,
       management,
+      weather,
+      tasks,
       entityId,
     } = this.state;
     const renderFirstUse = (
@@ -68,6 +70,8 @@ class DashboardPage extends Component {
           <StatisticsSection
             agricolaEntity={agricolaEntity}
             management={management}
+            weather={weather}
+            tasks={tasks}
             entityId={entityId}
             i18n={i18n}
           />

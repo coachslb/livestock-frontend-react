@@ -1,0 +1,11 @@
+{
+    "historyTitle": "Histórico de suporte",
+    "noHistory": "Não existem mensagens enviadas.",
+    "subject": "Assunto",
+    "name": "Nome",
+    "by": "por",
+    "message": "Escreva a sua questão/problema",
+    "button":{
+        "send": "Enviar"
+    }
+}

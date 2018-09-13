@@ -73,13 +73,14 @@
   display: flex;
   align-items: center;
   margin-left: 20px;
+  justify-content: space-between;
 }
 
 .statistic-element-number {
   margin-right: 20%;
   font-size: 4em;
   box-shadow: -2px -5px 30px 18px rgba(242, 233, 242, 1);
-  border-radius: 10%;
+  border-radius: 4px;
   /* background-color: #CA6924; */
   color: #fff;
   padding: 10px;
@@ -94,6 +95,26 @@
   ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', endColorstr='#ff920a',GradientType=0 ); /* IE6-9 */
 }
+.number-prod {
+  background: #61c419; /* Old browsers */
+  background: -moz-linear-gradient(top, #61c419 81%, #b4e391 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #61c419 81%,#b4e391 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #61c419 81%,#b4e391 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#61c419', endColorstr='#b4e391',GradientType=0 ); /* IE6-9 */
+}
+
+.dashboard-tasks-weather{
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+  width: 50%;
+  min-height: 800px;
+}
+
+.dashboard-task_card-body{
+  margin-top: 10px;
+  
+}
 
 @media (max-width: 1600px) {
   .first-use-card {
@@ -104,8 +125,12 @@
   .statistics-card {
     width: 100%;
   }
-}
 
+  .dashboard-tasks-weather{
+    width: 100%;
+    height: 100%;
+  }
+}
 .management-type {
   width: 64px;
   height: 64px;
@@ -115,7 +140,6 @@
   background-size: cover;
   background-position: center;
 }
-
 .management-type--weighing {
   background-image: url('../../../assets/imgs/managements/weighing.svg');
   background-color: #f9690e;

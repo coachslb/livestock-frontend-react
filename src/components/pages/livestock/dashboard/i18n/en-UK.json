@@ -25,7 +25,20 @@
         "places": "Places",
         "animals": "Animals",
         "managements": "Managements",
-        "workers": "Workers"
+        "workers": "Workers",
+        "production": "Production",
+        "weighing": "Total weight",
+        "sickAnimals": "Sick animals"
+    },
+    "weather":{
+        "weatherTitle": "Weather prevision",
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "after": "After"
+    },
+    "task":{
+        "taskTitle": "Next tasks",
+        "tasks": "Tasks"
     },
     "lastManagements": "Last managements"
 }

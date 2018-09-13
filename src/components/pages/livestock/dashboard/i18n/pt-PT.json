@@ -25,7 +25,20 @@
         "places": "Locais",
         "animals": "Animais",
         "managements": "Maneios",
-        "workers": "Trabalhadores"
+        "workers": "Trabalhadores",
+        "production": "Produção",
+        "weighing": "Peso total",
+        "sickAnimals": "Animais doentes"
+    },
+    "weather":{
+        "weatherTitle": "Previsão meteorológica",
+        "today": "Hoje",
+        "tomorrow": "Amanhã",
+        "after": "Depois"
+    },
+    "task":{
+        "taskTitle": "Proximas tarefas",
+        "tasks": "Tarefas"
     },
     "lastManagements": "Últimos maneios"
 }

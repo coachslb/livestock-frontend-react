@@ -267,7 +267,10 @@ class ResultsPage extends Component {
                       <ManagementResults data={managementData} exploration={exploration} />
                     )}
                     {productionData && (
-                      <ProductionResults data={productionData} exploration={exploration} />
+                      <div id="production">
+                        <ProductionResults data={productionData} exploration={exploration} />
+                      </div>
+                      
                     )}
                   </Fragment>
                 )}

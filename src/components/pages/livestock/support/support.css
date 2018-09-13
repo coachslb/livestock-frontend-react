@@ -1,0 +1,32 @@
+.support-section {
+}
+
+.support-history-section {
+  min-height: 560px;
+  max-height: 560px;
+  overflow-y: scroll !important;
+  margin-bottom: 20px;
+  background-color: #fafafa;
+  overflow: auto !important;
+}
+
+.support-form-section {
+  bottom: 20px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10%;
+}
+
+.card-support-message-history {
+  margin: 10px 5px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-support-createdBy {
+  text-align: end;
+  font-size: 14px;
+  margin: 0 10px;
+  font-weight: bold;
+}

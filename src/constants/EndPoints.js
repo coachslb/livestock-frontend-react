@@ -1,5 +1,6 @@
 //export const URL = "https://livestock.netlify.com/api/";
-export const URL = "http://localhost:9010/api/";
+ export const URL = "http://localhost:9010/api/";
+//  export const URL = "http://192.168.1.65:9010/api/";
 export const VERSION = "v1";
 
 /** Fixed Values */
@@ -93,3 +94,6 @@ export const RESULTS_GENERAL = "/results";
 export const RESULTS_ANIMAL = "/results/animals";
 export const RESULTS_MANAGEMENT = "/results/managements";
 export const RESULTS_PRODUCTION = "/results/production";
+
+/** Support */
+export const SUPPORT = "/support";
