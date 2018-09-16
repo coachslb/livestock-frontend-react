@@ -47,7 +47,7 @@
     "groups":{
         "groupsTitle": "Grupos",
         "description": "Aqui pode adicionar novos grupos de animais à sua exploração. Clique em Adicionar.",
-        "group": "Group",
+        "group": "Grupo",
         "addAnimal": "Adicionar animal",
         "noAnimals": "Não existem animais presentes neste grupo"
     },

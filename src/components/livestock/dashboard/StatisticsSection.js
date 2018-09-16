@@ -16,7 +16,7 @@ const StatisticsSection = (props) => {
             users={props.agricolaEntity.users}
             weighing={props.agricolaEntity.weighing}
             production={props.agricolaEntity.production}
-            productionUnit={props.agricolaEntity.productionUnit}
+            productionUnit="L"
             i18n={props.i18n.dashboard.entityGeneralStatistics}
 
         />
